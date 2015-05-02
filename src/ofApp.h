@@ -8,8 +8,22 @@
 
 #include "ofxTonic.h"
 
-using namespace Tonic;
+struct blackWhitePixels{
+    int indexPos;
+    int pixelN;
+    int firstValue;
+    vector<int> numberPixels;
+};
 
+struct colorPixels{
+    int indexPos;
+    int pixelN;
+    int firstValue;
+    vector<int> numberPixels;
+};
+
+
+using namespace Tonic;
 
 
 class ofApp : public ofxiOSApp {
@@ -18,6 +32,7 @@ class ofApp : public ofxiOSApp {
     ofxTonicSynth synth2;
     ofxTonicSynth synth3;
     ofxTonicSynth synth4;
+    ofxTonicSynth synth5;
     ofxTonicSynth synthMain;
     
 public:
@@ -40,6 +55,9 @@ public:
     void audioRequested (float * output, int bufferSize, int nChannels);
 
     
+    bool bPlayNote;
+
+    
     // ofxTonic
     ofxTonicSynth createSynthVoiceIn();
     ofxTonicSynth controlSynthParameter;
@@ -47,6 +65,15 @@ public:
     ControlGenerator bpm;
     ControlGenerator metro;
     ofEvent<float> * metroOut;
+    void triggerReceive(float & metro);
+    int index;
+    int noteIndex;
+    int oldNoteIndex1;
+    int oldNoteIndex2;
+    int oldNoteIndex3;
+    int oldNoteIndex4;
+    int oldNoteIndex5;
+    void noteTrigger1(int _index);
 
     
     //openCV
@@ -54,6 +81,27 @@ public:
     ofImage edge;
     ofPixels gray;
     bool camOpen;
+    
+    //Pixels
+    float pixelStepS;
+    int changeVideoWidth, changeVideoHeight;
+    vector<float> pixelBright;
+    void pixelDraw();
+    int thresholdValue;
+    vector<blackWhitePixels> blackPixels;
+    vector<blackWhitePixels> whitePixels;
+    blackWhitePixels _wPix;
+    int pixelCircleSize;
+    
+    //Video
+    int videoGrabberW, videoGrabberH, camSize, changedCamSize;
+    float cameraScreenRatio;
+
+
+    // DataConvert
+    string decimalToBinary(int decimal);
+    string binaryString;
+
     
     
 };
