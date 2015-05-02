@@ -3,6 +3,9 @@
 //
 
 #ifdef __OBJC__
+    #include <opencv2/core/core.hpp>
+    #include <opencv2/calib3d/calib3d.hpp> // or whatever you want to
+
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 #endif
