@@ -10,18 +10,26 @@ void ofApp::setup(){
     ofBackground( 30 );
     ofSetFrameRate( 60 );
     
+    screenW = ofGetWidth();
+    screenH = ofGetHeight();
+    
+    controlPnX = 0;
+    controlPnY = 1536;
+    controlPnW = 1536;
+    controlPnH = 512;
+    
     cam.setDeviceID(0);
     cam.setup( 480, 360 );
     
     synthSetting();
-    bpm = synthMain.addParameter("tempo",120).min(50).max(300);
+    bpm = synthMain.addParameter("tempo",100).min(50).max(300);
     metro = ControlMetro().bpm(4 * bpm);
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5);
     
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
     
-    pixelStepS = 2;
+    pixelStepS = 4;
     camSize = cam.getWidth();
     changedCamSize = camSize / pixelStepS;  // 60
     cameraScreenRatio = ofGetWidth() / cam.getWidth();   // 2.8444451
@@ -51,7 +59,9 @@ void ofApp::setup(){
     //        return;
     //    } else {
     //    }
-    
+ 
+    ctrlRectS = 80;
+    speedCPos = ofPoint( 15 * 96, 1536 + 256 );
     
 }
 
@@ -128,16 +138,9 @@ void ofApp::update(){
 void ofApp::triggerReceive(float & metro){
     
     index++;
-    
     noteIndex = index;
     
     noteTrigger1( noteIndex % blackPixels.size() );
-    //        noteTrigger2();
-    //        noteTrigger3();
-    
-    if ( bPlayNote ) {
-        
-    }
     
     
 }
@@ -148,17 +151,40 @@ void ofApp::draw(){
     
     ofPushStyle();
     ofSetColor( 80 );
-    edge.draw(0, 0, 1546, 2048);
+    edge.draw( 0, 0, screenW, screenH);
     ofPopStyle();
+    
+    
+    ofPushMatrix();
+    ofTranslate( 0, 0 );
+    pixelDraw();
+    crossDraw();
+    playingPixel();
+    ofPopMatrix();
+
     
     ofPushStyle();
     ofSetColor( 40 );
-    ofDrawRectangle( 0, 1546, 1546, 502 );
+    ofDrawRectangle( 0, controlPnY, controlPnW, controlPnH );
     ofPopStyle();
+
+    debugControlPDraw();
     
-    pixelDraw();
+    controlPanelDraw();
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::controlPanelDraw(){
+    
+    ofPushStyle();
+    ofSetColor( 180 );
+    ofDrawRectangle( speedCPos.x - ctrlRectS * 0.5, speedCPos.y - ctrlRectS * 0.5, ctrlRectS, ctrlRectS );
+    ofPopStyle();
+
+}
+
 
 
 //--------------------------------------------------------------
@@ -168,18 +194,9 @@ void ofApp::pixelDraw(){
     float _ellipseSizeR = 0.7;
     
     ofPushMatrix();
-    ofTranslate( 7, 10 );
-    
     ofPushStyle();
-    
     ofEnableAntiAliasing();
     
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-    
-    ofPushStyle();
     ofSetColor( 255, 80 );
     
     // Canny
@@ -193,31 +210,87 @@ void ofApp::pixelDraw(){
     }
     
     ofPopStyle();
+    ofPopMatrix();
+
     
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::playingPixel(){
     
-    
+    int _pixelSize = pixelCircleSize;  // 10
+    float _ellipseSizeR = 0.7;
+
     if (bPlayNote) {
         
-        // Canny
+        ofPushMatrix();
         ofPushStyle();
+        ofEnableAntiAliasing();
         ofSetColor( 0, 255, 0, 180 );
         
-        int _noteIndexLoop = noteIndex % (whitePixels.size());
+        int _noteIndex = noteIndex % (whitePixels.size());
         
-        for (int j=0; j<whitePixels[_noteIndexLoop].pixelN; j++) {
-            
-            float _x = (whitePixels[_noteIndexLoop].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-            float _y = (int)(whitePixels[_noteIndexLoop].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
-        }
+        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        
+        ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
         
         ofPopStyle();
+        ofPopMatrix();
         
     }
     
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::crossDraw(){
+    
+    if (bPlayNote) {
+        
+        ofPushMatrix();
+        ofPushStyle();
+        ofEnableAntiAliasing();
+        ofSetColor( 0, 255, 0, 70 );
+        
+        int _noteIndex = noteIndex % (whitePixels.size());
+        
+        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        
+        ofDrawLine( _x, 0, _x, 2048);
+        ofDrawLine( 0, _y, 1546, _y);
+        
+        ofPopStyle();
+        ofPopMatrix();
+        
+    }
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::debugControlPDraw(){
+    
+    ofPushMatrix();
+
+    for (int i=0; i<15; i++){
+        float _x1 = i * 96 + 96;
+        ofDrawLine( _x1, 1536, _x1, 2048 );
+    }
+    
+    for (int j=0; j<7; j++){
+        float _y1 = j * 64 + 64;
+        ofDrawLine( 0, _y1 + 1536, 1536, _y1 + 1536 );
+    }
+    
+    ofPopMatrix();
     
 }
+
 
 
 
@@ -246,17 +319,18 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
     
-    if ( touch.id==0 ) {
-        bPlayNote = !bPlayNote;
-    }
-    
-    
-    if ( !bPlayNote ) {
-        index = 0;
-        ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
-    } else {
-        noteIndex = index;
-        ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+    if ((touch.x>0)&&(touch.x<controlPnW)&&(touch.y<controlPnY)&&(touch.y>0)) {
+        if ( touch.id==0 ) {
+            bPlayNote = !bPlayNote;
+        }
+        
+        if ( !bPlayNote ) {
+            index = 0;
+            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+        } else {
+            noteIndex = index;
+            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+        }
     }
     
     
@@ -362,24 +436,24 @@ void ofApp::noteTrigger1(int _index){
     
     int _noteIndexLoopForNote = _index;
     
-    string _bStForNote = ofToBinary( blackPixels[_noteIndexLoopForNote].pixelN );
+    string _sNote = ofToBinary( blackPixels[_noteIndexLoopForNote].pixelN );
     
-    int _1Note = ofToInt( ofToString(_bStForNote.at(29)) )*4 + ofToInt( ofToString(_bStForNote.at(30)) )*2 + ofToInt( ofToString(_bStForNote.at(31)) );
+    int _1Note = ofToInt( ofToString(_sNote.at(29)) ) * 4 + ofToInt( ofToString(_sNote.at(30)) ) * 2 + ofToInt( ofToString(_sNote.at(31)) );
 
-    int _2Note = ofToInt( ofToString(_bStForNote.at(26)) )*4 + ofToInt( ofToString(_bStForNote.at(27)) )*2 + ofToInt( ofToString(_bStForNote.at(28)) );
+    int _2Note = ofToInt( ofToString(_sNote.at(26)) ) * 4 + ofToInt( ofToString(_sNote.at(27)) ) * 2 + ofToInt( ofToString(_sNote.at(28)) );
 
-    int _3Note = ofToInt( ofToString(_bStForNote.at(23)) )*4 + ofToInt( ofToString(_bStForNote.at(24)) )*2 + ofToInt( ofToString(_bStForNote.at(25)) );
+    int _3Note = ofToInt( ofToString(_sNote.at(23)) ) * 4 + ofToInt( ofToString(_sNote.at(24)) ) * 2 + ofToInt( ofToString(_sNote.at(25)) );
 
-    int _4Note = ofToInt( ofToString(_bStForNote.at(20)) )*4 + ofToInt( ofToString(_bStForNote.at(21)) )*2 + ofToInt( ofToString(_bStForNote.at(22)) );
+    int _4Note = ofToInt( ofToString(_sNote.at(20)) ) * 4 + ofToInt( ofToString(_sNote.at(21)) ) * 2 + ofToInt( ofToString(_sNote.at(22)) );
 
-    int _5Note = ofToInt( ofToString(_bStForNote.at(17)) )*4 + ofToInt( ofToString(_bStForNote.at(18)) )*2 + ofToInt( ofToString(_bStForNote.at(19)) );
+    int _5Note = ofToInt( ofToString(_sNote.at(17)) ) * 4 + ofToInt( ofToString(_sNote.at(18)) ) * 2 + ofToInt( ofToString(_sNote.at(19)) );
 
-    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
+//    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
 
     
     if ((_1Note - oldNoteIndex1)!=0) {
         synth1.setParameter("trigger1", 1);
-        synth1.setParameter("carrierPitch1", _scale2[_1Note] + 60);
+        synth1.setParameter("carrierPitch1", _scale1[_1Note] + 60);
     }
     oldNoteIndex1 = _1Note;
 
@@ -408,56 +482,5 @@ void ofApp::noteTrigger1(int _index){
     oldNoteIndex5 = _5Note;
 
     
-    
-//    synth2.setParameter("trigger2", 1);
-//    synth2.setParameter("carrierPitch2", _scale2[_2Note] + 48);
-//
-//    synth3.setParameter("trigger3", 1);
-//    synth3.setParameter("carrierPitch3", _scale3[_3Note] + 72);
-//
-//    synth4.setParameter("trigger4", 1);
-//    synth4.setParameter("carrierPitch4", _scale2[_4Note] + 84);
-//
-//    synth5.setParameter("trigger5", 1);
-//    synth5.setParameter("carrierPitch5", _scale2[_5Note] + 32);
-
-    
-    //    if ( bPlayNote ) {
-    //
-    //        if ((_noteIndexForNote - oldNoteIndex1)!=0) {
-    //            synth1.setParameter("trigger1", 1);
-    //            synth1.setParameter("carrierPitch1", _scale2[_noteIndexForNote] + 60);
-    //        }
-    //        oldNoteIndex1 = _noteIndexForNote;
-    //        oldCount1 = index;
-    //
-    //        if ( (index)-oldCount1 == 1 ) {
-    //        }
-    //        if ( index==1 )
-    //            oldCount1 = 1;
-    //
-    //    } else {
-    //        oldCount1 = 0;
-    //        oldNoteIndex1 = 0;
-    //    }
-    
 }
-
-
-//--------------------------------------------------------------
-string ofApp::decimalToBinary(int _decimal) {
-    string binary;
-    while(_decimal)  {
-        binary.insert(0, 1, (_decimal & 1) + '0');
-        _decimal >>= 1;
-    }
-    
-    for (int i=0; 12-binary.size(); i++) {
-        binary.insert(0, 1, '0');
-    }
-    
-    return binary;
-}
-
-
 

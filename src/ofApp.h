@@ -76,13 +76,18 @@ public:
     void noteTrigger1(int _index);
 
     
+    // Main
+    int screenW, screenH;
+    float controlPnX, controlPnY, controlPnW, controlPnH;
+    
+    
     //openCV
     ofVideoGrabber cam;
     ofImage edge;
     ofPixels gray;
     bool camOpen;
     
-    //Pixels
+    // Basic Pixels
     float pixelStepS;
     int changeVideoWidth, changeVideoHeight;
     vector<float> pixelBright;
@@ -97,12 +102,17 @@ public:
     int videoGrabberW, videoGrabberH, camSize, changedCamSize;
     float cameraScreenRatio;
 
-
-    // DataConvert
-    string decimalToBinary(int decimal);
-    string binaryString;
-
     
+    // Graphics
+    void playingPixel();
+    void crossDraw();
+    
+    
+    // control Panel
+    void debugControlPDraw();
+    float ctrlRectS;
+    ofPoint speedCPos, speedCSize;
+    void controlPanelDraw();
     
 };
 
