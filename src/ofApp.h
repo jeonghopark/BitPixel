@@ -78,7 +78,6 @@ public:
     
     // Main
     int screenW, screenH;
-    float controlPnX, controlPnY, controlPnW, controlPnH;
     
     
     //openCV
@@ -109,10 +108,12 @@ public:
     
     
     // control Panel
+    float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     void debugControlPDraw();
     float ctrlRectS;
     ofPoint speedCPos, speedCSize;
-    void controlPanelDraw();
+    bool bSpeedCtrl;
+    void controlElementDraw();
     
 };
 

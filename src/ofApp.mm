@@ -13,10 +13,10 @@ void ofApp::setup(){
     screenW = ofGetWidth();
     screenH = ofGetHeight();
     
-    controlPnX = 0;
-    controlPnY = 1536;
-    controlPnW = 1536;
-    controlPnH = 512;
+    ctrlPnX = 0;
+    ctrlPnY = 1536;
+    ctrlPnW = 1536;
+    ctrlPnH = 512;
     
     cam.setDeviceID(0);
     cam.setup( 480, 360 );
@@ -61,8 +61,10 @@ void ofApp::setup(){
     //    }
  
     ctrlRectS = 80;
-    speedCPos = ofPoint( 15 * 96, 1536 + 256 );
+    speedCSize = ofPoint(ctrlRectS,ctrlRectS);
+    speedCPos = ofPoint( 15 * 96, ctrlPnY + ctrlPnH * 0.5 );
     
+    bSpeedCtrl = false;
 }
 
 //--------------------------------------------------------------
@@ -71,6 +73,7 @@ void ofApp::update(){
     cam.update();
     
     if(cam.isFrameNew()) {
+
         convertColor(cam, gray, CV_RGB2GRAY);
         Canny(gray, edge, 120, 120, 3);
         thin(edge);
@@ -142,7 +145,6 @@ void ofApp::triggerReceive(float & metro){
     
     noteTrigger1( noteIndex % blackPixels.size() );
     
-    
 }
 
 
@@ -165,22 +167,22 @@ void ofApp::draw(){
     
     ofPushStyle();
     ofSetColor( 40 );
-    ofDrawRectangle( 0, controlPnY, controlPnW, controlPnH );
+    ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
     ofPopStyle();
 
     debugControlPDraw();
     
-    controlPanelDraw();
+    controlElementDraw();
     
 }
 
 
 //--------------------------------------------------------------
-void ofApp::controlPanelDraw(){
+void ofApp::controlElementDraw(){
     
     ofPushStyle();
     ofSetColor( 180 );
-    ofDrawRectangle( speedCPos.x - ctrlRectS * 0.5, speedCPos.y - ctrlRectS * 0.5, ctrlRectS, ctrlRectS );
+    ofDrawRectangle( speedCPos.x - speedCSize.x * 0.5, speedCPos.y - speedCSize.y * 0.5, speedCSize.x, speedCSize.y );
     ofPopStyle();
 
 }
@@ -261,8 +263,8 @@ void ofApp::crossDraw(){
         float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
-        ofDrawLine( _x, 0, _x, 2048);
-        ofDrawLine( 0, _y, 1546, _y);
+        ofDrawLine( _x, 0, _x, ctrlPnY);
+        ofDrawLine( 0, _y, ctrlPnW, _y);
         
         ofPopStyle();
         ofPopMatrix();
@@ -279,12 +281,12 @@ void ofApp::debugControlPDraw(){
 
     for (int i=0; i<15; i++){
         float _x1 = i * 96 + 96;
-        ofDrawLine( _x1, 1536, _x1, 2048 );
+        ofDrawLine( _x1, ctrlPnY, _x1, screenH );
     }
     
     for (int j=0; j<7; j++){
         float _y1 = j * 64 + 64;
-        ofDrawLine( 0, _y1 + 1536, 1536, _y1 + 1536 );
+        ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
     }
     
     ofPopMatrix();
@@ -304,22 +306,7 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
     
-}
-
-//--------------------------------------------------------------
-void ofApp::touchMoved(ofTouchEventArgs & touch){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::touchUp(ofTouchEventArgs & touch){
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
-    
-    if ((touch.x>0)&&(touch.x<controlPnW)&&(touch.y<controlPnY)&&(touch.y>0)) {
+    if ((touch.x>0)&&(touch.x<ctrlPnW)&&(touch.y<ctrlPnY)&&(touch.y>0)) {
         if ( touch.id==0 ) {
             bPlayNote = !bPlayNote;
         }
@@ -332,6 +319,38 @@ void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
             ofAddListener(* metroOut, this, &ofApp::triggerReceive);
         }
     }
+
+    
+    if ((touch.x>speedCPos.x-speedCSize.x * 0.5)&&(touch.x<speedCPos.x+speedCSize.x * 0.5)&&
+        (touch.y>speedCPos.y-speedCSize.y * 0.5)&&(touch.y<speedCPos.y+speedCSize.y * 0.5)) {
+            bSpeedCtrl = true;
+        }
+    
+}
+
+//--------------------------------------------------------------
+void ofApp::touchMoved(ofTouchEventArgs & touch){
+    
+    if (bSpeedCtrl) {
+        if ((touch.y>ctrlPnY+speedCSize.y*0.75)&&(touch.y<screenH-speedCSize.y*0.75)) {
+            speedCPos.y = touch.y;
+
+            float _tempo = ofMap(speedCPos.y, ctrlPnY+speedCSize.y*0.75, screenH-speedCSize.y*0.75, 200, 50);
+            synthMain.setParameter("tempo", _tempo);
+        }
+    }
+    
+    
+}
+
+//--------------------------------------------------------------
+void ofApp::touchUp(ofTouchEventArgs & touch){
+    
+}
+
+//--------------------------------------------------------------
+void ofApp::touchDoubleTap(ofTouchEventArgs & touch){
+    
     
     
 }
@@ -434,9 +453,9 @@ void ofApp::noteTrigger1(int _index){
     int _scale4[8] = {0, 2, 4, 5, 7, 9, 11, 12};
     int _scale5[8] = {0, 2, 4, 5, 7, 9, 11, 12};
     
-    int _noteIndexLoopForNote = _index;
+    int _indexLoopForNote = _index;
     
-    string _sNote = ofToBinary( blackPixels[_noteIndexLoopForNote].pixelN );
+    string _sNote = ofToBinary( blackPixels[_indexLoopForNote].pixelN );
     
     int _1Note = ofToInt( ofToString(_sNote.at(29)) ) * 4 + ofToInt( ofToString(_sNote.at(30)) ) * 2 + ofToInt( ofToString(_sNote.at(31)) );
 
