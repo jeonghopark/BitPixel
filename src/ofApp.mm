@@ -7,7 +7,7 @@ using namespace cv;
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofBackground( 30 );
+    ofBackground( 255 );
     ofSetFrameRate( 60 );
     
     screenW = ofGetWidth();
@@ -20,6 +20,8 @@ void ofApp::setup(){
     
     cam.setDeviceID(0);
     cam.setup( 480, 360 );
+    
+    bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
     
     synthSetting();
     bpm = synthMain.addParameter("tempo",100).min(50).max(300);
@@ -63,8 +65,16 @@ void ofApp::setup(){
     ctrlRectS = 80;
     speedCSize = ofPoint(ctrlRectS,ctrlRectS);
     speedCPos = ofPoint( 15 * 96, ctrlPnY + ctrlPnH * 0.5 );
-    
     bSpeedCtrl = false;
+    
+    thresholdCSize = ofPoint(ctrlRectS,ctrlRectS);
+    thresholdCPos = ofPoint( 1 * 96, ctrlPnY + ctrlPnH * 0.5 );
+    bthresholdCtrl = false;
+    
+    cannyThreshold1 = 120;
+    cannyThreshold2 = 120;
+    grayThreshold = 30;
+
 }
 
 //--------------------------------------------------------------
@@ -75,8 +85,12 @@ void ofApp::update(){
     if(cam.isFrameNew()) {
 
         convertColor(cam, gray, CV_RGB2GRAY);
-        Canny(gray, edge, 120, 120, 3);
+
+        threshold(gray, gray, grayThreshold);
+        
+        Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         thin(edge);
+        invert(edge);
         edge.update();
         
         
@@ -106,7 +120,7 @@ void ofApp::update(){
             
             for (int i=0; i<pixelBright.size(); i++) {
                 
-                if ( pixelBright[i] == 0 ) {
+                if ( pixelBright[i] == 255 ) {
                     
                     if ( _bCounter==0 ) {
                         blackWhitePixels _bWP;
@@ -152,9 +166,24 @@ void ofApp::triggerReceive(float & metro){
 void ofApp::draw(){
     
     ofPushStyle();
-    ofSetColor( 80 );
+    if (bPlayNote) {
+        ofSetColor( 240, 50 );
+    } else {
+        ofSetColor( 240, 255 );
+    }
     edge.draw( 0, 0, screenW, screenH);
     ofPopStyle();
+    
+
+    ofPushStyle();
+    if (bPlayNote) {
+        ofSetColor( 240, 140 );
+    } else {
+        ofSetColor( 240, 0 );
+    }
+    bufferImg.draw( 0, 0, screenW, screenH);
+    ofPopStyle();
+
     
     
     ofPushMatrix();
@@ -182,7 +211,16 @@ void ofApp::controlElementDraw(){
     
     ofPushStyle();
     ofSetColor( 180 );
-    ofDrawRectangle( speedCPos.x - speedCSize.x * 0.5, speedCPos.y - speedCSize.y * 0.5, speedCSize.x, speedCSize.y );
+    float _sX = speedCPos.x - speedCSize.x * 0.5;
+    float _sY = speedCPos.y - speedCSize.y * 0.5;
+    ofDrawRectangle( _sX, _sY, speedCSize.x, speedCSize.y );
+    ofPopStyle();
+
+    ofPushStyle();
+    ofSetColor( 180 );
+    float _tX = thresholdCPos.x - thresholdCSize.x * 0.5;
+    float _tY = thresholdCPos.y - thresholdCSize.y * 0.5;
+    ofDrawRectangle( _tX, _tY, thresholdCSize.x, thresholdCSize.y );
     ofPopStyle();
 
 }
@@ -199,7 +237,7 @@ void ofApp::pixelDraw(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 255, 80 );
+    ofSetColor( 30, 80 );
     
     // Canny
     for (int i=0; i<whitePixels.size(); i++) {
@@ -230,7 +268,7 @@ void ofApp::playingPixel(){
         ofPushMatrix();
         ofPushStyle();
         ofEnableAntiAliasing();
-        ofSetColor( 0, 255, 0, 180 );
+        ofSetColor( 0, 255, 0, 255 );
         
         int _noteIndex = noteIndex % (whitePixels.size());
         
@@ -256,7 +294,7 @@ void ofApp::crossDraw(){
         ofPushMatrix();
         ofPushStyle();
         ofEnableAntiAliasing();
-        ofSetColor( 0, 255, 0, 70 );
+        ofSetColor( 0, 255, 0, 255 );
         
         int _noteIndex = noteIndex % (whitePixels.size());
         
@@ -309,7 +347,9 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     if ((touch.x>0)&&(touch.x<ctrlPnW)&&(touch.y<ctrlPnY)&&(touch.y>0)) {
         if ( touch.id==0 ) {
             bPlayNote = !bPlayNote;
+            bufferImg = edge;
         }
+        
         
         if ( !bPlayNote ) {
             index = 0;
@@ -321,25 +361,67 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     }
 
     
-    if ((touch.x>speedCPos.x-speedCSize.x * 0.5)&&(touch.x<speedCPos.x+speedCSize.x * 0.5)&&
-        (touch.y>speedCPos.y-speedCSize.y * 0.5)&&(touch.y<speedCPos.y+speedCSize.y * 0.5)) {
+    if ( touch.id==0 ) {
+        float _sMinX = speedCPos.x - speedCSize.x * 0.5;
+        float _sMaxX = speedCPos.x + speedCSize.x * 0.5;
+        float _sMinY = speedCPos.y - speedCSize.y * 0.5;
+        float _sMaxY = speedCPos.y + speedCSize.y * 0.5;
+        if ((touch.x>_sMinX)&&(touch.x<_sMaxX)&&(touch.y>_sMinY)&&(touch.y<_sMaxY)) {
             bSpeedCtrl = true;
+        } else {
+            bSpeedCtrl = false;
         }
-    
+        
+        float _tMinX = thresholdCPos.x - thresholdCSize.x * 0.5;
+        float _tMaxX = thresholdCPos.x + thresholdCSize.x * 0.5;
+        float _tMinY = thresholdCPos.y - thresholdCSize.y * 0.5;
+        float _tMaxY = thresholdCPos.y + thresholdCSize.y * 0.5;
+        if ((touch.x>_tMinX)&&(touch.x<_tMaxX)&&(touch.y>_tMinY)&&(touch.y<_tMaxY)) {
+            bthresholdCtrl = true;
+        } else {
+            bthresholdCtrl = false;
+        }
+    }
+
 }
 
 //--------------------------------------------------------------
 void ofApp::touchMoved(ofTouchEventArgs & touch){
     
-    if (bSpeedCtrl) {
-        if ((touch.y>ctrlPnY+speedCSize.y*0.75)&&(touch.y<screenH-speedCSize.y*0.75)) {
-            speedCPos.y = touch.y;
+    if ( touch.id==0 ) {
 
-            float _tempo = ofMap(speedCPos.y, ctrlPnY+speedCSize.y*0.75, screenH-speedCSize.y*0.75, 200, 50);
-            synthMain.setParameter("tempo", _tempo);
+        if (bSpeedCtrl) {
+            float _minY = ctrlPnY+speedCSize.y*0.75;
+            float _maxY = screenH-speedCSize.y*0.75;
+            if ((touch.y>_minY)&&(touch.y<_maxY)) {
+                speedCPos.y = touch.y;
+                float _tempo = ofMap(speedCPos.y, _minY, _maxY, 200, 50);
+                synthMain.setParameter("tempo", _tempo);
+            }
         }
+
+        if (bthresholdCtrl) {
+            float _minY = ctrlPnY+speedCSize.y*0.75;
+            float _maxY = screenH-speedCSize.y*0.75;
+            if ((touch.y>_minY)&&(touch.y<_maxY)) {
+                thresholdCPos.y = touch.y;
+                float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
+                cannyThreshold1 = _threshold;
+//                cannyThreshold2 = _threshold;
+            }
+            
+            float _minX = 1 * 96;
+            float _maxX = 3 * 96;
+            if ((touch.x>_minX)&&(touch.x<_maxX)) {
+                thresholdCPos.x = touch.x;
+                float _threshold = ofMap(thresholdCPos.x, _minX, _maxX, 255, 20);
+                grayThreshold = _threshold;
+            }
+            
+        }
+        
     }
-    
+
     
 }
 

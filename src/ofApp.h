@@ -5,6 +5,7 @@
 #include "ofxiOSExtras.h"
 
 #include "ofxCv.h"
+#include "ofxOpenCv.h"
 
 #include "ofxTonic.h"
 
@@ -85,6 +86,11 @@ public:
     ofImage edge;
     ofPixels gray;
     bool camOpen;
+    float cannyThreshold1;
+    float cannyThreshold2;
+    float grayThreshold;
+    
+    ofImage bufferImg;
     
     // Basic Pixels
     float pixelStepS;
@@ -108,12 +114,20 @@ public:
     
     
     // control Panel
-    float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
+    void controlElementDraw();
     void debugControlPDraw();
+    float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
+
     float ctrlRectS;
+
     ofPoint speedCPos, speedCSize;
     bool bSpeedCtrl;
-    void controlElementDraw();
+    
+    ofPoint thresholdCPos, thresholdCSize;
+    bool bthresholdCtrl;
+    
+    
+    ofxCvGrayscaleImage grayImage;
     
 };
 
