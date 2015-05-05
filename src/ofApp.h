@@ -129,6 +129,10 @@ public:
     
     ofxCvGrayscaleImage grayImage;
     
+    // Information
+    void information();
+    ofTrueTypeFont informationText;
+    
 };
 
 

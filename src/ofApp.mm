@@ -33,8 +33,8 @@ void ofApp::setup(){
     
     pixelStepS = 4;
     camSize = cam.getWidth();
-    changedCamSize = camSize / pixelStepS;  // 60
-    cameraScreenRatio = ofGetWidth() / cam.getWidth();   // 2.8444451
+    changedCamSize = camSize / pixelStepS;  // 90
+    cameraScreenRatio = ofGetWidth() / cam.getWidth();
     thresholdValue = 80;
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -73,8 +73,11 @@ void ofApp::setup(){
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
-    grayThreshold = 30;
+    grayThreshold = 120;
 
+    
+    informationText.load("verdana.ttf", 48);
+    
 }
 
 //--------------------------------------------------------------
@@ -87,8 +90,10 @@ void ofApp::update(){
         convertColor(cam, gray, CV_RGB2GRAY);
 
         threshold(gray, gray, grayThreshold);
+        erode(gray, edge);
         
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
+        
         thin(edge);
         invert(edge);
         edge.update();
@@ -117,6 +122,7 @@ void ofApp::update(){
             
             int _wCounter = 0;
             int _bCounter = 0;
+            
             
             for (int i=0; i<pixelBright.size(); i++) {
                 
@@ -194,14 +200,12 @@ void ofApp::draw(){
     ofPopMatrix();
 
     
-    ofPushStyle();
-    ofSetColor( 40 );
-    ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
-    ofPopStyle();
 
-    debugControlPDraw();
-    
     controlElementDraw();
+    
+    if (bPlayNote) {
+        information();
+    }
     
 }
 
@@ -210,14 +214,21 @@ void ofApp::draw(){
 void ofApp::controlElementDraw(){
     
     ofPushStyle();
-    ofSetColor( 180 );
+    ofSetColor( 210 );
+    ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
+    ofPopStyle();
+
+    debugControlPDraw();
+
+    ofPushStyle();
+    ofSetColor( 255 );
     float _sX = speedCPos.x - speedCSize.x * 0.5;
     float _sY = speedCPos.y - speedCSize.y * 0.5;
     ofDrawRectangle( _sX, _sY, speedCSize.x, speedCSize.y );
     ofPopStyle();
 
     ofPushStyle();
-    ofSetColor( 180 );
+    ofSetColor( 255 );
     float _tX = thresholdCPos.x - thresholdCSize.x * 0.5;
     float _tY = thresholdCPos.y - thresholdCSize.y * 0.5;
     ofDrawRectangle( _tX, _tY, thresholdCSize.x, thresholdCSize.y );
@@ -226,6 +237,23 @@ void ofApp::controlElementDraw(){
 }
 
 
+//--------------------------------------------------------------
+void ofApp::information(){
+    
+    ofPushStyle();
+    ofSetColor( 120 );
+
+    string _numP = ofToString( blackPixels[noteIndex % blackPixels.size()].pixelN );
+    informationText.drawString( _numP, screenW * 0.5 - 48, ctrlPnY + 10 );
+    
+    string _numB = ofToBinary( blackPixels[noteIndex % blackPixels.size()].pixelN );
+    for (int i=0; i<15; i++) {
+        informationText.drawString( ofToString(_numB.at(31-i)), screenW * 0.5 - 48*i, ctrlPnY + 60 );
+    }
+    
+    ofPopStyle();
+    
+}
 
 //--------------------------------------------------------------
 void ofApp::pixelDraw(){
@@ -240,10 +268,10 @@ void ofApp::pixelDraw(){
     ofSetColor( 30, 80 );
     
     // Canny
-    for (int i=0; i<whitePixels.size(); i++) {
+    for (int i=0; i<blackPixels.size(); i++) {
         
-        float _x = (whitePixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(whitePixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (blackPixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(blackPixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
         
@@ -270,10 +298,10 @@ void ofApp::playingPixel(){
         ofEnableAntiAliasing();
         ofSetColor( 0, 255, 0, 255 );
         
-        int _noteIndex = noteIndex % (whitePixels.size());
+        int _noteIndex = noteIndex % (blackPixels.size());
         
-        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (blackPixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(blackPixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
         
@@ -296,10 +324,10 @@ void ofApp::crossDraw(){
         ofEnableAntiAliasing();
         ofSetColor( 0, 255, 0, 255 );
         
-        int _noteIndex = noteIndex % (whitePixels.size());
+        int _noteIndex = noteIndex % (blackPixels.size());
         
-        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (blackPixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(blackPixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawLine( _x, 0, _x, ctrlPnY);
         ofDrawLine( 0, _y, ctrlPnW, _y);
@@ -316,6 +344,8 @@ void ofApp::crossDraw(){
 void ofApp::debugControlPDraw(){
     
     ofPushMatrix();
+    ofPushStyle();
+    ofSetColor( 120 );
 
     for (int i=0; i<15; i++){
         float _x1 = i * 96 + 96;
@@ -327,7 +357,13 @@ void ofApp::debugControlPDraw(){
         ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
     }
     
+    ofPopStyle();
     ofPopMatrix();
+    
+    ofPushStyle();
+    ofSetColor(0);
+    ofDrawBitmapString(ofToString(ofGetFrameRate(),2), 10, screenH-10);
+    ofPopStyle();
     
 }
 
@@ -406,17 +442,18 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 thresholdCPos.y = touch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
-                cannyThreshold1 = _threshold;
+//                cannyThreshold1 = _threshold;
 //                cannyThreshold2 = _threshold;
-            }
-            
-            float _minX = 1 * 96;
-            float _maxX = 3 * 96;
-            if ((touch.x>_minX)&&(touch.x<_maxX)) {
-                thresholdCPos.x = touch.x;
-                float _threshold = ofMap(thresholdCPos.x, _minX, _maxX, 255, 20);
                 grayThreshold = _threshold;
             }
+            
+//            float _minX = 1 * 96;
+//            float _maxX = 3 * 96;
+//            if ((touch.x>_minX)&&(touch.x<_maxX)) {
+//                thresholdCPos.x = touch.x;
+//                float _threshold = ofMap(thresholdCPos.x, _minX, _maxX, 255, 20);
+//                grayThreshold = _threshold;
+//            }
             
         }
         
