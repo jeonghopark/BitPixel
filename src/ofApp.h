@@ -133,6 +133,9 @@ public:
     void information();
     ofTrueTypeFont informationText;
     
+    // Decimal to N Base
+    vector<int> convertDecimalToNBase(int n, int base);
+
 };
 
 

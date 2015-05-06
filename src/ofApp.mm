@@ -1,3 +1,5 @@
+// http://www.translatorscafe.com/cafe/units-converter/numbers/calculator/octal-to-decimal/
+
 #include "ofApp.h"
 
 using namespace ofxCv;
@@ -90,12 +92,13 @@ void ofApp::update(){
         convertColor(cam, gray, CV_RGB2GRAY);
 
         threshold(gray, gray, grayThreshold);
-        erode(gray, edge);
+//        erode(gray);
         
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         
         thin(edge);
         invert(edge);
+        
         edge.update();
         
         
@@ -243,12 +246,54 @@ void ofApp::information(){
     ofPushStyle();
     ofSetColor( 120 );
 
-    string _numP = ofToString( blackPixels[noteIndex % blackPixels.size()].pixelN );
-    informationText.drawString( _numP, screenW * 0.5 - 48, ctrlPnY + 10 );
-    
-    string _numB = ofToBinary( blackPixels[noteIndex % blackPixels.size()].pixelN );
-    for (int i=0; i<15; i++) {
-        informationText.drawString( ofToString(_numB.at(31-i)), screenW * 0.5 - 48*i, ctrlPnY + 60 );
+    if (blackPixels.size()>0) {
+
+        string _numP = ofToString( blackPixels[noteIndex % blackPixels.size()].pixelN );
+        
+        if (_numP.size()==1) {
+            _numP.insert(1, "0");
+            _numP.insert(2, "0");
+            _numP.insert(3, "0");
+            _numP.insert(4, "0");
+        } else if (_numP.size()==2) {
+            _numP.insert(2, "0");
+            _numP.insert(3, "0");
+            _numP.insert(4, "0");
+        } else if (_numP.size()==3) {
+            _numP.insert(3, "0");
+            _numP.insert(4, "0");
+        } else if (_numP.size()==4) {
+            _numP.insert(4, "0");
+        }
+        
+        for (int i=0; i<_numP.size(); i++) {
+            informationText.drawString( ofToString(_numP.at(i)), screenW * 0.5 - 48 * i + 48 * 1.5, ctrlPnY + 50 );
+        }
+        
+        string _numB = ofToBinary( blackPixels[noteIndex % blackPixels.size()].pixelN );
+        for (int i=0; i<15; i++) {
+            informationText.drawString( ofToString(_numB.at(31-i)), screenW * 0.5 - 48 * i + 48 * 7, ctrlPnY + 110 );
+        }
+        
+
+        string _sNote = ofToBinary( blackPixels[noteIndex % blackPixels.size()].pixelN );
+        
+        int _1Note = ofToInt( ofToString(_sNote.at(29)) ) * 4 + ofToInt( ofToString(_sNote.at(30)) ) * 2 + ofToInt( ofToString(_sNote.at(31)) );
+        
+        int _2Note = ofToInt( ofToString(_sNote.at(26)) ) * 4 + ofToInt( ofToString(_sNote.at(27)) ) * 2 + ofToInt( ofToString(_sNote.at(28)) );
+        
+        int _3Note = ofToInt( ofToString(_sNote.at(23)) ) * 4 + ofToInt( ofToString(_sNote.at(24)) ) * 2 + ofToInt( ofToString(_sNote.at(25)) );
+        
+        int _4Note = ofToInt( ofToString(_sNote.at(20)) ) * 4 + ofToInt( ofToString(_sNote.at(21)) ) * 2 + ofToInt( ofToString(_sNote.at(22)) );
+        
+        int _5Note = ofToInt( ofToString(_sNote.at(17)) ) * 4 + ofToInt( ofToString(_sNote.at(18)) ) * 2 + ofToInt( ofToString(_sNote.at(19)) );
+        
+        informationText.drawString( ofToString(_1Note), screenW * 0.5 - 48 * 0 + 48 * 1.5, ctrlPnY + 170 );
+        informationText.drawString( ofToString(_2Note), screenW * 0.5 - 48 * 1 + 48 * 1.5, ctrlPnY + 170 );
+        informationText.drawString( ofToString(_3Note), screenW * 0.5 - 48 * 2 + 48 * 1.5, ctrlPnY + 170 );
+        informationText.drawString( ofToString(_4Note), screenW * 0.5 - 48 * 3 + 48 * 1.5, ctrlPnY + 170 );
+        informationText.drawString( ofToString(_5Note), screenW * 0.5 - 48 * 4 + 48 * 1.5, ctrlPnY + 170 );
+        
     }
     
     ofPopStyle();
@@ -265,7 +310,7 @@ void ofApp::pixelDraw(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 30, 80 );
+    ofSetColor( 10, 180 );
     
     // Canny
     for (int i=0; i<blackPixels.size(); i++) {
@@ -576,18 +621,21 @@ void ofApp::noteTrigger1(int _index){
     
     string _sNote = ofToBinary( blackPixels[_indexLoopForNote].pixelN );
     
-    int _1Note = ofToInt( ofToString(_sNote.at(29)) ) * 4 + ofToInt( ofToString(_sNote.at(30)) ) * 2 + ofToInt( ofToString(_sNote.at(31)) );
+    vector<int> _8bitNumber;
+    _8bitNumber = convertDecimalToNBase( blackPixels[_indexLoopForNote].pixelN, 8 );
+    
+    int _1Note = _8bitNumber[0];
 
-    int _2Note = ofToInt( ofToString(_sNote.at(26)) ) * 4 + ofToInt( ofToString(_sNote.at(27)) ) * 2 + ofToInt( ofToString(_sNote.at(28)) );
+    int _2Note = _8bitNumber[1];
 
-    int _3Note = ofToInt( ofToString(_sNote.at(23)) ) * 4 + ofToInt( ofToString(_sNote.at(24)) ) * 2 + ofToInt( ofToString(_sNote.at(25)) );
+    int _3Note = _8bitNumber[2];
 
-    int _4Note = ofToInt( ofToString(_sNote.at(20)) ) * 4 + ofToInt( ofToString(_sNote.at(21)) ) * 2 + ofToInt( ofToString(_sNote.at(22)) );
+    int _4Note = _8bitNumber[3];
 
-    int _5Note = ofToInt( ofToString(_sNote.at(17)) ) * 4 + ofToInt( ofToString(_sNote.at(18)) ) * 2 + ofToInt( ofToString(_sNote.at(19)) );
+    int _5Note = _8bitNumber[4];
 
 //    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
-
+    
     
     if ((_1Note - oldNoteIndex1)!=0) {
         synth1.setParameter("trigger1", 1);
@@ -622,3 +670,27 @@ void ofApp::noteTrigger1(int _index){
     
 }
 
+
+//--------------------------------------------------------------
+vector<int> ofApp::convertDecimalToNBase(int n, int base) {
+    
+    int i=0,div,res;
+    vector<int> a;
+    a.resize(5);
+    
+    div=n/base;
+    res=n%base;
+    a[i] = res;
+    
+    while(1){
+        if(div==0) break;
+        else {
+            i++;
+            res=div%base;
+            div=div/base;
+            a[i] = res;
+        }
+    }
+    return a;
+    
+}
