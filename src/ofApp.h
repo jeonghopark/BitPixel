@@ -119,6 +119,7 @@ public:
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStepSize, guideHeightStepSize;
     int maxSpeed, minSpeed;
+    void controlGuide();
 
     float ctrlRectS;
 
@@ -134,16 +135,21 @@ public:
     // Information
     void information();
     ofTrueTypeFont informationText;
+    int fontSize;
     
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);
 
     // Line Score
     void lineScoreDraw();
-    int oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5;
+    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5;
+    
+    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5;
+    int lineScoreStepX, lineScoreStepY;
     
     
-    int _test;
+    
+    
 };
 
 
