@@ -164,9 +164,9 @@ void ofApp::update(){
 void ofApp::triggerReceive(float & metro){
     
     index++;
-    noteIndex = index;
+    noteIndex = index % blackPixels.size();
     
-    noteTrigger1( noteIndex % blackPixels.size() );
+    noteTrigger1( noteIndex );
     
 }
 
@@ -248,7 +248,7 @@ void ofApp::information(){
 
     if (blackPixels.size()>0) {
 
-        int _blackPixels = blackPixels[noteIndex % blackPixels.size()].pixelN;
+        int _blackPixels = blackPixels[noteIndex].pixelN;
     
         vector<int> _10bitNumber;
         _10bitNumber.resize(4);
