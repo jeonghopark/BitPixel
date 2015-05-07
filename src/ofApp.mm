@@ -1,6 +1,6 @@
 // http://www.translatorscafe.com/cafe/units-converter/numbers/calculator/octal-to-decimal/
 
-int scale1[8] = {-12, 0, 2, 4, 7, 9, 12, 14};
+int scale1[8] = {0, 2, 4, 7, 9, 12, 14, 16};
 int scale2[8] = {-12, 0, 7, 12, 14, 16, 19, 21};
 int scale3[8] = {0, 2, 4, 5, 7, 9, 11, 12};
 int scale4[8] = {0, 2, 4, 5, 7, 9, 11, 12};
@@ -42,7 +42,9 @@ void ofApp::setup(){
     bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
     
     synthSetting();
-    bpm = synthMain.addParameter("tempo",100).min(50).max(300);
+    maxSpeed = 250;
+    minSpeed = 30;
+    bpm = synthMain.addParameter("tempo",100).min(minSpeed).max(maxSpeed);
     metro = ControlMetro().bpm(4 * bpm);
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5);
@@ -76,6 +78,12 @@ void ofApp::setup(){
     oldNoteIndex4 = 0;
     oldNoteIndex5 = 0;
     
+    oldScoreNote1 = 0;
+    oldScoreNote2 = 0;
+    oldScoreNote3 = 0;
+    oldScoreNote4 = 0;
+    oldScoreNote5 = 0;
+    
     //    cam.setDesiredFrameRate(30);
     //    cam.initGrabber( 480, 360 );
     
@@ -100,7 +108,9 @@ void ofApp::setup(){
     
     
     informationText.load("verdana.ttf", 48);
-    
+ 
+    _test = 0;
+
 }
 
 //--------------------------------------------------------------
@@ -187,7 +197,7 @@ void ofApp::triggerReceive(float & metro){
     index++;
     noteIndex = index;
     
-    noteTrigger1( noteIndex % whitePixels.size() );
+    noteTrigger1();
     
 }
 
@@ -404,7 +414,7 @@ void ofApp::lineScoreDraw(){
     int _xNumber = 20;
     int _stepX = 40;
     int _stepY = 4;
-    int _defaultNote = 72;
+    int _defaultNote = 68;
     int _size = 3;
     
     ofPushMatrix();
@@ -412,33 +422,62 @@ void ofApp::lineScoreDraw(){
     ofTranslate( ctrlPnW * 0.5 - _stepX * (_xNumber-2) * 0.5, ctrlPnY + _defaultNote * 6 );
     ofSetColor( 0, 180 );
     
+    
     if (bPlayNote) {
-        
+    
         if (whitePixels.size()>0) {
             
-            for (int j=0; j<_xNumber-1; j++) {
+            for (int j=0; j<_xNumber; j++) {
                 
-                vector<int> _blackPixels;
-                _blackPixels.resize(_xNumber);
-                _blackPixels[j] = whitePixels[(noteIndex + j) % whitePixels.size()].pixelN;
+                vector<int> _whitePixels;
+                _whitePixels.resize(_xNumber);
+                _whitePixels[j] = whitePixels[(noteIndex + j) % whitePixels.size()].pixelN;
                 
                 vector< vector<int> > _8bitNumber;
                 _8bitNumber.resize(_xNumber);
                 _8bitNumber[j].resize(5);
-                _8bitNumber[j] = convertDecimalToNBase( _blackPixels[j], 8, _8bitNumber.size() );
+                _8bitNumber[j] = convertDecimalToNBase( _whitePixels[j], 8, _8bitNumber.size() );
                 
-                float _x1a = j * _stepX;
-                float _y1a = _defaultNote - scale1[_8bitNumber[j][0]] * _stepY;
-                float _y2a = _defaultNote - scale2[_8bitNumber[j][1]] * _stepY;
-                float _y3a = _defaultNote - scale3[_8bitNumber[j][2]] * _stepY;
-                float _y4a = _defaultNote - scale4[_8bitNumber[j][3]] * _stepY;
-                float _y5a = _defaultNote - scale5[_8bitNumber[j][4]] * _stepY;
                 
-                ofDrawCircle( _x1a, _y1a, _size );
-                ofDrawCircle( _x1a, _y2a, _size );
-                ofDrawCircle( _x1a, _y3a, _size );
-                ofDrawCircle( _x1a, _y4a, _size );
-                ofDrawCircle( _x1a, _y5a, _size );
+                int _1Note = _8bitNumber[j][0];
+                int _2Note = _8bitNumber[j][1];
+                int _3Note = _8bitNumber[j][2];
+                int _4Note = _8bitNumber[j][3];
+                int _5Note = _8bitNumber[j][4];
+
+                float _x1a = (j - 1) * _stepX;
+                float _y2a = _defaultNote - scale2[_2Note] * _stepY;
+                float _y3a = _defaultNote - scale3[_3Note] * _stepY;
+                float _y4a = _defaultNote - scale4[_4Note] * _stepY;
+                float _y5a = _defaultNote - scale5[_5Note] * _stepY;
+
+                if ((_1Note - oldScoreNote1)!=0) {
+                    float _y1a = _defaultNote - scale1[_1Note] * _stepY;
+                    ofDrawCircle( _x1a, _y1a, _size );
+                }  
+                oldScoreNote1 = _1Note;
+            
+
+                
+//                if ((_2Note - oldScoreNote2)!=0) {
+//                    ofDrawCircle( _x1a, _y2a, _size );
+//                }
+//                oldScoreNote2 = _2Note;
+//
+//                if ((_3Note - oldScoreNote3)!=0) {
+//                    ofDrawCircle( _x1a, _y3a, _size );
+//                }
+//                oldScoreNote3 = _3Note;
+//                
+//                if ((_4Note - oldScoreNote4)!=0) {
+//                    ofDrawCircle( _x1a, _y4a, _size );
+//                }
+//                oldScoreNote4 = _4Note;
+//
+//                if ((_5Note - oldScoreNote5)!=0) {
+//                    ofDrawCircle( _x1a, _y5a, _size );
+//                }
+//                oldScoreNote5 = _5Note;
                 
             
             }
@@ -448,6 +487,18 @@ void ofApp::lineScoreDraw(){
     
     
     
+    
+    ofPopStyle();
+
+    ofPopMatrix();
+    
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate( ctrlPnW * 0.5 - _xNumber * 0.5 * _stepX, ctrlPnY + ctrlPnH * 0.5 );
+    ofSetColor( 255, 0, 0, 200 );
+    ofDrawLine( 0, 200, 0, -200 );
     
     ofPopStyle();
     ofPopMatrix();
@@ -546,7 +597,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             float _maxY = screenH-speedCSize.y*0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 speedCPos.y = touch.y;
-                float _tempo = ofMap(speedCPos.y, _minY, _maxY, 200, 50);
+                float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
                 synthMain.setParameter("tempo", _tempo);
             }
         }
@@ -679,14 +730,12 @@ void ofApp::synthSetting(){
 
 
 //--------------------------------------------------------------
-void ofApp::noteTrigger1(int _index){
+void ofApp::noteTrigger1(){
     
-    
-    int _indexLoopForNote = _index;
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(5);
-    _8bitNumber = convertDecimalToNBase( whitePixels[_indexLoopForNote].pixelN, 8, _8bitNumber.size() );
+    _8bitNumber = convertDecimalToNBase( whitePixels[noteIndex % whitePixels.size()].pixelN, 8, _8bitNumber.size() );
     
     int _1Note = _8bitNumber[0];
     int _2Note = _8bitNumber[1];
@@ -699,32 +748,33 @@ void ofApp::noteTrigger1(int _index){
     if ((_1Note - oldNoteIndex1)!=0) {
         synth1.setParameter("trigger1", 1);
         synth1.setParameter("carrierPitch1", scale1[_1Note]);
+        
     }
     oldNoteIndex1 = _1Note;
     
-    if ((_2Note - oldNoteIndex2)!=0) {
-        synth2.setParameter("trigger2", 1);
-        synth2.setParameter("carrierPitch2", scale2[_2Note]);
-    }
-    oldNoteIndex2 = _2Note;
-    
-    if ((_3Note - oldNoteIndex3)!=0) {
-        synth3.setParameter("trigger3", 1);
-        synth3.setParameter("carrierPitch3", scale3[_3Note]);
-    }
-    oldNoteIndex3 = _3Note;
-    
-    if ((_4Note - oldNoteIndex4)!=0) {
-        synth4.setParameter("trigger4", 1);
-        synth4.setParameter("carrierPitch4", scale4[_4Note]);
-    }
-    oldNoteIndex4 = _4Note;
-    
-    if ((_5Note - oldNoteIndex5)!=0) {
-        synth5.setParameter("trigger5", 1);
-        synth5.setParameter("carrierPitch5", scale5[_5Note]);
-    }
-    oldNoteIndex5 = _5Note;
+//    if ((_2Note - oldNoteIndex2)!=0) {
+//        synth2.setParameter("trigger2", 1);
+//        synth2.setParameter("carrierPitch2", scale2[_2Note]);
+//    }
+//    oldNoteIndex2 = _2Note;
+//    
+//    if ((_3Note - oldNoteIndex3)!=0) {
+//        synth3.setParameter("trigger3", 1);
+//        synth3.setParameter("carrierPitch3", scale3[_3Note]);
+//    }
+//    oldNoteIndex3 = _3Note;
+//    
+//    if ((_4Note - oldNoteIndex4)!=0) {
+//        synth4.setParameter("trigger4", 1);
+//        synth4.setParameter("carrierPitch4", scale4[_4Note]);
+//    }
+//    oldNoteIndex4 = _4Note;
+//    
+//    if ((_5Note - oldNoteIndex5)!=0) {
+//        synth5.setParameter("trigger5", 1);
+//        synth5.setParameter("carrierPitch5", scale5[_5Note]);
+//    }
+//    oldNoteIndex5 = _5Note;
     
     
 }

@@ -74,7 +74,7 @@ public:
     int oldNoteIndex3;
     int oldNoteIndex4;
     int oldNoteIndex5;
-    void noteTrigger1(int _index);
+    void noteTrigger1();
 
     
     // Main
@@ -118,6 +118,7 @@ public:
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStepSize, guideHeightStepSize;
+    int maxSpeed, minSpeed;
 
     float ctrlRectS;
 
@@ -139,7 +140,10 @@ public:
 
     // Line Score
     void lineScoreDraw();
+    int oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5;
     
+    
+    int _test;
 };
 
 
