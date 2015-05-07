@@ -137,6 +137,9 @@ public:
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);
 
+    // Line Score
+    void lineScoreDraw();
+    
 };
 
 
