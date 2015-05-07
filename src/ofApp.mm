@@ -41,8 +41,14 @@ void ofApp::setup(){
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         pixelCircleSize = 10;
+        ctrlRectS = 80;
+        guideWidthStepSize = 96;
+        guideHeightStepSize = 64;
     }else{
         pixelCircleSize = 5;
+        ctrlRectS = 30;
+        guideWidthStepSize = ctrlPnW / 16;
+        guideHeightStepSize = ctrlPnH / 8;
     }
     
     index = 0;
@@ -64,13 +70,12 @@ void ofApp::setup(){
     //    } else {
     //    }
  
-    ctrlRectS = 80;
     speedCSize = ofPoint(ctrlRectS,ctrlRectS);
-    speedCPos = ofPoint( 15 * 96, ctrlPnY + ctrlPnH * 0.5 );
+    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bSpeedCtrl = false;
     
     thresholdCSize = ofPoint(ctrlRectS,ctrlRectS);
-    thresholdCPos = ofPoint( 1 * 96, ctrlPnY + ctrlPnH * 0.5 );
+    thresholdCPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bthresholdCtrl = false;
     
     cannyThreshold1 = 120;
@@ -109,8 +114,8 @@ void ofApp::update(){
             ofImage _tImage;
             
             pixelBright.clear();
-            blackPixels.clear();
             whitePixels.clear();
+            blackPixels.clear();
             
             ofPixels _src = edge.getPixels();
             unsigned char * src = _src.getData();
@@ -135,7 +140,7 @@ void ofApp::update(){
                         blackWhitePixels _bWP;
                         _bWP.indexPos = i;
                         _bWP.pixelN = _wCounter;
-                        whitePixels.push_back(_bWP);
+                        blackPixels.push_back(_bWP);
                     }
                     _bCounter++;
                     _wCounter = 0;
@@ -146,7 +151,7 @@ void ofApp::update(){
                         blackWhitePixels _bWP;
                         _bWP.indexPos = i;
                         _bWP.pixelN = _bCounter;
-                        blackPixels.push_back(_bWP);
+                        whitePixels.push_back(_bWP);
                     }
                     _wCounter++;
                     _bCounter = 0;
@@ -164,9 +169,9 @@ void ofApp::update(){
 void ofApp::triggerReceive(float & metro){
     
     index++;
-    noteIndex = index % blackPixels.size();
+    noteIndex = index;
     
-    noteTrigger1( noteIndex );
+    noteTrigger1( noteIndex % whitePixels.size() );
     
 }
 
@@ -246,9 +251,9 @@ void ofApp::information(){
     ofPushStyle();
     ofSetColor( 120 );
 
-    if (blackPixels.size()>0) {
+    if (whitePixels.size()>0) {
 
-        int _blackPixels = blackPixels[noteIndex].pixelN;
+        int _blackPixels = whitePixels[noteIndex % whitePixels.size()].pixelN;
     
         vector<int> _10bitNumber;
         _10bitNumber.resize(4);
@@ -283,10 +288,10 @@ void ofApp::pixelDraw(){
     ofSetColor( 10, 180 );
     
     // Canny
-    for (int i=0; i<blackPixels.size(); i++) {
+    for (int i=0; i<whitePixels.size(); i++) {
         
-        float _x = (blackPixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(blackPixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (whitePixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(whitePixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
         
@@ -307,21 +312,53 @@ void ofApp::playingPixel(){
     float _ellipseSizeR = 0.7;
 
     if (bPlayNote) {
-        
+
+        ofEnableAntiAliasing();
+
+        int _noteIndex = noteIndex % (whitePixels.size());
+
         ofPushMatrix();
         ofPushStyle();
-        ofEnableAntiAliasing();
         ofSetColor( 0, 255, 0, 255 );
         
-        int _noteIndex = noteIndex % (blackPixels.size());
         
-        float _x = (blackPixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(blackPixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
+
         
         ofPopStyle();
+
+        ofPushStyle();
+        ofSetColor( 255, 0, 0, 255 );
+        float _xS = ((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _yS = (int)((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        
+        ofDrawCircle(  _xS, _yS, _pixelSize * _ellipseSizeR );
+        
+        ofPopStyle();
+
+        
+        ofPushStyle();
+        ofSetColor( 0, 0, 255, 180 );
+
+        int _indexPixes = whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN;
+
+        int _index = whitePixels[_noteIndex].pixelN;
+        for (int i=0; i<_index; i++){
+        
+            float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
+            float _yS = (int)((_indexPixes+i) / changedCamSize) * pixelStepS * cameraScreenRatio;
+            
+            ofDrawCircle(  _xS, _yS, _pixelSize * _ellipseSizeR );
+        }
+        
+        ofPopStyle();
+
+        
         ofPopMatrix();
+
         
     }
     
@@ -339,10 +376,10 @@ void ofApp::crossDraw(){
         ofEnableAntiAliasing();
         ofSetColor( 0, 255, 0, 255 );
         
-        int _noteIndex = noteIndex % (blackPixels.size());
+        int _noteIndex = noteIndex % (whitePixels.size());
         
-        float _x = (blackPixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(blackPixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofDrawLine( _x, 0, _x, ctrlPnY);
         ofDrawLine( 0, _y, ctrlPnW, _y);
@@ -363,12 +400,12 @@ void ofApp::debugControlPDraw(){
     ofSetColor( 120 );
 
     for (int i=0; i<15; i++){
-        float _x1 = i * 96 + 96;
+        float _x1 = i * guideWidthStepSize + guideWidthStepSize;
         ofDrawLine( _x1, ctrlPnY, _x1, screenH );
     }
     
     for (int j=0; j<7; j++){
-        float _y1 = j * 64 + 64;
+        float _y1 = j * guideHeightStepSize + guideHeightStepSize;
         ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
     }
     
@@ -591,7 +628,7 @@ void ofApp::noteTrigger1(int _index){
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(5);
-    _8bitNumber = convertDecimalToNBase( blackPixels[_indexLoopForNote].pixelN, 8, _8bitNumber.size() );
+    _8bitNumber = convertDecimalToNBase( whitePixels[_indexLoopForNote].pixelN, 8, _8bitNumber.size() );
     
     int _1Note = _8bitNumber[0];
     int _2Note = _8bitNumber[1];

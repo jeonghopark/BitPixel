@@ -98,8 +98,8 @@ public:
     vector<float> pixelBright;
     void pixelDraw();
     int thresholdValue;
-    vector<blackWhitePixels> blackPixels;
     vector<blackWhitePixels> whitePixels;
+    vector<blackWhitePixels> blackPixels;
     blackWhitePixels _wPix;
     int pixelCircleSize;
     
@@ -117,6 +117,7 @@ public:
     void controlElementDraw();
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
+    int guideWidthStepSize, guideHeightStepSize;
 
     float ctrlRectS;
 
