@@ -128,7 +128,8 @@ public:
     ofPoint speedCPos, speedCSize;
     bool bSpeedCtrl;
     
-    ofPoint thresholdCPos, thresholdCSize;
+    ofPoint thresholdCPos;
+    float thresholdCSize;
     bool bthresholdCtrl;
     
     

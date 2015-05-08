@@ -105,7 +105,7 @@ void ofApp::setup(){
     speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bSpeedCtrl = false;
     
-    thresholdCSize = ofPoint(ctrlRectS,ctrlRectS);
+    thresholdCSize = ctrlRectS * 0.5;
     thresholdCPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bthresholdCtrl = false;
     
@@ -223,10 +223,10 @@ void ofApp::draw(){
     ofPushStyle();
     if (bPlayNote) {
         ofSetColor( 240, 140 );
+        bufferImg.draw( 0, 0, screenW, screenH);
     } else {
         ofSetColor( 255, 0 );
     }
-    bufferImg.draw( 0, 0, screenW, screenH);
     ofPopStyle();
     
     
@@ -276,9 +276,9 @@ void ofApp::controlElementDraw(){
     ofPushStyle();
     ofSetColor( 0 );
     ofNoFill();
-    float _tX = thresholdCPos.x - thresholdCSize.x * 0.5;
-    float _tY = thresholdCPos.y - thresholdCSize.y * 0.5;
-    ofDrawRectangle( _tX, _tY, thresholdCSize.x, thresholdCSize.y );
+    float _tX = thresholdCPos.x;
+    float _tY = thresholdCPos.y;
+    ofDrawCircle( _tX, _tY, thresholdCSize );
     ofPopStyle();
     
     
@@ -729,11 +729,10 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             bSpeedCtrl = false;
         }
         
-        float _tMinX = thresholdCPos.x - thresholdCSize.x * 0.5;
-        float _tMaxX = thresholdCPos.x + thresholdCSize.x * 0.5;
-        float _tMinY = thresholdCPos.y - thresholdCSize.y * 0.5;
-        float _tMaxY = thresholdCPos.y + thresholdCSize.y * 0.5;
-        if ((touch.x>_tMinX)&&(touch.x<_tMaxX)&&(touch.y>_tMinY)&&(touch.y<_tMaxY)) {
+        float _sizeF = 0.7;
+        float _dist = ofDist( thresholdCPos.x, thresholdCPos.y , touch.x, touch.y );
+        
+        if (_dist<thresholdCSize * _sizeF) {
             bthresholdCtrl = true;
         } else {
             bthresholdCtrl = false;
