@@ -125,7 +125,8 @@ public:
 
     float ctrlRectS;
 
-    ofPoint speedCPos, speedCSize;
+    ofPoint speedCPos;
+    float speedCSize;
     bool bSpeedCtrl;
     
     ofPoint thresholdCPos;

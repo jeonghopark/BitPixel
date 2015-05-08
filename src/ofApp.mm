@@ -39,6 +39,7 @@ void ofApp::setup(){
     
     cam.setDeviceID(0);
     cam.setup( 480, 360 );
+    cam.setDesiredFrameRate(15);
     
     bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
     
@@ -101,7 +102,7 @@ void ofApp::setup(){
     //    } else {
     //    }
     
-    speedCSize = ofPoint(ctrlRectS,ctrlRectS);
+    speedCSize = ctrlRectS;
     speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bSpeedCtrl = false;
     
@@ -267,18 +268,23 @@ void ofApp::controlElementDraw(){
     
     ofPushStyle();
     ofSetColor( 0 );
-    float _sX = speedCPos.x - speedCSize.x * 0.5;
-    float _sY = speedCPos.y - speedCSize.y * 0.5;
+    float _sX = speedCPos.x;
+    float _sY = speedCPos.y;
     ofNoFill();
-    ofDrawRectangle( _sX, _sY, speedCSize.x, speedCSize.y );
+    ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
     ofPopStyle();
     
     ofPushStyle();
     ofSetColor( 0 );
     ofNoFill();
-    float _tX = thresholdCPos.x;
-    float _tY = thresholdCPos.y;
-    ofDrawCircle( _tX, _tY, thresholdCSize );
+    float _sizeF = 1.1;
+    float _x1 = thresholdCPos.x;
+    float _y1 = thresholdCPos.y - thresholdCSize * _sizeF;
+    float _x2 = thresholdCPos.x - cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
+    float _y2 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
+    float _x3 = thresholdCPos.x + cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
+    float _y3 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
+    ofDrawTriangle( _x1, _y1, _x2, _y2, _x3, _y3 );
     ofPopStyle();
     
     
@@ -716,23 +722,19 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
     
-    
-    
     if ( touch.id==0 ) {
-        float _sMinX = speedCPos.x - speedCSize.x * 0.5;
-        float _sMaxX = speedCPos.x + speedCSize.x * 0.5;
-        float _sMinY = speedCPos.y - speedCSize.y * 0.5;
-        float _sMaxY = speedCPos.y + speedCSize.y * 0.5;
-        if ((touch.x>_sMinX)&&(touch.x<_sMaxX)&&(touch.y>_sMinY)&&(touch.y<_sMaxY)) {
+        float _distS = ofDist( speedCPos.x, speedCPos.y , touch.x, touch.y );
+
+        if (_distS<thresholdCSize) {
             bSpeedCtrl = true;
         } else {
             bSpeedCtrl = false;
         }
         
-        float _sizeF = 0.7;
-        float _dist = ofDist( thresholdCPos.x, thresholdCPos.y , touch.x, touch.y );
+//        float _sizeF = 0.7;
+        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , touch.x, touch.y );
         
-        if (_dist<thresholdCSize * _sizeF) {
+        if (_distT<thresholdCSize) {
             bthresholdCtrl = true;
         } else {
             bthresholdCtrl = false;
@@ -747,8 +749,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
     if ( touch.id==0 ) {
         
         if (bSpeedCtrl) {
-            float _minY = ctrlPnY+speedCSize.y*0.75;
-            float _maxY = screenH-speedCSize.y*0.75;
+            float _minY = ctrlPnY+speedCSize*0.75;
+            float _maxY = screenH-speedCSize*0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 speedCPos.y = touch.y;
                 float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
@@ -757,8 +759,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         }
         
         if (bthresholdCtrl) {
-            float _minY = ctrlPnY+speedCSize.y*0.75;
-            float _maxY = screenH-speedCSize.y*0.75;
+            float _minY = ctrlPnY+speedCSize*0.75;
+            float _maxY = screenH-speedCSize*0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 thresholdCPos.y = touch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
