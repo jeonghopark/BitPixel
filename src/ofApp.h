@@ -165,7 +165,10 @@ public:
     
 
     
-
+    // note scale selector
+    int noteSelector(int _n, int _index, int _subIndex);
+    
+    void scaleChange();
     
 };
 
