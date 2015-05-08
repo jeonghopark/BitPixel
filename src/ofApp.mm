@@ -975,13 +975,13 @@ void ofApp::synthSetting(){
     synth2.setOutputGen( tone2 * env2 * 0.75 );
     
     ControlParameter carrierPitch3 = synth3.addParameter("carrierPitch3");
-    float amountMod3 = 6;
+    float amountMod3 = 12;
     ControlGenerator rCarrierFreq3 = ControlMidiToFreq().input(carrierPitch3);
-    ControlGenerator rModFreq3 = rCarrierFreq3 * 4.489;
+    ControlGenerator rModFreq3 = rCarrierFreq3 * 14.489;
     Generator modulationTone3 = SineWave().freq( rModFreq3 ) * rModFreq3 * amountMod3;
     Generator tone3 = SineWave().freq(rCarrierFreq3 + modulationTone3);
     ControlGenerator envelopTrigger3 = synth3.addParameter("trigger3");
-    Generator env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger3).legato(false);
+    Generator env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger3).legato(true);
     synth3.setOutputGen( tone3 * env3 * 0.75 );
     
     ControlParameter carrierPitch4 = synth4.addParameter("carrierPitch4");
@@ -1060,6 +1060,7 @@ void ofApp::noteTrigger1(){
         synth3.setParameter("trigger3", 1);
         int _note3 = noteSelector(baseSelection, 3, _3Note);
         synth3.setParameter("carrierPitch3", _note3);
+        scoreNote3.push_back(_note3);
     } else {
         scoreNote3.push_back(-1);
     }
@@ -1069,6 +1070,7 @@ void ofApp::noteTrigger1(){
         synth4.setParameter("trigger4", 1);
         int _note4 = noteSelector(baseSelection, 4, _4Note);
         synth4.setParameter("carrierPitch4", _note4);
+        scoreNote4.push_back(_note4);
     } else {
         scoreNote4.push_back(-1);
     }
@@ -1078,6 +1080,7 @@ void ofApp::noteTrigger1(){
         synth5.setParameter("trigger5", 1);
         int _note5 = noteSelector(baseSelection, 5, _5Note);
         synth5.setParameter("carrierPitch5", _note5);
+        scoreNote5.push_back(_note5);
     } else {
         scoreNote5.push_back(-1);
     }
@@ -1087,6 +1090,7 @@ void ofApp::noteTrigger1(){
         synth6.setParameter("trigger6", 1);
         int _note6 = noteSelector(baseSelection, 6, _6Note);
         synth6.setParameter("carrierPitch6", _note6);
+        scoreNote6.push_back(_note6);
     } else {
         scoreNote6.push_back(-1);
     }
