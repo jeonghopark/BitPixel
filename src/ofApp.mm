@@ -18,8 +18,8 @@ void ofApp::setup(){
     
     for (int i=0; i<8; i++){
         scale1[i] = scale1[i] + 64;
-        scale2[i] = scale2[i] + 72;
-        scale3[i] = scale3[i] + 84;
+        scale2[i] = scale2[i] + 84;
+        scale3[i] = scale3[i] + 72;
         scale4[i] = scale4[i] + 48;
         scale5[i] = scale5[i] + 36;
     }
@@ -27,6 +27,7 @@ void ofApp::setup(){
     
     ofBackground( 255 );
     ofSetFrameRate( 60 );
+    ofEnableAlphaBlending();
     
     screenW = ofGetWidth();
     screenH = ofGetHeight();
@@ -223,9 +224,15 @@ void ofApp::draw(){
     if (bPlayNote) {
         ofSetColor( 240, 140 );
     } else {
-        ofSetColor( 240, 0 );
+        ofSetColor( 255, 0 );
     }
     bufferImg.draw( 0, 0, screenW, screenH);
+    ofPopStyle();
+    
+    
+    ofPushStyle();
+    ofSetColor(255,30);
+    ofDrawRectangle(0, 0, screenW, screenH);
     ofPopStyle();
     
     
@@ -274,6 +281,19 @@ void ofApp::controlElementDraw(){
     ofDrawRectangle( _tX, _tY, thresholdCSize.x, thresholdCSize.y );
     ofPopStyle();
     
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofTranslate( guideWidthStepSize * 13.5, ctrlPnY + 70 );
+    drawShape(5, ctrlRectS * 0.55);
+    ofTranslate( 0, ctrlRectS * 1.5 );
+    drawShape(6, ctrlRectS * 0.55);
+    ofTranslate( 0, ctrlRectS * 1.5 );
+    drawShape(7, ctrlRectS * 0.55);
+    ofTranslate( 0, ctrlRectS * 1.5 );
+    drawShape(8, ctrlRectS * 0.55);
+    ofPopMatrix();
+    ofPopStyle();
 }
 
 
@@ -311,13 +331,13 @@ void ofApp::information(){
 void ofApp::pixelDraw(){
     
     int _pixelSize = pixelCircleSize;  // 10
-    float _ellipseSizeR = 0.7;
+    float _ellipseSizeR = 1.7;
     
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( ofColor::tomato );
+    ofSetColor( 0, 180 );
     
     // Canny
     for (int i=0; i<whitePixels.size(); i++) {
@@ -325,7 +345,12 @@ void ofApp::pixelDraw(){
         float _x = (whitePixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)(whitePixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
         
-        ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
+//        ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
+        
+        ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
+        ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+        ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+        ofDrawTriangle( _1P, _2P, _3P );
         
     }
     
@@ -348,7 +373,7 @@ void ofApp::playingPixel(){
         ofPushMatrix();
         ofPushStyle();
         ofEnableAntiAliasing();
-        ofSetColor( 0, 255, 0, 180 );
+        ofSetColor( 0, 120 );
         
         if (whitePixels.size()>0) {
             
@@ -356,16 +381,14 @@ void ofApp::playingPixel(){
             
             
             //
-            float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-            float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
-            
+//            float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
+//            float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+//            ofDrawCircle( _x, _y, _pixelSize * _ellipseSizeR );
+
             //
-            float _xS = ((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) % changedCamSize) * pixelStepS * cameraScreenRatio;
-            float _yS = (int)((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) / changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            ofDrawCircle(  _xS, _yS, _pixelSize * _ellipseSizeR );
+//            float _xS = ((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) % changedCamSize) * pixelStepS * cameraScreenRatio;
+//            float _yS = (int)((whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN) / changedCamSize) * pixelStepS * cameraScreenRatio;
+//            ofDrawCircle(  _xS, _yS, _pixelSize * _ellipseSizeR );
             
             
             //
@@ -377,7 +400,12 @@ void ofApp::playingPixel(){
                 float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
                 float _yS = (int)((_indexPixes+i) / changedCamSize) * pixelStepS * cameraScreenRatio;
                 
-                ofDrawCircle(  _xS, _yS, _pixelSize * _ellipseSizeR );
+                ofFill();
+                ofSetColor( 0, 20 );
+                ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
+                ofNoFill();
+                ofSetColor( 0, 120 );
+                ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
             }
         
         
@@ -572,13 +600,18 @@ void ofApp::lineScoreDraw(){
     ofPopMatrix();
     
     
+
     ofPushMatrix();
     ofPushStyle();
+    ofSetColor( 0, 80 );
     
-    ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + ctrlPnH * 0.5 );
-    ofSetColor( 255, 0, 0, 200 );
-    ofDrawLine( 0, 200, 0, -200 );
-    
+    float _yD = 20;
+    float _x1 = ctrlPnW * 0.5 - _xDefaultPos * 0.5;
+    ofDrawLine( _x1, ctrlPnY + _yD, _x1, screenH - _yD);
+
+    float _x2 = ctrlPnW * 0.5 + _xDefaultPos * 0.5;
+    ofDrawLine( _x2, ctrlPnY + _yD, _x2, screenH - _yD);
+
     ofPopStyle();
     ofPopMatrix();
     
@@ -610,6 +643,37 @@ void ofApp::controlGuide(){
     
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::drawShape(int _b, int _s){
+    
+    vector<ofPoint> posLine;
+    
+    int _base = _b;
+    int _size = _s;
+    for (int i=0; i<_base; i++) {
+        float _sizeDegree = 360 / _base;
+        float _x = sin(ofDegToRad(i*_sizeDegree+180)) * _size;
+        float _y = cos(ofDegToRad(i*_sizeDegree+180)) * _size;
+        
+        ofPoint _p = ofPoint( _x, _y );
+        posLine.push_back( _p );
+    }
+    
+    ofSetColor(10, 60);
+    for (int i=0; i<posLine.size(); i++){
+        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+    }
+    
+    ofSetColor(0);
+    for (int i=0; i<posLine.size()-1; i++){
+        ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
+    }
+    ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
+    
+}
+
 
 
 //--------------------------------------------------------------
@@ -652,21 +716,6 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
     
-    if ((touch.x>0)&&(touch.x<ctrlPnW)&&(touch.y<ctrlPnY)&&(touch.y>0)) {
-        if ( touch.id==0 ) {
-            bPlayNote = !bPlayNote;
-            bufferImg = edge;
-        }
-        
-        
-        if ( !bPlayNote ) {
-            index = 0;
-            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
-        } else {
-            noteIndex = index;
-            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
-        }
-    }
     
     
     if ( touch.id==0 ) {
@@ -737,6 +786,23 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void ofApp::touchUp(ofTouchEventArgs & touch){
     
+    if ((touch.x>0)&&(touch.x<ctrlPnW)&&(touch.y<ctrlPnY)&&(touch.y>0)) {
+        if ( touch.id==0 ) {
+            bPlayNote = !bPlayNote;
+//            blur(edge, 3);
+            bufferImg = edge;
+        }
+        
+        
+        if ( !bPlayNote ) {
+            index = 0;
+            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+        } else {
+            noteIndex = index;
+            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+        }
+    }
+
 }
 
 //--------------------------------------------------------------
@@ -852,7 +918,7 @@ void ofApp::noteTrigger1(){
     //    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
     
 
-    if ((_1Note - oldNoteIndex1)!=0) {
+    if (abs(_1Note - oldNoteIndex1)>=1) {
         synth1.setParameter("trigger1", 1);
         synth1.setParameter("carrierPitch1", scale1[_1Note]);
         scoreNote1.push_back(scale1[_1Note]);
@@ -861,7 +927,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex1 = _1Note;
     
-    if ((_2Note - oldNoteIndex2)!=0) {
+    if (abs(_2Note - oldNoteIndex2)>=1) {
         synth2.setParameter("trigger2", 1);
         synth2.setParameter("carrierPitch2", scale2[_2Note]);
         scoreNote2.push_back(scale2[_2Note]);
@@ -870,7 +936,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex2 = _2Note;
 
-    if ((_3Note - oldNoteIndex3)!=0) {
+    if (abs(_3Note - oldNoteIndex3)>=1) {
         synth3.setParameter("trigger3", 1);
         synth3.setParameter("carrierPitch3", scale3[_3Note]);
         scoreNote3.push_back(scale3[_3Note]);
@@ -879,7 +945,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex3 = _3Note;
 
-    if ((_4Note - oldNoteIndex4)!=0) {
+    if (abs(_4Note - oldNoteIndex4)>=1) {
         synth4.setParameter("trigger4", 1);
         synth4.setParameter("carrierPitch4", scale4[_4Note]);
         scoreNote4.push_back(scale4[_4Note]);
@@ -888,7 +954,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex4 = _4Note;
 
-    if ((_5Note - oldNoteIndex5)!=0) {
+    if (abs(_5Note - oldNoteIndex5)>=1) {
         synth5.setParameter("trigger5", 1);
         synth5.setParameter("carrierPitch5", scale5[_5Note]);
         scoreNote5.push_back(scale5[_5Note]);

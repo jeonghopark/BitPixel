@@ -121,6 +121,8 @@ public:
     int maxSpeed, minSpeed;
     void controlGuide();
 
+    void drawShape(int _b, int _s);
+
     float ctrlRectS;
 
     ofPoint speedCPos, speedCSize;
@@ -147,8 +149,9 @@ public:
     vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5;
     int lineScoreStepX, lineScoreStepY;
     
+
     
-    
+
     
 };
 
