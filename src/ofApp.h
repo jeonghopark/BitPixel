@@ -34,6 +34,7 @@ class ofApp : public ofxiOSApp {
     ofxTonicSynth synth3;
     ofxTonicSynth synth4;
     ofxTonicSynth synth5;
+    ofxTonicSynth synth6;
     ofxTonicSynth synthMain;
     
 public:
@@ -74,6 +75,7 @@ public:
     int oldNoteIndex3;
     int oldNoteIndex4;
     int oldNoteIndex5;
+    int oldNoteIndex6;
     void noteTrigger1();
 
     
@@ -121,7 +123,6 @@ public:
     int maxSpeed, minSpeed;
     void controlGuide();
 
-    void drawShape(int _b, int _s);
 
     float ctrlRectS;
 
@@ -132,6 +133,17 @@ public:
     ofPoint thresholdCPos;
     float thresholdCSize;
     bool bthresholdCtrl;
+    
+    // base Interface
+    void baseInterface();
+    ofPoint base5Pos;
+    ofPoint base6Pos;
+    ofPoint base7Pos;
+    ofPoint base8Pos;
+    float baseSize;
+    void drawShape(ofPoint _p, int _b, int _s);
+
+    int baseSelection;
     
     
     ofxCvGrayscaleImage grayImage;
@@ -146,9 +158,9 @@ public:
 
     // Line Score
     void lineScoreDraw();
-    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5;
+    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6;
     
-    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5;
+    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6;
     int lineScoreStepX, lineScoreStepY;
     
 
