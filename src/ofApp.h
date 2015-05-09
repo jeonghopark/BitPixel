@@ -134,6 +134,10 @@ public:
     float thresholdCSize;
     bool bthresholdCtrl;
     
+    ofPoint intervalPos;
+    float intervalSize;
+    bool bInterval;
+    
     // base Interface
     void baseInterface();
     ofPoint base5Pos;
@@ -169,6 +173,8 @@ public:
     int noteSelector(int _n, int _index, int _subIndex);
     
     void scaleChange();
+    
+    int intervalDist;
     
 };
 

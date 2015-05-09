@@ -128,6 +128,11 @@ void ofApp::setup(){
     thresholdCSize = ctrlRectS * 0.5;
     thresholdCPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bthresholdCtrl = false;
+
+    intervalSize = ctrlRectS * 0.5;
+    intervalPos = ofPoint( 2.5 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    bthresholdCtrl = false;
+    intervalDist = 1;
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
@@ -288,12 +293,36 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::controlElementDraw(){
     
+
     ofPushStyle();
     ofSetColor( 255 );
     ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
     ofPopStyle();
+
+
+    ofPushMatrix();
+    ofPushStyle();
+    ofSetColor( 10 );
     
-    controlGuide();
+    float _speedX = guideWidthStepSize;
+    float _yD = 20;
+    ofDrawLine( _speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
+    
+    float _thresholdX = guideWidthStepSize * 15;
+    ofDrawLine( _thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
+    
+    float _intervalX = guideWidthStepSize * 2.5;
+    ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
+    
+    
+    //    for (int j=0; j<7; j++){
+    //        float _y1 = j * guideHeightStepSize + guideHeightStepSize;
+    //        ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
+    //    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+
     
     ofPushStyle();
     ofSetColor( 0 );
@@ -314,6 +343,17 @@ void ofApp::controlElementDraw(){
     float _x3 = thresholdCPos.x + cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
     float _y3 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
     ofDrawTriangle( _x1, _y1, _x2, _y2, _x3, _y3 );
+    ofPopStyle();
+    
+    
+    ofPushStyle();
+    ofSetColor( 0 );
+    float _iX = intervalPos.x;
+    float _iY = intervalPos.y;
+    ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
+    ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
+    ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
+    ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
     ofPopStyle();
     
 }
@@ -677,25 +717,6 @@ void ofApp::lineScoreDraw(){
 //--------------------------------------------------------------
 void ofApp::controlGuide(){
     
-    ofPushMatrix();
-    ofPushStyle();
-    ofSetColor( 10 );
-    
-    float _x1 = guideWidthStepSize;
-    float _yD = 20;
-    ofDrawLine( _x1, ctrlPnY + _yD, _x1, screenH - _yD);
-    
-    float _x2 = guideWidthStepSize * 15;
-    ofDrawLine( _x2, ctrlPnY + _yD, _x2, screenH - _yD);
-    
-    
-    //    for (int j=0; j<7; j++){
-    //        float _y1 = j * guideHeightStepSize + guideHeightStepSize;
-    //        ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
-    //    }
-    
-    ofPopStyle();
-    ofPopMatrix();
     
     
 }
@@ -818,6 +839,15 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
         } else {
             bthresholdCtrl = false;
         }
+        
+        float _distI = ofDist( intervalPos.x, intervalPos.y , touch.x, touch.y );
+        
+        if (_distI<intervalSize) {
+            bInterval = true;
+        } else {
+            bInterval = false;
+        }
+
     }
     
 }
@@ -828,8 +858,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
     if ( touch.id==0 ) {
         
         if (bSpeedCtrl) {
-            float _minY = ctrlPnY+speedCSize*0.75;
-            float _maxY = screenH-speedCSize*0.75;
+            float _minY = ctrlPnY + speedCSize * 0.75;
+            float _maxY = screenH - speedCSize * 0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 speedCPos.y = touch.y;
                 float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
@@ -838,8 +868,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         }
         
         if (bthresholdCtrl) {
-            float _minY = ctrlPnY+speedCSize*0.75;
-            float _maxY = screenH-speedCSize*0.75;
+            float _minY = ctrlPnY + speedCSize * 0.75;
+            float _maxY = screenH - speedCSize * 0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 thresholdCPos.y = touch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
@@ -856,6 +886,18 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             //                grayThreshold = _threshold;
             //            }
             
+        }
+        
+        
+        if (bInterval) {
+            float _minY = ctrlPnY + speedCSize * 0.75;
+            float _maxY = screenH - speedCSize * 0.75;
+            if ((touch.y>_minY)&&(touch.y<_maxY)) {
+                intervalPos.y = touch.y;
+                float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 4);
+                intervalDist = _interval;
+                cout << intervalDist << endl;
+            }
         }
         
     }
@@ -1036,7 +1078,7 @@ void ofApp::noteTrigger1(){
     //    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
     
     
-    if (abs(_1Note - oldNoteIndex1)>=1) {
+    if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
         synth1.setParameter("trigger1", 1);
         int _note1 = noteSelector(baseSelection, 1, _1Note);
         synth1.setParameter("carrierPitch1", _note1);
@@ -1046,7 +1088,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex1 = _1Note;
     
-    if (abs(_2Note - oldNoteIndex2)>=1) {
+    if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
         synth2.setParameter("trigger2", 1);
         int _note2 = noteSelector(baseSelection, 2, _2Note);
         synth2.setParameter("carrierPitch2", _note2);
@@ -1056,7 +1098,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex2 = _2Note;
     
-    if (abs(_3Note - oldNoteIndex3)>=1) {
+    if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
         synth3.setParameter("trigger3", 1);
         int _note3 = noteSelector(baseSelection, 3, _3Note);
         synth3.setParameter("carrierPitch3", _note3);
@@ -1066,7 +1108,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex3 = _3Note;
     
-    if (abs(_4Note - oldNoteIndex4)>=1) {
+    if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
         synth4.setParameter("trigger4", 1);
         int _note4 = noteSelector(baseSelection, 4, _4Note);
         synth4.setParameter("carrierPitch4", _note4);
@@ -1076,7 +1118,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex4 = _4Note;
     
-    if (abs(_5Note - oldNoteIndex5)>=1) {
+    if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
         synth5.setParameter("trigger5", 1);
         int _note5 = noteSelector(baseSelection, 5, _5Note);
         synth5.setParameter("carrierPitch5", _note5);
@@ -1086,7 +1128,7 @@ void ofApp::noteTrigger1(){
     }
     oldNoteIndex5 = _5Note;
     
-    if (abs(_6Note - oldNoteIndex6)>=1) {
+    if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
         synth6.setParameter("trigger6", 1);
         int _note6 = noteSelector(baseSelection, 6, _6Note);
         synth6.setParameter("carrierPitch6", _note6);
