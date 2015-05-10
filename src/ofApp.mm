@@ -302,7 +302,7 @@ void ofApp::controlElementDraw(){
 
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 10 );
+    ofSetColor( 0, 80 );
     
     float _speedX = guideWidthStepSize;
     float _yD = 20;
@@ -494,32 +494,6 @@ void ofApp::playingPixel(){
     
 }
 
-
-
-//--------------------------------------------------------------
-void ofApp::crossDraw(){
-    
-    if (bPlayNote) {
-        
-        ofPushMatrix();
-        ofPushStyle();
-        ofEnableAntiAliasing();
-        ofSetColor( 0, 255, 0, 255 );
-        
-        int _noteIndex = noteIndex % (whitePixels.size());
-        
-        float _x = (whitePixels[_noteIndex].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(whitePixels[_noteIndex].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
-        
-        ofDrawLine( _x, 0, _x, ctrlPnY);
-        ofDrawLine( 0, _y, ctrlPnW, _y);
-        
-        ofPopStyle();
-        ofPopMatrix();
-        
-    }
-    
-}
 
 
 //--------------------------------------------------------------

@@ -111,9 +111,7 @@ public:
 
     
     // Graphics
-    void playingPixel();
-    void crossDraw();
-    
+    void playingPixel();    
     
     // control Panel
     void controlElementDraw();
