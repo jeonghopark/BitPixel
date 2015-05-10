@@ -369,7 +369,7 @@ void ofApp::information(){
     
     if (whitePixels.size()>0) {
         
-        int _whitePixels = whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN;
+        int _whitePixels = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
         
         informationText.drawString( ofToString(_whitePixels), screenW * 0.5 - 200, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
 
@@ -452,7 +452,7 @@ void ofApp::playingPixel(){
         
         if (whitePixels.size()>0) {
             
-            int _noteIndex = noteIndex % (whitePixels.size()-1);
+            int _noteIndex = ((noteIndex) % (whitePixels.size()-1))+1;
             
             
             //
@@ -467,9 +467,9 @@ void ofApp::playingPixel(){
             
             
             //
-            int _indexPixes = whitePixels[_noteIndex+1].indexPos-whitePixels[_noteIndex+1].pixelN;
+            int _indexPixes = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].indexPos-whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
             
-            int _index = whitePixels[_noteIndex+1].pixelN;
+            int _index = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
             for (int i=0; i<_index; i++){
                 
                 float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -1043,7 +1043,7 @@ void ofApp::noteTrigger1(){
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(6);
-    _8bitNumber = convertDecimalToNBase( whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN, baseSelection, _8bitNumber.size() );
+    _8bitNumber = convertDecimalToNBase( whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN, baseSelection, _8bitNumber.size() );
     
     int _1Note = _8bitNumber[0];
     int _2Note = _8bitNumber[1];
