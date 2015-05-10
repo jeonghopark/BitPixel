@@ -369,28 +369,30 @@ void ofApp::information(){
     
     if (whitePixels.size()>0) {
         
-        int _blackPixels = whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN;
+        int _whitePixels = whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN;
         
-        vector<int> _10bitNumber;
-        _10bitNumber.resize(4);
-        _10bitNumber = convertDecimalToNBase( _blackPixels, 10, _10bitNumber.size() );
-        for (int i=0; i<_10bitNumber.size(); i++) {
-            informationText.drawString( ofToString(_10bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
-        }
+        informationText.drawString( ofToString(_whitePixels), screenW * 0.5 - 200, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
+
+//        vector<int> _10bitNumber;
+//        _10bitNumber.resize(4);
+//        _10bitNumber = convertDecimalToNBase( _whitePixels, 10, _10bitNumber.size() );
+//        for (int i=0; i<_10bitNumber.size(); i++) {
+//            informationText.drawString( ofToString(_10bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
+//        }
         
         vector<int> _8bitNumber;
         if ((baseSelection==5)||(baseSelection==6)) {
             _8bitNumber.resize(6);
-            _8bitNumber = convertDecimalToNBase( _blackPixels, baseSelection, _8bitNumber.size() );
+            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, _8bitNumber.size() );
             for (int i=0; i<_8bitNumber.size(); i++) {
-                informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 2 + fontSize * 1.5 );
+                informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
             }
         }
         if ((baseSelection==7)||(baseSelection==8)) {
             _8bitNumber.resize(5);
-            _8bitNumber = convertDecimalToNBase( _blackPixels, baseSelection, _8bitNumber.size() );
+            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, _8bitNumber.size() );
             for (int i=0; i<_8bitNumber.size(); i++) {
-                informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 2 + fontSize * 1.5 );
+                informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
             }
         }
         
