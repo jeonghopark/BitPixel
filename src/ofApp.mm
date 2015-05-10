@@ -8,11 +8,11 @@ int scale54[5] = {0, 2, 5, 7, 9};
 int scale55[5] = {0, 2, 4, 7, 9};
 int scale56[3] = {-7, 0, 7};
 
-int scale61[6] = {0, 2, 5, 7, 9, 12};
+int scale61[6] = {0, 4, 5, 7, 9, 12};
 int scale62[6] = {0, 7, 12, 14, 16, 19};
-int scale63[6] = {0, 2, 5, 7, 9, 12};
-int scale64[6] = {0, 2, 5, 7, 9, 12};
-int scale65[6] = {0, 2, 5, 7, 9, 12};
+int scale63[6] = {0, 4, 5, 7, 9, 12};
+int scale64[6] = {0, 4, 5, 7, 9, 12};
+int scale65[6] = {0, 4, 5, 7, 9, 12};
 int scale66[2] = {0, 7};
 
 int scale71[7] = {0, 2, 4, 7, 9, 12, 14};
@@ -21,10 +21,10 @@ int scale73[7] = {0, 2, 5, 7, 9, 11, 14};
 int scale74[7] = {0, 2, 4, 5, 7, 9, 11};
 int scale75[3] = {-7, 0, 7};
 
-int scale81[8] = {0, 2, 4, 7, 9, 12, 14, 16};
+int scale81[8] = {0, 2, 5, 7, 9, 11, 12, 17};
 int scale82[8] = {0, 7, 12, 14, 16, 19, 21, 24};
-int scale83[8] = {0, 2, 4, 5, 7, 9, 11, 12};
-int scale84[8] = {0, 2, 4, 5, 7, 9, 11, 12};
+int scale83[8] = {0, 5, 6, 7, 9, 11, 12, 17};
+int scale84[8] = {0, 5, 6, 7, 9, 11, 12, 17};
 int scale85[2] = {0, 7};
 
 
@@ -180,6 +180,7 @@ void ofApp::update(){
             pixelBright.clear();
             whitePixels.clear();
             blackPixels.clear();
+            
             
             ofPixels _src = edge.getPixels();
             unsigned char * src = _src.getData();
@@ -886,12 +887,11 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
 void ofApp::touchUp(ofTouchEventArgs & touch){
     
     if ((touch.x>0)&&(touch.x<ctrlPnW)&&(touch.y<ctrlPnY)&&(touch.y>0)) {
-        if ( touch.id==0 ) {
+        if ((whitePixels.size()!=0)&&( touch.id==0 )) {
             bPlayNote = !bPlayNote;
             //            blur(edge, 3);
             bufferImg = edge;
         }
-        
         
         if ( !bPlayNote ) {
             index = 0;
@@ -973,15 +973,37 @@ void ofApp::audioRequested (float * output, int bufferSize, int nChannels){
 //--------------------------------------------------------------
 void ofApp::synthSetting(){
     
+    
+    // modu synth
+//    ControlParameter modIndex = synth1.addParameter("modIndex", 0.25f);
+//    ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
+//    Generator rCarrierFreq = ControlMidiToFreq().input(carrierPitch1).smoothed();
+//    Generator rModFreq     = rCarrierFreq * 18.0f;
+//    Generator outputGen = SineWave()
+//    .freq( rCarrierFreq
+//          + (
+//             SineWave().freq( rModFreq ) *
+//             rModFreq *
+//             (modIndex.smoothed() * (1.0f + SineWave().freq((LFNoise().setFreq(0.5f) + 1.f) * 2.f + 0.2f)))
+//             )
+//          ) * ControlDbToLinear().input(0).smoothed();
+//    
+//    ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
+//    Generator env1 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
+//    synth1.setOutputGen(outputGen * env1 * 0.75 );
+    
+    
+    // bell ? synth
     ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
-    float amountMod1 = 4;
+    float amountMod1 = 5;
     ControlGenerator rCarrierFreq1 = ControlMidiToFreq().input(carrierPitch1);
-    ControlGenerator rModFreq1 = rCarrierFreq1 * 3.489;
+    ControlGenerator rModFreq1 = rCarrierFreq1 * 7;
     Generator modulationTone1 = SineWave().freq( rModFreq1 ) * rModFreq1 * amountMod1;
     Generator tone1 = SineWave().freq(rCarrierFreq1 + modulationTone1);
     ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
     Generator env1 = ADSR().attack(0.001).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
     synth1.setOutputGen( tone1 * env1 * 0.75 );
+
     
     ControlParameter carrierPitch2 = synth2.addParameter("carrierPitch2");
     float amountMod2 = 1;
@@ -1004,9 +1026,9 @@ void ofApp::synthSetting(){
     synth3.setOutputGen( tone3 * env3 * 0.75 );
     
     ControlParameter carrierPitch4 = synth4.addParameter("carrierPitch4");
-    float amountMod4 = 6;
+    float amountMod4 = 18;
     ControlGenerator rCarrierFreq4 = ControlMidiToFreq().input(carrierPitch4);
-    ControlGenerator rModFreq4 = rCarrierFreq4 * 4.489;
+    ControlGenerator rModFreq4 = rCarrierFreq4 * 1.1;
     Generator modulationTone4 = SineWave().freq( rModFreq4 ) * rModFreq4 * amountMod4;
     Generator tone4 = SineWave().freq(rCarrierFreq4 + modulationTone4);
     ControlGenerator envelopTrigger4 = synth4.addParameter("trigger4");
