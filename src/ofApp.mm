@@ -326,6 +326,7 @@ void ofApp::controlElementDraw(){
     
     ofPushStyle();
     ofSetColor( 0 );
+    ofSetCircleResolution(48);
     float _sX = speedCPos.x;
     float _sY = speedCPos.y;
     ofNoFill();
@@ -350,6 +351,7 @@ void ofApp::controlElementDraw(){
     ofSetColor( 0 );
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
+    
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
     ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
     ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
@@ -367,7 +369,7 @@ void ofApp::information(){
     
     if (whitePixels.size()>0) {
         
-        int _blackPixels = whitePixels[noteIndex % whitePixels.size()].pixelN;
+        int _blackPixels = whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN;
         
         vector<int> _10bitNumber;
         _10bitNumber.resize(4);
@@ -448,7 +450,7 @@ void ofApp::playingPixel(){
         
         if (whitePixels.size()>0) {
             
-            int _noteIndex = noteIndex % (whitePixels.size());
+            int _noteIndex = noteIndex % (whitePixels.size()-1);
             
             
             //
@@ -463,9 +465,9 @@ void ofApp::playingPixel(){
             
             
             //
-            int _indexPixes = whitePixels[_noteIndex].indexPos-whitePixels[_noteIndex].pixelN;
+            int _indexPixes = whitePixels[_noteIndex+1].indexPos-whitePixels[_noteIndex+1].pixelN;
             
-            int _index = whitePixels[_noteIndex].pixelN;
+            int _index = whitePixels[_noteIndex+1].pixelN;
             for (int i=0; i<_index; i++){
                 
                 float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -896,7 +898,6 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
                 intervalPos.y = touch.y;
                 float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 4);
                 intervalDist = _interval;
-                cout << intervalDist << endl;
             }
         }
         
@@ -1066,7 +1067,7 @@ void ofApp::noteTrigger1(){
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(6);
-    _8bitNumber = convertDecimalToNBase( whitePixels[noteIndex % whitePixels.size()].pixelN, baseSelection, _8bitNumber.size() );
+    _8bitNumber = convertDecimalToNBase( whitePixels[(noteIndex+1) % (whitePixels.size()-1)].pixelN, baseSelection, _8bitNumber.size() );
     
     int _1Note = _8bitNumber[0];
     int _2Note = _8bitNumber[1];
