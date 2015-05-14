@@ -49,6 +49,8 @@ void ofApp::setup(){
     screenW = ofGetWidth();
     screenH = ofGetHeight();
     
+    cout << screenW << endl;
+    
     ctrlPnX = 0;
     ctrlPnY = screenW;
     ctrlPnW = screenW;
@@ -68,7 +70,7 @@ void ofApp::setup(){
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5);
     
-    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+//    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
     
     pixelStepS = 4;
     camSize = cam.getWidth();
@@ -76,22 +78,26 @@ void ofApp::setup(){
     cameraScreenRatio = screenW / cam.getWidth();
     thresholdValue = 80;
     
+    float _sizeF = screenW;
+
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        pixelCircleSize = 10;
-        ctrlRectS = 80;
-        guideWidthStepSize = 96;
-        guideHeightStepSize = 64;
-        fontSize = 28;
-        lineScoreStepX = 40;
-        lineScoreStepY = 5;
+        ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+        pixelCircleSize = 10 / 1536.0 * _sizeF;
+        ctrlRectS = 80 / 1536.0 * _sizeF;
+        guideWidthStepSize = 96 / 1536.0 * _sizeF;
+        guideHeightStepSize = 64 / 1536.0 * _sizeF;
+        fontSize = 28 / 1536.0 * _sizeF;
+        lineScoreStepX = 40 / 1536.0 * _sizeF;
+        lineScoreStepY = 5 / 1536.0 * _sizeF;
     }else{
-        pixelCircleSize = 5;
-        ctrlRectS = 50;
+        ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
+        pixelCircleSize = 5 / 640.0 * _sizeF;
+        ctrlRectS = 50 / 640.0 * _sizeF;
         guideWidthStepSize = ctrlPnW / 16;
         guideHeightStepSize = ctrlPnH / 8;
-        fontSize = 36;
-        lineScoreStepX = 20;
-        lineScoreStepY = 3;
+        fontSize = 36 / 640.0 * _sizeF;
+        lineScoreStepX = 20 / 640.0 * _sizeF;
+        lineScoreStepY = 3 / 640.0 * _sizeF;
     }
     
     index = 0;
@@ -141,13 +147,14 @@ void ofApp::setup(){
     
     informationText.load("verdana.ttf", fontSize);
     
-    float _stepBasePos = 105;
+    float _stepBasePos = 105 / 1536.0 * _sizeF;
     base5Pos = ofPoint( guideWidthStepSize * 13.5, ctrlPnY + _stepBasePos );
     base6Pos = ofPoint( guideWidthStepSize * 13.5, ctrlPnY + _stepBasePos * 2 );
     base7Pos = ofPoint( guideWidthStepSize * 13.5, ctrlPnY + _stepBasePos * 3 );
     base8Pos = ofPoint( guideWidthStepSize * 13.5, ctrlPnY + _stepBasePos * 4 );
     baseSize = ctrlRectS * 0.55;
     
+    bPlayNote = false;
     
 }
 
@@ -159,18 +166,16 @@ void ofApp::update(){
     if(cam.isFrameNew()) {
         
         convertColor(cam, gray, CV_RGB2GRAY);
-        
         threshold(gray, gray, grayThreshold);
         //        erode(gray);
-        
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
-        
         thin(edge);
         invert(edge);
-        
+
         edge.update();
         
-        
+        unsigned char * src = edge.getPixels().getData();
+
         if ( bPlayNote ) {
             noteIndex = index;
         } else {
@@ -182,8 +187,6 @@ void ofApp::update(){
             blackPixels.clear();
             
             
-            ofPixels _src = edge.getPixels();
-            unsigned char * src = _src.getData();
             
             for (int j=0; j<camSize; j+=pixelStepS) {
                 for (int i=0; i<camSize; i+=pixelStepS) {
@@ -384,14 +387,14 @@ void ofApp::information(){
         vector<int> _8bitNumber;
         if ((baseSelection==5)||(baseSelection==6)) {
             _8bitNumber.resize(6);
-            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, _8bitNumber.size() );
+            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, (int)_8bitNumber.size() );
             for (int i=0; i<_8bitNumber.size(); i++) {
                 informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
             }
         }
         if ((baseSelection==7)||(baseSelection==8)) {
             _8bitNumber.resize(5);
-            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, _8bitNumber.size() );
+            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, (int)_8bitNumber.size() );
             for (int i=0; i<_8bitNumber.size(); i++) {
                 informationText.drawString( ofToString(_8bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
             }
@@ -995,15 +998,15 @@ void ofApp::synthSetting(){
     
     // bell ? synth
     ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
-    float amountMod1 = 5;
+    float amountMod1 = 1;
     ControlGenerator rCarrierFreq1 = ControlMidiToFreq().input(carrierPitch1);
-    ControlGenerator rModFreq1 = rCarrierFreq1 * 7;
+    ControlGenerator rModFreq1 = rCarrierFreq1 * 2.5;
     Generator modulationTone1 = SineWave().freq( rModFreq1 ) * rModFreq1 * amountMod1;
     Generator tone1 = SineWave().freq(rCarrierFreq1 + modulationTone1);
     ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
     Generator env1 = ADSR().attack(0.001).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
     synth1.setOutputGen( tone1 * env1 * 0.75 );
-
+    
     
     ControlParameter carrierPitch2 = synth2.addParameter("carrierPitch2");
     float amountMod2 = 1;
@@ -1056,7 +1059,6 @@ void ofApp::synthSetting(){
     Generator env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger6).legato(false);
     synth6.setOutputGen( tone6 * env6 * 0.75 );
     
-    
 }
 
 
@@ -1065,7 +1067,8 @@ void ofApp::noteTrigger1(){
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(6);
-    _8bitNumber = convertDecimalToNBase( whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN, baseSelection, _8bitNumber.size() );
+    int _input = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
+    _8bitNumber = convertDecimalToNBase( _input, baseSelection, (int)_8bitNumber.size() );
     
     int _1Note = _8bitNumber[0];
     int _2Note = _8bitNumber[1];
