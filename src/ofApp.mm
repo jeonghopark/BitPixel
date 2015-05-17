@@ -249,7 +249,7 @@ void ofApp::draw(){
     if (bPlayNote) {
         ofSetColor( 240, 0 );
     } else {
-        ofSetColor( 240, 255 );
+        ofSetColor( 240, 180 );
         edge.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
@@ -274,10 +274,10 @@ void ofApp::draw(){
     ofTranslate( 0, 0 );
     
     pixelTriangleDraw();
-    playingCircleNote();
+    playingCircleNotes();
     
     if (bPlayNote) {
-        playingShapeNote();
+        playingShapeNotes();
         pixelShapeDraw();
     }
 
@@ -381,6 +381,7 @@ void ofApp::information(){
         
         float _x = screenW * 0.5 - 200;
         float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
+
         informationText.drawString( ofToString(_whitePixels), _x, _y );
         
         //        vector<int> _10bitNumber;
@@ -426,12 +427,16 @@ void ofApp::pixelTriangleDraw(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 0, 180 );
+    ofSetColor( 0, 120 );
     
     for (int i=0; i<whitePixels.size(); i++) {
         
-        float _x = (whitePixels[i].indexPos % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)(whitePixels[i].indexPos / changedCamSize) * pixelStepS * cameraScreenRatio;
+        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
         ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
@@ -462,11 +467,11 @@ void ofApp::pixelShapeDraw(){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _xS = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _yS = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint( _xS, _yS );
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint( _x, _y );
         
-        float _size = ofMap( _pixelNumbers, 0, 400, 0, 100 );
+        float _size = ofMap( _pixelNumbers, 0, 400, 5, 100 );
         drawShape( _p, baseSelection, _size );
         
     }
@@ -481,7 +486,7 @@ void ofApp::pixelShapeDraw(){
 
 
 //--------------------------------------------------------------
-void ofApp::playingCircleNote(){
+void ofApp::playingCircleNotes(){
     
     int _pixelSize = pixelCircleSize;
     float _ellipseSizeR = 0.7;
@@ -495,8 +500,9 @@ void ofApp::playingCircleNote(){
         
         if (whitePixels.size()>0) {
             
-            int _pixelNumbers = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
-            int _indexPixes = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].indexPos - _pixelNumbers;
+            int _noteLoopIndex = ((noteIndex) % (whitePixels.size()-1))+1;
+            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+            int _indexPixes = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
 
             for (int i=0; i<_pixelNumbers; i++){
                 
@@ -523,7 +529,7 @@ void ofApp::playingCircleNote(){
 
 
 //--------------------------------------------------------------
-void ofApp::playingShapeNote(){
+void ofApp::playingShapeNotes(){
     
     if (bPlayNote) {
         
@@ -1158,17 +1164,19 @@ void ofApp::synthSetting(){
 //--------------------------------------------------------------
 void ofApp::noteTrigger(){
     
-    vector<int> _8bitNumber;
-    _8bitNumber.resize(6);
-    int _input = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
-    _8bitNumber = convertDecimalToNBase( _input, baseSelection, (int)_8bitNumber.size() );
+    vector<int> _bitNumber;
+    _bitNumber.resize(6);
     
-    int _1Note = _8bitNumber[0];
-    int _2Note = _8bitNumber[1];
-    int _3Note = _8bitNumber[2];
-    int _4Note = _8bitNumber[3];
-    int _5Note = _8bitNumber[4];
-    int _6Note = _8bitNumber[5];
+    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+    int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
+    _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
+    
+    int _1Note = _bitNumber[0];
+    int _2Note = _bitNumber[1];
+    int _3Note = _bitNumber[2];
+    int _4Note = _bitNumber[3];
+    int _5Note = _bitNumber[4];
+    int _6Note = _bitNumber[5];
     
     //    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
     

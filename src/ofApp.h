@@ -111,8 +111,8 @@ public:
 
     
     // Graphics
-    void playingCircleNote();
-    void playingShapeNote();
+    void playingCircleNotes();
+    void playingShapeNotes();
     
     // control Panel
     void controlElementDraw();
