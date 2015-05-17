@@ -247,17 +247,17 @@ void ofApp::draw(){
     
     ofPushStyle();
     if (bPlayNote) {
-        ofSetColor( 240, 50 );
+        ofSetColor( 240, 0 );
     } else {
         ofSetColor( 240, 255 );
+        edge.draw( 0, 0, screenW, screenH);
     }
-    edge.draw( 0, 0, screenW, screenH);
     ofPopStyle();
     
     
     ofPushStyle();
     if (bPlayNote) {
-        ofSetColor( 240, 140 );
+        ofSetColor( 240, 50 );
         bufferImg.draw( 0, 0, screenW, screenH);
     } else {
         ofSetColor( 255, 0 );
@@ -466,7 +466,7 @@ void ofApp::pixelShapeDraw(){
         float _yS = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _xS, _yS );
         
-        float _size = _pixelNumbers;
+        float _size = ofMap( _pixelNumbers, 0, 400, 0, 100 );
         drawShape( _p, baseSelection, _size );
         
     }
@@ -483,7 +483,7 @@ void ofApp::pixelShapeDraw(){
 //--------------------------------------------------------------
 void ofApp::playingCircleNote(){
     
-    int _pixelSize = pixelCircleSize;  // 10
+    int _pixelSize = pixelCircleSize;
     float _ellipseSizeR = 0.7;
     
     if (bPlayNote) {
@@ -778,7 +778,7 @@ void ofApp::baseInterface(){
 //--------------------------------------------------------------
 void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     
-    ofPoint _pos = _pos;
+    ofPoint _pos = pos;
 
     vector<ofPoint> posLine;
     
@@ -843,8 +843,8 @@ void ofApp::drawShape(ofPoint pos, int base, int size){
     
     ofTranslate( _pos );
     
-    ofSetColor( 0, 180 );
-    ofSetLineWidth(3);
+    ofSetColor( 0, 120 );
+    ofSetLineWidth(2);
     
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
