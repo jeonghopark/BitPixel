@@ -76,7 +76,7 @@ public:
     int oldNoteIndex4;
     int oldNoteIndex5;
     int oldNoteIndex6;
-    void noteTrigger1();
+    void noteTrigger();
 
     
     // Main
@@ -144,8 +144,8 @@ public:
     ofPoint base7Pos;
     ofPoint base8Pos;
     float baseSize;
-    void drawShapeCeterLine(ofPoint _p, int _b, int _s);
-    void drawShape(ofPoint _p, int _b, int _s);
+    void drawShapeCeterLine(ofPoint pos, int base, int size);
+    void drawShape(ofPoint pos, int base, int size);
     void pixelShapeDraw();
     
     

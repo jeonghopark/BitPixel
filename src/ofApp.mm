@@ -89,7 +89,7 @@ void ofApp::setup(){
         fontSize = 28 / 1536.0 * _sizeF;
         lineScoreStepX = 40 / 1536.0 * _sizeF;
         lineScoreStepY = 5 / 1536.0 * _sizeF;
-    }else{
+    } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
         pixelCircleSize = 5 / 640.0 * _sizeF;
         ctrlRectS = 50 / 640.0 * _sizeF;
@@ -174,7 +174,7 @@ void ofApp::update(){
         
         edge.update();
         
-        unsigned char * src = edge.getPixels().getData();
+        unsigned char * _src = edge.getPixels().getData();
         
         if ( bPlayNote ) {
             noteIndex = index;
@@ -186,19 +186,17 @@ void ofApp::update(){
             whitePixels.clear();
             blackPixels.clear();
             
-            
-            
             for (int j=0; j<camSize; j+=pixelStepS) {
                 for (int i=0; i<camSize; i+=pixelStepS) {
                     int _index = i + j * camSize;
-                    float _brightness = src[_index];
+                    float _brightness = _src[_index];
                     pixelBright.push_back(_brightness);
                 }
             }
             
+            
             int _wCounter = 0;
             int _bCounter = 0;
-            
             
             for (int i=0; i<pixelBright.size(); i++) {
                 
@@ -239,7 +237,7 @@ void ofApp::triggerReceive(float & metro){
     index++;
     noteIndex = index;
     
-    noteTrigger1();
+    noteTrigger();
     
 }
 
@@ -378,7 +376,8 @@ void ofApp::information(){
     
     if (whitePixels.size()>0) {
         
-        int _whitePixels = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
+        int _loopIndex = ((noteIndex) % (whitePixels.size()-1))+1;
+        int _whitePixels = whitePixels[ _loopIndex ].pixelN;
         
         float _x = screenW * 0.5 - 200;
         float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
@@ -777,14 +776,15 @@ void ofApp::baseInterface(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawShapeCeterLine(ofPoint _p, int _b, int _s){
+void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     
-    ofPoint _pos = _p;
-    
+    ofPoint _pos = _pos;
+
     vector<ofPoint> posLine;
     
-    int _base = _b;
-    int _size = _s;
+    int _base = base;
+    int _size = size;
+
     for (int i=0; i<_base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
         float _x = sin(ofDegToRad( _sizeDegree )) * _size;
@@ -819,14 +819,15 @@ void ofApp::drawShapeCeterLine(ofPoint _p, int _b, int _s){
 
 
 //--------------------------------------------------------------
-void ofApp::drawShape(ofPoint _p, int _b, int _s){
+void ofApp::drawShape(ofPoint pos, int base, int size){
     
-    ofPoint _pos = _p;
+    ofPoint _pos = pos;
     
     vector<ofPoint> posLine;
     
-    int _base = _b;
-    int _size = _s;
+    int _base = base;
+    int _size = size;
+    
     for (int i=0; i<_base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
         float _x = sin(ofDegToRad( _sizeDegree )) * _size;
@@ -1155,7 +1156,7 @@ void ofApp::synthSetting(){
 
 
 //--------------------------------------------------------------
-void ofApp::noteTrigger1(){
+void ofApp::noteTrigger(){
     
     vector<int> _8bitNumber;
     _8bitNumber.resize(6);
@@ -1239,7 +1240,7 @@ void ofApp::noteTrigger1(){
 //--------------------------------------------------------------
 vector<int> ofApp::convertDecimalToNBase(int n, int base, int size) {
     
-    int i=0,div,res;
+    int i=0, div, res;
     
     vector<int> a;
     a.clear();
