@@ -471,10 +471,10 @@ void ofApp::playingPixel(){
             
             
             //
-            int _indexPixes = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].indexPos-whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
+            int _pixelNumbers = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
+            int _indexPixes = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].indexPos - _pixelNumbers;
             
-            int _index = whitePixels[((noteIndex) % (whitePixels.size()-1))+1].pixelN;
-            for (int i=0; i<_index; i++){
+            for (int i=0; i<_pixelNumbers; i++){
                 
                 float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
                 float _yS = (int)((_indexPixes+i) / changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -487,14 +487,10 @@ void ofApp::playingPixel(){
                 ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
             }
             
-            
         }
-        
-        
         
         ofPopStyle();
         ofPopMatrix();
-        
         
     }
     

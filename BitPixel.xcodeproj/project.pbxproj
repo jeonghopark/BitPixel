@@ -21,7 +21,6 @@
 		7D6273D6A5EC453239F75546 /* Kalman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4EFA68730F0B7AEBF135B91 /* Kalman.cpp */; };
 		87227F05D2B95F59872348C8 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 696DD44499599B0CD6AEB4DD /* ContourFinder.cpp */; };
 		A6F4C97F8A5B381535164B8F /* ETF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17C2AA67ACB2397BF565C481 /* ETF.cpp */; };
-		A83AE2D61AF57B6700B15A32 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = A83AE2581AF57B6700B15A32 /* .gitignore */; };
 		A83AE2D71AF57B6700B15A32 /* ofxTonicSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE25B1AF57B6700B15A32 /* ofxTonicSynth.cpp */; };
 		A83AE2D81AF57B6700B15A32 /* ADSR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE25E1AF57B6700B15A32 /* ADSR.cpp */; };
 		A83AE2D91AF57B6700B15A32 /* Arithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE2601AF57B6700B15A32 /* Arithmetic.cpp */; };
@@ -81,7 +80,6 @@
 		A83AE30F1AF57B6700B15A32 /* Synth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE2CD1AF57B6700B15A32 /* Synth.cpp */; };
 		A83AE3101AF57B6700B15A32 /* TableLookupOsc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE2CF1AF57B6700B15A32 /* TableLookupOsc.cpp */; };
 		A83AE3111AF57B6700B15A32 /* TonicFrames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE2D21AF57B6700B15A32 /* TonicFrames.cpp */; };
-		A8502F481B05178D00466429 /* addon_config.mk in Resources */ = {isa = PBXBuildFile; fileRef = A8502E271B05178D00466429 /* addon_config.mk */; };
 		A8502F561B05178E00466429 /* opencv_calib3d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8502EF21B05178D00466429 /* opencv_calib3d.a */; };
 		A8502F571B05178E00466429 /* opencv_contrib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8502EF31B05178D00466429 /* opencv_contrib.a */; };
 		A8502F581B05178E00466429 /* opencv_core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8502EF41B05178D00466429 /* opencv_core.a */; };
@@ -97,8 +95,6 @@
 		A8502F631B05178E00466429 /* opencv_video.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8502EFF1B05178D00466429 /* opencv_video.a */; };
 		A8502F641B05178E00466429 /* opencv_videostab.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8502F001B05178D00466429 /* opencv_videostab.a */; };
 		A8502F911B05178E00466429 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = A8502F311B05178D00466429 /* LICENSE */; };
-		A8502F921B05178E00466429 /* OpenCV.sh in Resources */ = {isa = PBXBuildFile; fileRef = A8502F341B05178D00466429 /* OpenCV.sh */; };
-		A8502F931B05178E00466429 /* patch.calibfilter.cpp.patch in Resources */ = {isa = PBXBuildFile; fileRef = A8502F351B05178D00466429 /* patch.calibfilter.cpp.patch */; };
 		A8502F941B05178E00466429 /* ofxCvColorImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8502F381B05178D00466429 /* ofxCvColorImage.cpp */; };
 		A8502F951B05178E00466429 /* ofxCvContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8502F3B1B05178D00466429 /* ofxCvContourFinder.cpp */; };
 		A8502F961B05178E00466429 /* ofxCvFloatImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A8502F3D1B05178D00466429 /* ofxCvFloatImage.cpp */; };
@@ -170,7 +166,6 @@
 		9EF8D1AF505A4D3DCA7ED748 /* ContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ContourFinder.h; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h; sourceTree = SOURCE_ROOT; };
 		A073E709E7A362971732CC2B /* Distance.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Distance.cpp; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/src/Distance.cpp; sourceTree = SOURCE_ROOT; };
 		A55631C35993EC6711D6444D /* ObjectFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ObjectFinder.h; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ObjectFinder.h; sourceTree = SOURCE_ROOT; };
-		A83AE2581AF57B6700B15A32 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A83AE25A1AF57B6700B15A32 /* ofxTonic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTonic.h; sourceTree = "<group>"; };
 		A83AE25B1AF57B6700B15A32 /* ofxTonicSynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTonicSynth.cpp; sourceTree = "<group>"; };
 		A83AE25C1AF57B6700B15A32 /* ofxTonicSynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTonicSynth.h; sourceTree = "<group>"; };
@@ -294,7 +289,6 @@
 		A83AE2D31AF57B6700B15A32 /* TonicFrames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TonicFrames.h; sourceTree = "<group>"; };
 		A83AE2D41AF57B6700B15A32 /* TriangleWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleWave.h; sourceTree = "<group>"; };
 		A83AE2D51AF57B6700B15A32 /* Tonic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tonic.h; sourceTree = "<group>"; };
-		A8502E271B05178D00466429 /* addon_config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = addon_config.mk; sourceTree = "<group>"; };
 		A8502E2C1B05178D00466429 /* cv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cv.h; sourceTree = "<group>"; };
 		A8502E2D1B05178D00466429 /* cv.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cv.hpp; sourceTree = "<group>"; };
 		A8502E2E1B05178D00466429 /* cvaux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cvaux.h; sourceTree = "<group>"; };
@@ -469,8 +463,6 @@
 		A8502EFF1B05178D00466429 /* opencv_video.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv_video.a; sourceTree = "<group>"; };
 		A8502F001B05178D00466429 /* opencv_videostab.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = opencv_videostab.a; sourceTree = "<group>"; };
 		A8502F311B05178D00466429 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		A8502F341B05178D00466429 /* OpenCV.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = OpenCV.sh; sourceTree = "<group>"; };
-		A8502F351B05178D00466429 /* patch.calibfilter.cpp.patch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = patch.calibfilter.cpp.patch; sourceTree = "<group>"; };
 		A8502F371B05178D00466429 /* ofxCvBlob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCvBlob.h; sourceTree = "<group>"; };
 		A8502F381B05178D00466429 /* ofxCvColorImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxCvColorImage.cpp; sourceTree = "<group>"; };
 		A8502F391B05178D00466429 /* ofxCvColorImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCvColorImage.h; sourceTree = "<group>"; };
@@ -696,7 +688,6 @@
 		A83AE2571AF57B6700B15A32 /* ofxTonic */ = {
 			isa = PBXGroup;
 			children = (
-				A83AE2581AF57B6700B15A32 /* .gitignore */,
 				A83AE2591AF57B6700B15A32 /* src */,
 			);
 			name = ofxTonic;
@@ -844,9 +835,7 @@
 		A8502E261B05178D00466429 /* ofxOpenCv */ = {
 			isa = PBXGroup;
 			children = (
-				A8502E271B05178D00466429 /* addon_config.mk */,
 				A8502E281B05178D00466429 /* libs */,
-				A8502F321B05178D00466429 /* scripts */,
 				A8502F361B05178D00466429 /* src */,
 			);
 			name = ofxOpenCv;
@@ -1260,23 +1249,6 @@
 			path = license;
 			sourceTree = "<group>";
 		};
-		A8502F321B05178D00466429 /* scripts */ = {
-			isa = PBXGroup;
-			children = (
-				A8502F331B05178D00466429 /* formulas */,
-			);
-			path = scripts;
-			sourceTree = "<group>";
-		};
-		A8502F331B05178D00466429 /* formulas */ = {
-			isa = PBXGroup;
-			children = (
-				A8502F341B05178D00466429 /* OpenCV.sh */,
-				A8502F351B05178D00466429 /* patch.calibfilter.cpp.patch */,
-			);
-			path = formulas;
-			sourceTree = "<group>";
-		};
 		A8502F361B05178D00466429 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -1418,6 +1390,11 @@
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = NRV5ZBRDWA;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -1462,11 +1439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8502F911B05178E00466429 /* LICENSE in Resources */,
-				A8502F481B05178D00466429 /* addon_config.mk in Resources */,
-				A8502F921B05178E00466429 /* OpenCV.sh in Resources */,
 				A8502FA71B0521AD00466429 /* Images.xcassets in Resources */,
-				A8502F931B05178E00466429 /* patch.calibfilter.cpp.patch in Resources */,
-				A83AE2D61AF57B6700B15A32 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
