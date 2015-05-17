@@ -98,7 +98,7 @@ public:
     float pixelStepS;
     int changeVideoWidth, changeVideoHeight;
     vector<float> pixelBright;
-    void pixelDraw();
+    void pixelTriangleDraw();
     int thresholdValue;
     vector<blackWhitePixels> whitePixels;
     vector<blackWhitePixels> blackPixels;
@@ -111,7 +111,8 @@ public:
 
     
     // Graphics
-    void playingPixel();    
+    void playingCircleNote();
+    void playingShapeNote();
     
     // control Panel
     void controlElementDraw();
@@ -143,8 +144,11 @@ public:
     ofPoint base7Pos;
     ofPoint base8Pos;
     float baseSize;
+    void drawShapeCeterLine(ofPoint _p, int _b, int _s);
     void drawShape(ofPoint _p, int _b, int _s);
-
+    void pixelShapeDraw();
+    
+    
     int baseSelection;
     
     
