@@ -28,7 +28,6 @@ int scale84[8] = {0, 5, 6, 7, 9, 11, 12, 17};
 int scale85[2] = {0, 7};
 
 
-
 #include "ofApp.h"
 
 using namespace ofxCv;
@@ -278,7 +277,8 @@ void ofApp::draw(){
     
     if (bPlayNote) {
         playingShapeNotes();
-        pixelShapeDraw();
+//        pixelShapeDraw();
+        pixelShapeColorSizeDraw();
     }
 
     ofPopMatrix();
@@ -475,6 +475,67 @@ void ofApp::pixelShapeDraw(){
         drawShape( _p, baseSelection, _size );
         
     }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+    
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::pixelShapeColorSizeDraw(){
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofEnableAntiAliasing();
+    
+    ofSetColor( 0, 45 );
+    
+    for (int i=0; i<whitePixels.size(); i++) {
+        
+        vector<int> _bitNumber;
+        _bitNumber.resize(6);
+        
+        int _indexLoop = ((i) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
+        _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
+        
+        int _1Note = _bitNumber[0];
+        int _2Note = _bitNumber[1];
+        int _3Note = _bitNumber[2];
+        int _4Note = _bitNumber[3];
+        int _5Note = _bitNumber[4];
+        int _6Note = _bitNumber[5];
+
+        
+//        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+//        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        int _indexPixes = whitePixels[ _indexLoop ].indexPos - _pixelNumbers;
+        
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint( _x, _y );
+        
+        int _min = 10;
+        int _max = 100;
+        
+        float _size1 = ofMap( _1Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size1 );
+        float _size2 = ofMap( _2Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size2 );
+        float _size3 = ofMap( _3Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size3 );
+        float _size4 = ofMap( _4Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size4 );
+        float _size5 = ofMap( _5Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size5 );
+        float _size6 = ofMap( _6Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size6 );
+        
+    }
+    
     
     ofPopStyle();
     ofPopMatrix();
@@ -845,12 +906,8 @@ void ofApp::drawShape(ofPoint pos, int base, int size){
     
     
     ofPushMatrix();
-    ofPushStyle();
     
     ofTranslate( _pos );
-    
-    ofSetColor( 0, 120 );
-    ofSetLineWidth(2);
     
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
@@ -858,7 +915,6 @@ void ofApp::drawShape(ofPoint pos, int base, int size){
     ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
     
     ofPopMatrix();
-    ofPopStyle();
     
 }
 

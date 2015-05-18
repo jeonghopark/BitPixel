@@ -147,6 +147,7 @@ public:
     void drawShapeCeterLine(ofPoint pos, int base, int size);
     void drawShape(ofPoint pos, int base, int size);
     void pixelShapeDraw();
+    void pixelShapeColorSizeDraw();
     
     
     int baseSelection;
