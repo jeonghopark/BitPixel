@@ -223,6 +223,7 @@ void ofApp::update(){
                 }
             }
             
+
         }
         
     }
@@ -236,7 +237,9 @@ void ofApp::triggerReceive(float & metro){
     index++;
     noteIndex = index;
     
-    noteTrigger();
+//    noteTrigger();
+    noteTrig();
+
     
 }
 
@@ -277,10 +280,10 @@ void ofApp::draw(){
     
     if (bPlayNote) {
         playingShapeNotes();
-//        pixelShapeDraw();
+        //        pixelShapeDraw();
         pixelShapeColorSizeDraw();
     }
-
+    
     ofPopMatrix();
     
     
@@ -381,7 +384,7 @@ void ofApp::information(){
         
         float _x = screenW * 0.5 - 200;
         float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
-
+        
         informationText.drawString( ofToString(_whitePixels), _x, _y );
         
         //        vector<int> _10bitNumber;
@@ -508,10 +511,10 @@ void ofApp::pixelShapeColorSizeDraw(){
         int _4Note = _bitNumber[3];
         int _5Note = _bitNumber[4];
         int _6Note = _bitNumber[5];
-
         
-//        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
-//        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        
+        //        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+        //        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _indexLoop ].indexPos - _pixelNumbers;
         
         float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -521,19 +524,24 @@ void ofApp::pixelShapeColorSizeDraw(){
         int _min = 10;
         int _max = 100;
         
-        float _size1 = ofMap( _1Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size1 );
-        float _size2 = ofMap( _2Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size2 );
-        float _size3 = ofMap( _3Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size3 );
-        float _size4 = ofMap( _4Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size4 );
-        float _size5 = ofMap( _5Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size5 );
-        float _size6 = ofMap( _6Note, 0, baseSelection-1, _min, _max );
-        drawShape( _p, baseSelection, _size6 );
+//        float _size1 = ofMap( _1Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size1 );
+//        float _size2 = ofMap( _2Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size2 );
+//        float _size3 = ofMap( _3Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size3 );
+//        float _size4 = ofMap( _4Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size4 );
+//        float _size5 = ofMap( _5Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size5 );
+//        float _size6 = ofMap( _6Note, 0, baseSelection-1, _min, _max );
+//        drawShape( _p, baseSelection, _size6 );
         
+        
+        if (scoreNote1[i]>0) {
+            ofDrawCircle( _x, _y, scoreNote1[i] );
+        }
+
     }
     
     
@@ -564,7 +572,7 @@ void ofApp::playingCircleNotes(){
             int _noteLoopIndex = ((noteIndex) % (whitePixels.size()-1))+1;
             int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
             int _indexPixes = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-
+            
             for (int i=0; i<_pixelNumbers; i++){
                 
                 float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -625,7 +633,7 @@ void ofApp::playingShapeNotes(){
 //--------------------------------------------------------------
 void ofApp::lineScoreDraw(){
     
-    int _xNumber = 19;
+    int _xNumber = whitePixels.size();
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
@@ -846,12 +854,12 @@ void ofApp::baseInterface(){
 void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     
     ofPoint _pos = pos;
-
+    
     vector<ofPoint> posLine;
     
     int _base = base;
     int _size = size;
-
+    
     for (int i=0; i<_base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
         float _x = sin(ofDegToRad( _sizeDegree )) * _size;
@@ -1058,6 +1066,8 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
         } else {
             noteIndex = index;
             ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+            scoreMake();
+
         }
     }
     
@@ -1234,8 +1244,6 @@ void ofApp::noteTrigger(){
     int _5Note = _bitNumber[4];
     int _6Note = _bitNumber[5];
     
-    //    cout << _5Note << " " << _4Note << " " << _3Note << " " << _2Note  << " " << _1Note << endl;
-    
     
     if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
         synth1.setParameter("trigger1", 1);
@@ -1299,6 +1307,121 @@ void ofApp::noteTrigger(){
     
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::scoreMake(){
+    
+    scoreNote1.clear();
+    scoreNote2.clear();
+    scoreNote3.clear();
+    scoreNote4.clear();
+    scoreNote5.clear();
+    scoreNote6.clear();
+    
+    for (int i=0; i<whitePixels.size(); i++) {
+        
+        vector<int> _bitNumber;
+        _bitNumber.resize(6);
+        
+        int _indexLoop = ((i) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
+        _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
+        
+        int _1Note = _bitNumber[0];
+        int _2Note = _bitNumber[1];
+        int _3Note = _bitNumber[2];
+        int _4Note = _bitNumber[3];
+        int _5Note = _bitNumber[4];
+        int _6Note = _bitNumber[5];
+        
+        
+        if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
+            int _note1 = noteSelector(baseSelection, 1, _1Note);
+            scoreNote1.push_back(_note1);
+        } else {
+            scoreNote1.push_back(-1);
+        }
+        oldNoteIndex1 = _1Note;
+        
+        if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
+            int _note2 = noteSelector(baseSelection, 2, _2Note);
+            scoreNote2.push_back(_note2);
+        } else {
+            scoreNote2.push_back(-1);
+        }
+        oldNoteIndex2 = _2Note;
+        
+        if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
+            int _note3 = noteSelector(baseSelection, 3, _3Note);
+            scoreNote3.push_back(_note3);
+        } else {
+            scoreNote3.push_back(-1);
+        }
+        oldNoteIndex3 = _3Note;
+        
+        if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
+            int _note4 = noteSelector(baseSelection, 4, _4Note);
+            scoreNote4.push_back(_note4);
+        } else {
+            scoreNote4.push_back(-1);
+        }
+        oldNoteIndex4 = _4Note;
+        
+        if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
+            int _note5 = noteSelector(baseSelection, 5, _5Note);
+            scoreNote5.push_back(_note5);
+        } else {
+            scoreNote5.push_back(-1);
+        }
+        oldNoteIndex5 = _5Note;
+        
+        if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
+            int _note6 = noteSelector(baseSelection, 6, _6Note);
+            scoreNote6.push_back(_note6);
+        } else {
+            scoreNote6.push_back(-1);
+        }
+        oldNoteIndex6 = _6Note;
+
+    }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::noteTrig(){
+    
+    
+    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+    
+    synth1.setParameter("trigger1", 1);
+    int _note1 = noteSelector(baseSelection, 1, scoreNote1[_indexLoop]);
+    synth1.setParameter("carrierPitch1", _note1);
+    
+    synth2.setParameter("trigger2", 1);
+    int _note2 = noteSelector(baseSelection, 2, scoreNote2[_indexLoop]);
+    synth2.setParameter("carrierPitch2", _note2);
+    
+    synth3.setParameter("trigger3", 1);
+    int _note3 = noteSelector(baseSelection, 3, scoreNote3[_indexLoop]);
+    synth3.setParameter("carrierPitch3", _note3);
+    
+    synth4.setParameter("trigger4", 1);
+    int _note4 = noteSelector(baseSelection, 4, scoreNote4[_indexLoop]);
+    synth4.setParameter("carrierPitch4", _note4);
+    
+    synth5.setParameter("trigger5", 1);
+    int _note5 = noteSelector(baseSelection, 5, scoreNote5[_indexLoop]);
+    synth5.setParameter("carrierPitch5", _note5);
+    
+    synth6.setParameter("trigger6", 1);
+    int _note6 = noteSelector(baseSelection, 6, scoreNote6[_indexLoop]);
+    synth6.setParameter("carrierPitch6", _note6);
+    
+    
+}
+
 
 
 //--------------------------------------------------------------

@@ -169,14 +169,14 @@ public:
     
     vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6;
     int lineScoreStepX, lineScoreStepY;
+    void scoreMake();
+    void noteTrig();
     
-
     
     // note scale selector
     int noteSelector(int _n, int _index, int _subIndex);
-    
     void scaleChange();
-    
+
     int intervalDist;
     
 };
