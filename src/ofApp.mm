@@ -1,31 +1,31 @@
 // http://www.translatorscafe.com/cafe/units-converter/numbers/calculator/octal-to-decimal/
 
 
-int scale51[5] = {0, 2, 4, 7, 9};
-int scale52[5] = {0, 2, 5, 7, 9};
-int scale53[5] = {0, 2, 4, 7, 9};
-int scale54[5] = {0, 2, 5, 7, 9};
-int scale55[5] = {0, 2, 4, 7, 9};
-int scale56[3] = {-7, 0, 7};
-
-int scale61[6] = {0, 4, 5, 7, 9, 12};
-int scale62[6] = {0, 7, 12, 14, 16, 19};
-int scale63[6] = {0, 4, 5, 7, 9, 12};
-int scale64[6] = {0, 4, 5, 7, 9, 12};
-int scale65[6] = {0, 4, 5, 7, 9, 12};
-int scale66[2] = {0, 7};
-
-int scale71[7] = {0, 2, 4, 7, 9, 12, 14};
-int scale72[7] = {0, 7, 12, 14, 16, 19, 21};
-int scale73[7] = {0, 2, 5, 7, 9, 11, 14};
-int scale74[7] = {0, 2, 4, 5, 7, 9, 11};
-int scale75[3] = {-7, 0, 7};
-
-int scale81[8] = {0, 2, 5, 7, 9, 11, 12, 17};
-int scale82[8] = {0, 7, 12, 14, 16, 19, 21, 24};
-int scale83[8] = {0, 5, 6, 7, 9, 11, 12, 17};
-int scale84[8] = {0, 5, 6, 7, 9, 11, 12, 17};
-int scale85[2] = {0, 7};
+//int scale51[5] = {0, 2, 4, 7, 9};
+//int scale52[5] = {0, 2, 5, 7, 9};
+//int scale53[5] = {0, 2, 4, 7, 9};
+//int scale54[5] = {0, 2, 5, 7, 9};
+//int scale55[5] = {0, 2, 4, 7, 9};
+//int scale56[3] = {-7, 0, 7};
+//
+//int scale61[6] = {0, 4, 5, 7, 9, 12};
+//int scale62[6] = {0, 7, 12, 14, 16, 19};
+//int scale63[6] = {0, 4, 5, 7, 9, 12};
+//int scale64[6] = {0, 4, 5, 7, 9, 12};
+//int scale65[6] = {0, 4, 5, 7, 9, 12};
+//int scale66[2] = {0, 7};
+//
+//int scale71[7] = {0, 2, 4, 7, 9, 12, 14};
+//int scale72[7] = {0, 7, 12, 14, 16, 19, 21};
+//int scale73[7] = {0, 2, 5, 7, 9, 11, 14};
+//int scale74[7] = {0, 2, 4, 5, 7, 9, 11};
+//int scale75[3] = {-7, 0, 7};
+//
+//int scale81[8] = {0, 2, 5, 7, 9, 11, 12, 17};
+//int scale82[8] = {0, 7, 12, 14, 16, 19, 21, 24};
+//int scale83[8] = {0, 5, 6, 7, 9, 11, 12, 17};
+//int scale84[8] = {0, 5, 6, 7, 9, 11, 12, 17};
+//int scale85[2] = {0, 7};
 
 
 #include "ofApp.h"
@@ -39,7 +39,7 @@ void ofApp::setup(){
     
     
     baseSelection = 7;
-    scaleChange();
+//    scaleChange();
     
     ofBackground( 255 );
     ofSetFrameRate( 60 );
@@ -511,7 +511,6 @@ void ofApp::pixelShapeColorSizeDraw(){
         int _4Note = _bitNumber[3];
         int _5Note = _bitNumber[4];
         int _6Note = _bitNumber[5];
-        
         
         //        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
         //        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
@@ -1248,7 +1247,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
         synth1.setParameter("trigger1", 1);
-        int _note1 = noteSelector(baseSelection, 1, _1Note);
+        int _note1 = scaleSetting.noteSelector(baseSelection, 1, _1Note);
         synth1.setParameter("carrierPitch1", _note1);
         scoreNote1.push_back(_note1);
     } else {
@@ -1258,7 +1257,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
         synth2.setParameter("trigger2", 1);
-        int _note2 = noteSelector(baseSelection, 2, _2Note);
+        int _note2 = scaleSetting.noteSelector(baseSelection, 2, _2Note);
         synth2.setParameter("carrierPitch2", _note2);
         scoreNote2.push_back(_note2);
     } else {
@@ -1268,7 +1267,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
         synth3.setParameter("trigger3", 1);
-        int _note3 = noteSelector(baseSelection, 3, _3Note);
+        int _note3 = scaleSetting.noteSelector(baseSelection, 3, _3Note);
         synth3.setParameter("carrierPitch3", _note3);
         scoreNote3.push_back(_note3);
     } else {
@@ -1278,7 +1277,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
         synth4.setParameter("trigger4", 1);
-        int _note4 = noteSelector(baseSelection, 4, _4Note);
+        int _note4 = scaleSetting.noteSelector(baseSelection, 4, _4Note);
         synth4.setParameter("carrierPitch4", _note4);
         scoreNote4.push_back(_note4);
     } else {
@@ -1288,7 +1287,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
         synth5.setParameter("trigger5", 1);
-        int _note5 = noteSelector(baseSelection, 5, _5Note);
+        int _note5 = scaleSetting.noteSelector(baseSelection, 5, _5Note);
         synth5.setParameter("carrierPitch5", _note5);
         scoreNote5.push_back(_note5);
     } else {
@@ -1298,7 +1297,7 @@ void ofApp::noteTrigger(){
     
     if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
         synth6.setParameter("trigger6", 1);
-        int _note6 = noteSelector(baseSelection, 6, _6Note);
+        int _note6 = scaleSetting.noteSelector(baseSelection, 6, _6Note);
         synth6.setParameter("carrierPitch6", _note6);
         scoreNote6.push_back(_note6);
     } else {
@@ -1338,7 +1337,7 @@ void ofApp::scoreMake(){
         
         
         if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
-            int _note1 = noteSelector(baseSelection, 1, _1Note);
+            int _note1 = scaleSetting.noteSelector(baseSelection, 1, _1Note);
             scoreNote1.push_back(_note1);
         } else {
             scoreNote1.push_back(-1);
@@ -1346,7 +1345,7 @@ void ofApp::scoreMake(){
         oldNoteIndex1 = _1Note;
         
         if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
-            int _note2 = noteSelector(baseSelection, 2, _2Note);
+            int _note2 = scaleSetting.noteSelector(baseSelection, 2, _2Note);
             scoreNote2.push_back(_note2);
         } else {
             scoreNote2.push_back(-1);
@@ -1354,7 +1353,7 @@ void ofApp::scoreMake(){
         oldNoteIndex2 = _2Note;
         
         if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
-            int _note3 = noteSelector(baseSelection, 3, _3Note);
+            int _note3 = scaleSetting.noteSelector(baseSelection, 3, _3Note);
             scoreNote3.push_back(_note3);
         } else {
             scoreNote3.push_back(-1);
@@ -1362,7 +1361,7 @@ void ofApp::scoreMake(){
         oldNoteIndex3 = _3Note;
         
         if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
-            int _note4 = noteSelector(baseSelection, 4, _4Note);
+            int _note4 = scaleSetting.noteSelector(baseSelection, 4, _4Note);
             scoreNote4.push_back(_note4);
         } else {
             scoreNote4.push_back(-1);
@@ -1370,7 +1369,7 @@ void ofApp::scoreMake(){
         oldNoteIndex4 = _4Note;
         
         if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
-            int _note5 = noteSelector(baseSelection, 5, _5Note);
+            int _note5 = scaleSetting.noteSelector(baseSelection, 5, _5Note);
             scoreNote5.push_back(_note5);
         } else {
             scoreNote5.push_back(-1);
@@ -1378,7 +1377,7 @@ void ofApp::scoreMake(){
         oldNoteIndex5 = _5Note;
         
         if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
-            int _note6 = noteSelector(baseSelection, 6, _6Note);
+            int _note6 = scaleSetting.noteSelector(baseSelection, 6, _6Note);
             scoreNote6.push_back(_note6);
         } else {
             scoreNote6.push_back(-1);
@@ -1397,27 +1396,27 @@ void ofApp::noteTrig(){
     int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
     
     synth1.setParameter("trigger1", 1);
-    int _note1 = noteSelector(baseSelection, 1, scoreNote1[_indexLoop]);
+    int _note1 = scaleSetting.noteSelector(baseSelection, 1, scoreNote1[_indexLoop]);
     synth1.setParameter("carrierPitch1", _note1);
     
     synth2.setParameter("trigger2", 1);
-    int _note2 = noteSelector(baseSelection, 2, scoreNote2[_indexLoop]);
+    int _note2 = scaleSetting.noteSelector(baseSelection, 2, scoreNote2[_indexLoop]);
     synth2.setParameter("carrierPitch2", _note2);
     
     synth3.setParameter("trigger3", 1);
-    int _note3 = noteSelector(baseSelection, 3, scoreNote3[_indexLoop]);
+    int _note3 = scaleSetting.noteSelector(baseSelection, 3, scoreNote3[_indexLoop]);
     synth3.setParameter("carrierPitch3", _note3);
     
     synth4.setParameter("trigger4", 1);
-    int _note4 = noteSelector(baseSelection, 4, scoreNote4[_indexLoop]);
+    int _note4 = scaleSetting.noteSelector(baseSelection, 4, scoreNote4[_indexLoop]);
     synth4.setParameter("carrierPitch4", _note4);
     
     synth5.setParameter("trigger5", 1);
-    int _note5 = noteSelector(baseSelection, 5, scoreNote5[_indexLoop]);
+    int _note5 = scaleSetting.noteSelector(baseSelection, 5, scoreNote5[_indexLoop]);
     synth5.setParameter("carrierPitch5", _note5);
     
     synth6.setParameter("trigger6", 1);
-    int _note6 = noteSelector(baseSelection, 6, scoreNote6[_indexLoop]);
+    int _note6 = scaleSetting.noteSelector(baseSelection, 6, scoreNote6[_indexLoop]);
     synth6.setParameter("carrierPitch6", _note6);
     
     
@@ -1452,171 +1451,171 @@ vector<int> ofApp::convertDecimalToNBase(int n, int base, int size) {
 }
 
 
-//--------------------------------------------------------------
-int ofApp::noteSelector(int _n, int _index, int _subIndex){
-    
-    int _result = 0;
-    
-    switch (_n) {
-        case 5:
-            
-            switch (_index) {
-                case 1:
-                    _result = scale51[_subIndex];
-                    break;
-                case 2:
-                    _result = scale52[_subIndex];
-                    break;
-                case 3:
-                    _result = scale53[_subIndex];
-                    break;
-                case 4:
-                    _result = scale54[_subIndex];
-                    break;
-                case 5:
-                    _result = scale55[_subIndex];
-                    break;
-                case 6:
-                    _result = scale56[_subIndex];
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            break;
-            
-        case 6:
-            switch (_index) {
-                    
-                case 1:
-                    _result = scale61[_subIndex];
-                    break;
-                case 2:
-                    _result = scale62[_subIndex];
-                    break;
-                case 3:
-                    _result = scale63[_subIndex];
-                    break;
-                case 4:
-                    _result = scale64[_subIndex];
-                    break;
-                case 5:
-                    _result = scale65[_subIndex];
-                    break;
-                case 6:
-                    _result = scale66[_subIndex];
-                    break;
-                    
-                default:
-                    break;
-            }
-            break;
-            
-        case 7:
-            switch (_index) {
-                    
-                case 1:
-                    _result = scale71[_subIndex];
-                    break;
-                case 2:
-                    _result = scale72[_subIndex];
-                    break;
-                case 3:
-                    _result = scale73[_subIndex];
-                    break;
-                case 4:
-                    _result = scale74[_subIndex];
-                    break;
-                case 5:
-                    _result = scale75[_subIndex];
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            break;
-            
-        case 8:
-            switch (_index) {
-                    
-                case 1:
-                    _result = scale81[_subIndex];
-                    break;
-                case 2:
-                    _result = scale82[_subIndex];
-                    break;
-                case 3:
-                    _result = scale83[_subIndex];
-                    break;
-                case 4:
-                    _result = scale84[_subIndex];
-                    break;
-                case 5:
-                    _result = scale85[_subIndex];
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-            break;
-            
-        default:
-            break;
-            
-    }
-    
-    return _result;
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::scaleChange(){
-    
-    for (int i=0; i<5; i++){
-        scale51[i] = scale51[i] + 64;
-        scale52[i] = scale52[i] + 84;
-        scale53[i] = scale53[i] + 72;
-        scale54[i] = scale54[i] + 48;
-        scale55[i] = scale55[i] + 36;
-    }
-    for (int i=0; i<3; i++){
-        scale56[i] = scale56[i] + 36;
-    }
-    
-    for (int i=0; i<6; i++){
-        scale61[i] = scale61[i] + 64;
-        scale62[i] = scale62[i] + 84;
-        scale63[i] = scale63[i] + 72;
-        scale64[i] = scale64[i] + 48;
-        scale65[i] = scale65[i] + 36;
-    }
-    for (int i=0; i<2; i++){
-        scale66[i] = scale66[i] + 36;
-    }
-    
-    for (int i=0; i<7; i++){
-        scale71[i] = scale71[i] + 64;
-        scale72[i] = scale72[i] + 84;
-        scale73[i] = scale73[i] + 72;
-        scale74[i] = scale74[i] + 48;
-    }
-    for (int i=0; i<3; i++){
-        scale75[i] = scale75[i] + 36;
-    }
-    
-    for (int i=0; i<8; i++){
-        scale81[i] = scale81[i] + 64;
-        scale82[i] = scale82[i] + 84;
-        scale83[i] = scale83[i] + 72;
-        scale84[i] = scale84[i] + 48;
-    }
-    for (int i=0; i<2; i++){
-        scale85[i] = scale85[i] + 36;
-    }
-    
-}
+////--------------------------------------------------------------
+//int ofApp::noteSelector(int _n, int _index, int _subIndex){
+//    
+//    int _result = 0;
+//    
+//    switch (_n) {
+//        case 5:
+//            
+//            switch (_index) {
+//                case 1:
+//                    _result = scale51[_subIndex];
+//                    break;
+//                case 2:
+//                    _result = scale52[_subIndex];
+//                    break;
+//                case 3:
+//                    _result = scale53[_subIndex];
+//                    break;
+//                case 4:
+//                    _result = scale54[_subIndex];
+//                    break;
+//                case 5:
+//                    _result = scale55[_subIndex];
+//                    break;
+//                case 6:
+//                    _result = scale56[_subIndex];
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            
+//            break;
+//            
+//        case 6:
+//            switch (_index) {
+//                    
+//                case 1:
+//                    _result = scale61[_subIndex];
+//                    break;
+//                case 2:
+//                    _result = scale62[_subIndex];
+//                    break;
+//                case 3:
+//                    _result = scale63[_subIndex];
+//                    break;
+//                case 4:
+//                    _result = scale64[_subIndex];
+//                    break;
+//                case 5:
+//                    _result = scale65[_subIndex];
+//                    break;
+//                case 6:
+//                    _result = scale66[_subIndex];
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            break;
+//            
+//        case 7:
+//            switch (_index) {
+//                    
+//                case 1:
+//                    _result = scale71[_subIndex];
+//                    break;
+//                case 2:
+//                    _result = scale72[_subIndex];
+//                    break;
+//                case 3:
+//                    _result = scale73[_subIndex];
+//                    break;
+//                case 4:
+//                    _result = scale74[_subIndex];
+//                    break;
+//                case 5:
+//                    _result = scale75[_subIndex];
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            
+//            break;
+//            
+//        case 8:
+//            switch (_index) {
+//                    
+//                case 1:
+//                    _result = scale81[_subIndex];
+//                    break;
+//                case 2:
+//                    _result = scale82[_subIndex];
+//                    break;
+//                case 3:
+//                    _result = scale83[_subIndex];
+//                    break;
+//                case 4:
+//                    _result = scale84[_subIndex];
+//                    break;
+//                case 5:
+//                    _result = scale85[_subIndex];
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            
+//            break;
+//            
+//        default:
+//            break;
+//            
+//    }
+//    
+//    return _result;
+//    
+//}
+//
+//
+////--------------------------------------------------------------
+//void ofApp::scaleChange(){
+//    
+//    for (int i=0; i<5; i++){
+//        scale51[i] = scale51[i] + 64;
+//        scale52[i] = scale52[i] + 84;
+//        scale53[i] = scale53[i] + 72;
+//        scale54[i] = scale54[i] + 48;
+//        scale55[i] = scale55[i] + 36;
+//    }
+//    for (int i=0; i<3; i++){
+//        scale56[i] = scale56[i] + 36;
+//    }
+//    
+//    for (int i=0; i<6; i++){
+//        scale61[i] = scale61[i] + 64;
+//        scale62[i] = scale62[i] + 84;
+//        scale63[i] = scale63[i] + 72;
+//        scale64[i] = scale64[i] + 48;
+//        scale65[i] = scale65[i] + 36;
+//    }
+//    for (int i=0; i<2; i++){
+//        scale66[i] = scale66[i] + 36;
+//    }
+//    
+//    for (int i=0; i<7; i++){
+//        scale71[i] = scale71[i] + 64;
+//        scale72[i] = scale72[i] + 84;
+//        scale73[i] = scale73[i] + 72;
+//        scale74[i] = scale74[i] + 48;
+//    }
+//    for (int i=0; i<3; i++){
+//        scale75[i] = scale75[i] + 36;
+//    }
+//    
+//    for (int i=0; i<8; i++){
+//        scale81[i] = scale81[i] + 64;
+//        scale82[i] = scale82[i] + 84;
+//        scale83[i] = scale83[i] + 72;
+//        scale84[i] = scale84[i] + 48;
+//    }
+//    for (int i=0; i<2; i++){
+//        scale85[i] = scale85[i] + 36;
+//    }
+//    
+//}
 

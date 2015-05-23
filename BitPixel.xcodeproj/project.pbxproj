@@ -21,6 +21,7 @@
 		7D6273D6A5EC453239F75546 /* Kalman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4EFA68730F0B7AEBF135B91 /* Kalman.cpp */; };
 		87227F05D2B95F59872348C8 /* ContourFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 696DD44499599B0CD6AEB4DD /* ContourFinder.cpp */; };
 		A6F4C97F8A5B381535164B8F /* ETF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 17C2AA67ACB2397BF565C481 /* ETF.cpp */; };
+		A80DECFA1B106CCA0034614F /* ScaleSetting.mm in Sources */ = {isa = PBXBuildFile; fileRef = A80DECF81B106CCA0034614F /* ScaleSetting.mm */; };
 		A83AE2D71AF57B6700B15A32 /* ofxTonicSynth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE25B1AF57B6700B15A32 /* ofxTonicSynth.cpp */; };
 		A83AE2D81AF57B6700B15A32 /* ADSR.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE25E1AF57B6700B15A32 /* ADSR.cpp */; };
 		A83AE2D91AF57B6700B15A32 /* Arithmetic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A83AE2601AF57B6700B15A32 /* Arithmetic.cpp */; };
@@ -166,6 +167,8 @@
 		9EF8D1AF505A4D3DCA7ED748 /* ContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ContourFinder.h; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h; sourceTree = SOURCE_ROOT; };
 		A073E709E7A362971732CC2B /* Distance.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Distance.cpp; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/src/Distance.cpp; sourceTree = SOURCE_ROOT; };
 		A55631C35993EC6711D6444D /* ObjectFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ObjectFinder.h; path = ../../../openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ObjectFinder.h; sourceTree = SOURCE_ROOT; };
+		A80DECF81B106CCA0034614F /* ScaleSetting.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScaleSetting.mm; sourceTree = "<group>"; };
+		A80DECF91B106CCA0034614F /* ScaleSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleSetting.h; sourceTree = "<group>"; };
 		A83AE25A1AF57B6700B15A32 /* ofxTonic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTonic.h; sourceTree = "<group>"; };
 		A83AE25B1AF57B6700B15A32 /* ofxTonicSynth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTonicSynth.cpp; sourceTree = "<group>"; };
 		A83AE25C1AF57B6700B15A32 /* ofxTonicSynth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTonicSynth.h; sourceTree = "<group>"; };
@@ -1343,6 +1346,8 @@
 				E4D8936B11527B74007E1F53 /* main.mm */,
 				E4D8936D11527B74007E1F53 /* ofApp.mm */,
 				E4D8936C11527B74007E1F53 /* ofApp.h */,
+				A80DECF81B106CCA0034614F /* ScaleSetting.mm */,
+				A80DECF91B106CCA0034614F /* ScaleSetting.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1481,6 +1486,7 @@
 				A83AE2E91AF57B6700B15A32 /* ControlDelay.cpp in Sources */,
 				A83AE3021AF57B6700B15A32 /* LFNoise.cpp in Sources */,
 				A83AE3011AF57B6700B15A32 /* Generator.cpp in Sources */,
+				A80DECFA1B106CCA0034614F /* ScaleSetting.mm in Sources */,
 				A6F4C97F8A5B381535164B8F /* ETF.cpp in Sources */,
 				A8502F981B05178E00466429 /* ofxCvHaarFinder.cpp in Sources */,
 				A83AE2ED1AF57B6700B15A32 /* ControlMetroDivider.cpp in Sources */,
