@@ -177,10 +177,6 @@ public:
     void noteTrig();
     
     
-    // note scale selector
-//    int noteSelector(int _n, int _index, int _subIndex);
-//    void scaleChange();
-
     int intervalDist;
     
     ScaleSetting scaleSetting;

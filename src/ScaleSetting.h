@@ -19,9 +19,15 @@ class ScaleSetting {
     
     // note scale selector
     int noteSelector(int _n, int _index, int _subIndex);
+    
+    
+    private :
+    
     void scaleChange();
-
-
+    
+    
+    
+    
 };
 
 #endif /* defined(__BitPixel__ScaleSetting__) */
