@@ -40,7 +40,7 @@ int scale85[2] = {0, 7};
 //--------------------------------------------------------------
 void ScaleSetting::setup(){
     
-    scaleChange();
+    changeScale();
     
 }
 
@@ -168,7 +168,7 @@ int ScaleSetting::noteSelector(int _n, int _index, int _subIndex){
 
 
 //--------------------------------------------------------------
-void ScaleSetting::scaleChange(){
+void ScaleSetting::changeScale(){
     
     for (int i=0; i<5; i++){
         scale51[i] = scale51[i] + 64;

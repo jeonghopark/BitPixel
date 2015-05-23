@@ -23,7 +23,7 @@ class ScaleSetting {
     
     private :
     
-    void scaleChange();
+    void changeScale();
     
     
     

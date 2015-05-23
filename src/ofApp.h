@@ -6,9 +6,7 @@
 
 #include "ofxCv.h"
 #include "ofxOpenCv.h"
-
 #include "ofxTonic.h"
-
 
 #include "ScaleSetting.h"
 
@@ -80,7 +78,7 @@ public:
     int oldNoteIndex4;
     int oldNoteIndex5;
     int oldNoteIndex6;
-    void noteTrigger();
+//    void noteTrigger();
 
     
     // Main
@@ -102,7 +100,7 @@ public:
     float pixelStepS;
     int changeVideoWidth, changeVideoHeight;
     vector<float> pixelBright;
-    void pixelTriangleDraw();
+    void drawTrianglePixel();
     int thresholdValue;
     vector<blackWhitePixels> whitePixels;
     vector<blackWhitePixels> blackPixels;
@@ -115,11 +113,11 @@ public:
 
     
     // Graphics
-    void playingCircleNotes();
-    void playingShapeNotes();
+    void playCircleNotes();
+    void playShapeNotes();
     
     // control Panel
-    void controlElementDraw();
+    void drawControlElement();
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStepSize, guideHeightStepSize;
@@ -142,7 +140,7 @@ public:
     bool bInterval;
     
     // base Interface
-    void baseInterface();
+    void drawBaseInterface();
     ofPoint base5Pos;
     ofPoint base6Pos;
     ofPoint base7Pos;
@@ -151,7 +149,7 @@ public:
     void drawShapeCeterLine(ofPoint pos, int base, int size);
     void drawShape(ofPoint pos, int base, int size);
     void pixelShapeDraw();
-    void pixelShapeColorSizeDraw();
+    void drawPixelShapeColorSize();
     
     
     int baseSelection;
@@ -160,15 +158,15 @@ public:
     ofxCvGrayscaleImage grayImage;
     
     // Information
-    void information();
-    ofTrueTypeFont informationText;
-    int fontSize;
+//    void information();
+//    ofTrueTypeFont informationText;
+//    int fontSize;
     
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);
 
     // Line Score
-    void lineScoreDraw();
+    void drawLineScore();
     float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6;
     
     vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6;
