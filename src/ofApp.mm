@@ -633,7 +633,7 @@ void ofApp::playingShapeNotes(){
 //--------------------------------------------------------------
 void ofApp::lineScoreDraw(){
     
-    int _xNumber = whitePixels.size();
+    int _xNumber = (int)whitePixels.size();
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
@@ -1058,17 +1058,18 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
             bPlayNote = !bPlayNote;
             //            blur(edge, 3);
             bufferImg = edge;
-        }
         
-        if ( !bPlayNote ) {
-            index = 0;
-            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
-        } else {
-            noteIndex = index;
-            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
-            scoreMake();
+            if ( !bPlayNote ) {
+                index = 0;
+                ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+            } else {
+                scoreMake();
+//                noteIndex = index;
+                ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+            }
 
         }
+        
     }
     
     
