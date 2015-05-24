@@ -256,7 +256,9 @@ void ofApp::draw(){
     
     drawControlElement();
     
-    drawLineScore();
+    if (bPlayNote) {
+        drawLineScore();
+    }
     
     drawBaseInterface();
     
@@ -594,171 +596,173 @@ void ofApp::playShapeNotes(){
 //--------------------------------------------------------------
 void ofApp::drawLineScore(){
     
-    int _xNumber = (int)whitePixels.size();
+    int _xNumber = 22;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
     int _size = 3;
     int _xDefaultPos = _stepX * (_xNumber-1);
     
+    
     ofPushMatrix();
     ofPushStyle();
+
     ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
     ofSetColor( 0, 120 );
     
-    if (bPlayNote) {
+    
+
+    if (scoreNote1.size()>0) {
         
-        if (scoreNote1.size()>_xNumber) {
-            scoreNote1.erase(scoreNote1.begin());
+        for (int i=0; i<_xNumber; i++){
+            int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - scoreNote1[_indexLoopLine] * _stepY;
+            if (scoreNote1[_indexLoopLine]>0) {
+                ofDrawCircle( _x1, _y1, _size );
+            }
+
         }
-        for (int i=0; i<scoreNote1.size(); i++){
-            float _x1a = _xDefaultPos - i * _stepX;
-            float _y1a = _defaultNote - scoreNote1[i] * _stepY;
-            if (scoreNote1[i]>0) {
-                ofDrawCircle( _x1a, _y1a, _size );
+        
+        for (int i=0; i<_xNumber-1; i++){
+            int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - scoreNote1[_indexLoopLineS] * _stepY;
+            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+            float _y2 = _defaultNote - scoreNote1[_indexLoopLineE] * _stepY;
+            if ((scoreNote1[_indexLoopLineS]>0)&&(scoreNote1[_indexLoopLineE]>0)) {
+                ofDrawLine( _x1, _y1, _x2, _y2 );
             }
         }
-        
-        if (scoreNote1.size()>0) {
-            for (int i=0; i<scoreNote1.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote1[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote1[i+1] * _stepY;
-                if ((scoreNote1[i]>0)&&(scoreNote1[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
-        if (scoreNote2.size()>_xNumber) {
-            scoreNote2.erase(scoreNote2.begin());
-        }
-        for (int i=0; i<scoreNote2.size(); i++){
-            float _x2a = _xDefaultPos - i * _stepX;
-            float _y2a = _defaultNote - scoreNote2[i] * _stepY;
-            if (scoreNote2[i]>0) {
-                ofDrawCircle( _x2a, _y2a, _size );
-            }
-        }
-        
-        if (scoreNote2.size()>0) {
-            for (int i=0; i<scoreNote2.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote2[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote2[i+1] * _stepY;
-                if ((scoreNote2[i]>0)&&(scoreNote2[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
-        
-        if (scoreNote3.size()>_xNumber) {
-            scoreNote3.erase(scoreNote3.begin());
-        }
-        for (int i=0; i<scoreNote3.size(); i++){
-            float _x3a = _xDefaultPos - i * _stepX;
-            float _y3a = _defaultNote - scoreNote3[i] * _stepY;
-            if (scoreNote3[i]>0) {
-                ofDrawCircle( _x3a, _y3a, _size );
-            }
-        }
-        
-        if (scoreNote3.size()>0) {
-            for (int i=0; i<scoreNote3.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote3[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote3[i+1] * _stepY;
-                if ((scoreNote3[i]>0)&&(scoreNote3[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
-        
-        
-        if (scoreNote4.size()>_xNumber) {
-            scoreNote4.erase(scoreNote4.begin());
-        }
-        for (int i=0; i<scoreNote4.size(); i++){
-            float _x4a = _xDefaultPos - i * _stepX;
-            float _y4a = _defaultNote - scoreNote4[i] * _stepY;
-            if (scoreNote4[i]>0) {
-                ofDrawCircle( _x4a, _y4a, _size );
-            }
-        }
-        
-        if (scoreNote4.size()>0) {
-            for (int i=0; i<scoreNote4.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote4[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote4[i+1] * _stepY;
-                if ((scoreNote4[i]>0)&&(scoreNote4[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
-        
-        if (scoreNote5.size()>_xNumber) {
-            scoreNote5.erase(scoreNote5.begin());
-        }
-        for (int i=0; i<scoreNote5.size(); i++){
-            float _x5a = _xDefaultPos - i * _stepX;
-            float _y5a = _defaultNote - scoreNote5[i] * _stepY;
-            if (scoreNote5[i]>0) {
-                ofDrawCircle( _x5a, _y5a, _size );
-            }
-        }
-        
-        if (scoreNote5.size()>0) {
-            for (int i=0; i<scoreNote5.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote5[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote5[i+1] * _stepY;
-                if ((scoreNote5[i]>0)&&(scoreNote5[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
-        if (scoreNote6.size()>_xNumber) {
-            scoreNote6.erase(scoreNote6.begin());
-        }
-        for (int i=0; i<scoreNote6.size(); i++){
-            float _x6a = _xDefaultPos - i * _stepX;
-            float _y6a = _defaultNote - scoreNote6[i] * _stepY;
-            if (scoreNote6[i]>0) {
-                ofDrawCircle( _x6a, _y6a, _size );
-            }
-        }
-        
-        if (scoreNote6.size()>0) {
-            for (int i=0; i<scoreNote6.size()-1; i++){
-                float _x1 = _xDefaultPos - i * _stepX;
-                float _y1 = _defaultNote - scoreNote6[i] * _stepY;
-                float _x2 = _xDefaultPos - (i + 1) * _stepX;
-                float _y2 = _defaultNote - scoreNote6[i+1] * _stepY;
-                if ((scoreNote6[i]>0)&&(scoreNote6[i+1]>0)) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        
         
     }
+
     
+    
+    
+//    if (scoreNote2.size()>_xNumber) {
+//        scoreNote2.erase(scoreNote2.begin());
+//    }
+//    for (int i=0; i<scoreNote2.size(); i++){
+//        float _x2a = _xDefaultPos - i * _stepX;
+//        float _y2a = _defaultNote - scoreNote2[i] * _stepY;
+//        if (scoreNote2[i]>0) {
+//            ofDrawCircle( _x2a, _y2a, _size );
+//        }
+//    }
+//    
+//    if (scoreNote2.size()>0) {
+//        for (int i=0; i<scoreNote2.size()-1; i++){
+//            float _x1 = _xDefaultPos - i * _stepX;
+//            float _y1 = _defaultNote - scoreNote2[i] * _stepY;
+//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+//            float _y2 = _defaultNote - scoreNote2[i+1] * _stepY;
+//            if ((scoreNote2[i]>0)&&(scoreNote2[i+1]>0)) {
+//                ofDrawLine( _x1, _y1, _x2, _y2 );
+//            }
+//        }
+//    }
+//    
+//    
+//    
+//    if (scoreNote3.size()>_xNumber) {
+//        scoreNote3.erase(scoreNote3.begin());
+//    }
+//    for (int i=0; i<scoreNote3.size(); i++){
+//        float _x3a = _xDefaultPos - i * _stepX;
+//        float _y3a = _defaultNote - scoreNote3[i] * _stepY;
+//        if (scoreNote3[i]>0) {
+//            ofDrawCircle( _x3a, _y3a, _size );
+//        }
+//    }
+//    
+//    if (scoreNote3.size()>0) {
+//        for (int i=0; i<scoreNote3.size()-1; i++){
+//            float _x1 = _xDefaultPos - i * _stepX;
+//            float _y1 = _defaultNote - scoreNote3[i] * _stepY;
+//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+//            float _y2 = _defaultNote - scoreNote3[i+1] * _stepY;
+//            if ((scoreNote3[i]>0)&&(scoreNote3[i+1]>0)) {
+//                ofDrawLine( _x1, _y1, _x2, _y2 );
+//            }
+//        }
+//    }
+//    
+//    
+//    
+//    
+//    if (scoreNote4.size()>_xNumber) {
+//        scoreNote4.erase(scoreNote4.begin());
+//    }
+//    for (int i=0; i<scoreNote4.size(); i++){
+//        float _x4a = _xDefaultPos - i * _stepX;
+//        float _y4a = _defaultNote - scoreNote4[i] * _stepY;
+//        if (scoreNote4[i]>0) {
+//            ofDrawCircle( _x4a, _y4a, _size );
+//        }
+//    }
+//    
+//    if (scoreNote4.size()>0) {
+//        for (int i=0; i<scoreNote4.size()-1; i++){
+//            float _x1 = _xDefaultPos - i * _stepX;
+//            float _y1 = _defaultNote - scoreNote4[i] * _stepY;
+//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+//            float _y2 = _defaultNote - scoreNote4[i+1] * _stepY;
+//            if ((scoreNote4[i]>0)&&(scoreNote4[i+1]>0)) {
+//                ofDrawLine( _x1, _y1, _x2, _y2 );
+//            }
+//        }
+//    }
+//    
+//    
+//    
+//    if (scoreNote5.size()>_xNumber) {
+//        scoreNote5.erase(scoreNote5.begin());
+//    }
+//    for (int i=0; i<scoreNote5.size(); i++){
+//        float _x5a = _xDefaultPos - i * _stepX;
+//        float _y5a = _defaultNote - scoreNote5[i] * _stepY;
+//        if (scoreNote5[i]>0) {
+//            ofDrawCircle( _x5a, _y5a, _size );
+//        }
+//    }
+//    
+//    if (scoreNote5.size()>0) {
+//        for (int i=0; i<scoreNote5.size()-1; i++){
+//            float _x1 = _xDefaultPos - i * _stepX;
+//            float _y1 = _defaultNote - scoreNote5[i] * _stepY;
+//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+//            float _y2 = _defaultNote - scoreNote5[i+1] * _stepY;
+//            if ((scoreNote5[i]>0)&&(scoreNote5[i+1]>0)) {
+//                ofDrawLine( _x1, _y1, _x2, _y2 );
+//            }
+//        }
+//    }
+//    
+//    
+//    if (scoreNote6.size()>_xNumber) {
+//        scoreNote6.erase(scoreNote6.begin());
+//    }
+//    for (int i=0; i<scoreNote6.size(); i++){
+//        float _x6a = _xDefaultPos - i * _stepX;
+//        float _y6a = _defaultNote - scoreNote6[i] * _stepY;
+//        if (scoreNote6[i]>0) {
+//            ofDrawCircle( _x6a, _y6a, _size );
+//        }
+//    }
+//    
+//    if (scoreNote6.size()>0) {
+//        for (int i=0; i<scoreNote6.size()-1; i++){
+//            float _x1 = _xDefaultPos - i * _stepX;
+//            float _y1 = _defaultNote - scoreNote6[i] * _stepY;
+//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+//            float _y2 = _defaultNote - scoreNote6[i+1] * _stepY;
+//            if ((scoreNote6[i]>0)&&(scoreNote6[i+1]>0)) {
+//                ofDrawLine( _x1, _y1, _x2, _y2 );
+//            }
+//        }
+//    }
     
     
     
