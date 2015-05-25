@@ -186,7 +186,7 @@ public:
     int drawOldLineNote1;
     
     
-    void drawScoreCircleLine( vector<int> _vNote );
+    void drawScoreCircleLine( vector<int> _vNote, int _scoreCh );
     void trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh );
     
 

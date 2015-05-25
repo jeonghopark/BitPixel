@@ -611,24 +611,20 @@ void ofApp::drawLineScore(){
     
     
     ofPushMatrix();
-    ofPushStyle();
-
     ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
+
+    ofPushStyle();
     ofSetColor( 0, 120 );
     
-    drawScoreCircleLine(scoreNote1);
-    drawScoreCircleLine(scoreNote2);
-    drawScoreCircleLine(scoreNote3);
-    drawScoreCircleLine(scoreNote4);
-    drawScoreCircleLine(scoreNote5);
-    drawScoreCircleLine(scoreNote6);
-    
-    
+    drawScoreCircleLine(scoreNote1, 1);
+    drawScoreCircleLine(scoreNote2, 2);
+    drawScoreCircleLine(scoreNote3, 3);
+    drawScoreCircleLine(scoreNote4, 4);
+    drawScoreCircleLine(scoreNote5, 5);
+    drawScoreCircleLine(scoreNote6, 6);
     
     ofPopStyle();
-    
     ofPopMatrix();
-    
     
     
     ofPushMatrix();
@@ -649,7 +645,7 @@ void ofApp::drawLineScore(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawScoreCircleLine( vector<int> _vNote ){
+void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     
     
     int _xNumber = 22;
@@ -672,10 +668,13 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote ){
             int _note = _scoreNote[_indexLoopLine];
             int _noteOld = _scoreNote[_indexLoopLineOld];
             
+            int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+            int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+
             float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _note * _stepY;
+            float _y1 = _defaultNote - _noteScaled * _stepY;
             
-            if ( abs(_noteOld-_note) >= intervalDist ) {
+            if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
                 if (_note>0) {
                     ofDrawCircle( _x1, _y1, _size );
                 }
@@ -692,14 +691,18 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote ){
             int _noteS = _scoreNote[_indexLoopLineS];
             int _noteE = _scoreNote[_indexLoopLineE];
             int _noteEOld = _scoreNote[_indexLoopLineEOld];
-            
+
+            int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
+            int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
+            int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
+
             float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _noteS * _stepY;
+            float _y1 = _defaultNote - _noteSScaled * _stepY;
             float _x2 = _xDefaultPos - (i + 1) * _stepX;
-            float _y2 = _defaultNote - _noteE * _stepY;
+            float _y2 = _defaultNote - _noteEScaled * _stepY;
             
             
-            if ( (abs(_noteE-_noteS) >= intervalDist) && abs(_noteEOld-_noteE) >= intervalDist ) {
+            if ( (abs(_noteEScaled-_noteSScaled) >= intervalDist) && abs(_noteEOldScaled-_noteEScaled) >= intervalDist ) {
                 if ( _noteS > 0 && _noteE > 0 ) {
                     ofDrawLine( _x1, _y1, _x2, _y2 );
                 }
@@ -1232,7 +1235,7 @@ void ofApp::scoreMake(){
         
         if (abs(_1Note - oldNoteIndex1)>=_intervalDist) {
             int _note1Scaled = scaleSetting.noteSelector(baseSelection, 1, _1Note);
-            scoreNote1.push_back(_note1Scaled);
+            scoreNote1.push_back(_1Note);
         } else {
             scoreNote1.push_back(-1);
         }
@@ -1240,7 +1243,7 @@ void ofApp::scoreMake(){
         
         if (abs(_2Note - oldNoteIndex2)>=_intervalDist) {
             int _note2Scaled = scaleSetting.noteSelector(baseSelection, 2, _2Note);
-            scoreNote2.push_back(_note2Scaled);
+            scoreNote2.push_back(_2Note);
         } else {
             scoreNote2.push_back(-1);
         }
@@ -1248,7 +1251,7 @@ void ofApp::scoreMake(){
         
         if (abs(_3Note - oldNoteIndex3)>=_intervalDist) {
             int _note3Scaled = scaleSetting.noteSelector(baseSelection, 3, _3Note);
-            scoreNote3.push_back(_note3Scaled);
+            scoreNote3.push_back(_3Note);
         } else {
             scoreNote3.push_back(-1);
         }
@@ -1256,7 +1259,7 @@ void ofApp::scoreMake(){
         
         if (abs(_4Note - oldNoteIndex4)>=_intervalDist) {
             int _note4Scaled = scaleSetting.noteSelector(baseSelection, 4, _4Note);
-            scoreNote4.push_back(_note4Scaled);
+            scoreNote4.push_back(_4Note);
         } else {
             scoreNote4.push_back(-1);
         }
@@ -1264,7 +1267,7 @@ void ofApp::scoreMake(){
         
         if (abs(_5Note - oldNoteIndex5)>=_intervalDist) {
             int _note5Scaled = scaleSetting.noteSelector(baseSelection, 5, _5Note);
-            scoreNote5.push_back(_note5Scaled);
+            scoreNote5.push_back(_5Note);
         } else {
             scoreNote5.push_back(-1);
         }
@@ -1272,7 +1275,7 @@ void ofApp::scoreMake(){
         
         if (abs(_6Note - oldNoteIndex6)>=_intervalDist) {
             int _note6Scaled = scaleSetting.noteSelector(baseSelection, 6, _6Note);
-            scoreNote6.push_back(_note6Scaled);
+            scoreNote6.push_back(_6Note);
         } else {
             scoreNote6.push_back(-1);
         }
@@ -1344,19 +1347,26 @@ void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scor
     vector<int> _scoreNote = _vNote;
     ofxTonicSynth _synth = _synthIn;
     
-    int _note1 = _scoreNote[_indexLoop];
-    int _note1Old = _scoreNote[_indexLoopOld];
+    int _note = _scoreNote[_indexLoop];
+    int _noteOld = _scoreNote[_indexLoopOld];
     
+    int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+    int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
     
     
     string tName = "trigger" + ofToString(_scoreCh);
     string tPitch = "carrierPitch" + ofToString(_scoreCh);
     
+
     
-    if ( abs(_note1Old - _note1) >= intervalDist ) {
-        if (_note1>0) {
+    if ( abs(_noteOldScaled - _noteScaled) >= intervalDist ) {
+        if (_note>0) {
+
+            int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+
             _synth.setParameter( tName, 1);
-            _synth.setParameter( tPitch, _note1);
+            _synth.setParameter( tPitch, _noteScaled);
+            
         }
     }
     
