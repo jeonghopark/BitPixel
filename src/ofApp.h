@@ -113,8 +113,8 @@ public:
 
     
     // Graphics
-    void playCircleNotes();
-    void playShapeNotes();
+    void drawCircleNumberNotes();
+    void drawPlayingShapeNotes();
     
     // control Panel
     void drawControlElement();

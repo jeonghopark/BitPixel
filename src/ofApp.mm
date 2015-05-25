@@ -231,7 +231,7 @@ void ofApp::draw(){
     if (bPlayNote) {
         ofSetColor( 240, 0 );
     } else {
-        ofSetColor( 240, 180 );
+        ofSetColor( 240, 150 );
         edge.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
@@ -251,13 +251,22 @@ void ofApp::draw(){
     //    ofDrawRectangle(0, 0, screenW, screenH);
     //    ofPopStyle();
     
+
+    ofPushStyle();
+    if (bPlayNote) {
+        ofSetColor( 0, 70 );
+    } else {
+        ofSetColor( 0, 160 );
+    }
     drawTrianglePixel();
+    ofPopStyle();
+
     
     if (bPlayNote) {
-        playCircleNotes();
-        playShapeNotes();
-        //        pixelShapeDraw();
-        drawPixelShapeColorSize();
+        drawCircleNumberNotes();
+        drawPlayingShapeNotes();
+                pixelShapeDraw();
+//        drawPixelShapeColorSize();
     }
     
     drawControlElement();
@@ -394,6 +403,8 @@ void ofApp::drawControlElement(){
 //
 //}
 
+
+
 //--------------------------------------------------------------
 void ofApp::drawTrianglePixel(){
     
@@ -404,7 +415,7 @@ void ofApp::drawTrianglePixel(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 0, 120 );
+//    ofSetColor( 0, 160 );
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -512,7 +523,7 @@ void ofApp::drawPixelShapeColorSize(){
         
         
         if (scoreNote1[i]>0) {
-            ofDrawCircle( _x, _y, scoreNote1[i] );
+            ofDrawCircle( _x, _y, scoreNote1[i] * 10 );
         }
         
     }
@@ -528,7 +539,7 @@ void ofApp::drawPixelShapeColorSize(){
 
 
 //--------------------------------------------------------------
-void ofApp::playCircleNotes(){
+void ofApp::drawCircleNumberNotes(){
     
     int _pixelSize = pixelCircleSize;
     float _ellipseSizeR = 0.7;
@@ -570,7 +581,7 @@ void ofApp::playCircleNotes(){
 
 
 //--------------------------------------------------------------
-void ofApp::playShapeNotes(){
+void ofApp::drawPlayingShapeNotes(){
     
     ofPushMatrix();
     ofPushStyle();
@@ -969,25 +980,25 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     
     float _5BaseDist = ofDist( touch.x, touch.y, base5Pos.x, base5Pos.y );
     if ( _5BaseDist < baseSize ) {
-        index = 0;
+//        index = 0;
         baseSelection = 5;
     }
     
     float _6BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base6Pos.y );
     if ( _6BaseDist < baseSize ) {
-        index = 0;
+//        index = 0;
         baseSelection = 6;
     }
     
     float _7BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base7Pos.y );
     if ( _7BaseDist < baseSize ) {
-        index = 0;
+//        index = 0;
         baseSelection = 7;
     }
     
     float _8BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base8Pos.y );
     if ( _8BaseDist < baseSize ) {
-        index = 0;
+//        index = 0;
         baseSelection = 8;
     }
     
@@ -1233,48 +1244,42 @@ void ofApp::scoreMake(){
         int _6Note = _bitNumber[5];
         
         
-        if (abs(_1Note - oldNoteIndex1)>=_intervalDist) {
-            int _note1Scaled = scaleSetting.noteSelector(baseSelection, 1, _1Note);
+        if (abs(_1Note - oldNoteIndex1) >= _intervalDist) {
             scoreNote1.push_back(_1Note);
         } else {
             scoreNote1.push_back(-1);
         }
         oldNoteIndex1 = _1Note;
         
-        if (abs(_2Note - oldNoteIndex2)>=_intervalDist) {
-            int _note2Scaled = scaleSetting.noteSelector(baseSelection, 2, _2Note);
+        if (abs(_2Note - oldNoteIndex2) >= _intervalDist) {
             scoreNote2.push_back(_2Note);
         } else {
             scoreNote2.push_back(-1);
         }
         oldNoteIndex2 = _2Note;
         
-        if (abs(_3Note - oldNoteIndex3)>=_intervalDist) {
-            int _note3Scaled = scaleSetting.noteSelector(baseSelection, 3, _3Note);
+        if (abs(_3Note - oldNoteIndex3) >= _intervalDist) {
             scoreNote3.push_back(_3Note);
         } else {
             scoreNote3.push_back(-1);
         }
         oldNoteIndex3 = _3Note;
         
-        if (abs(_4Note - oldNoteIndex4)>=_intervalDist) {
-            int _note4Scaled = scaleSetting.noteSelector(baseSelection, 4, _4Note);
+        if (abs(_4Note - oldNoteIndex4) >= _intervalDist) {
             scoreNote4.push_back(_4Note);
         } else {
             scoreNote4.push_back(-1);
         }
         oldNoteIndex4 = _4Note;
         
-        if (abs(_5Note - oldNoteIndex5)>=_intervalDist) {
-            int _note5Scaled = scaleSetting.noteSelector(baseSelection, 5, _5Note);
+        if (abs(_5Note - oldNoteIndex5) >= _intervalDist) {
             scoreNote5.push_back(_5Note);
         } else {
             scoreNote5.push_back(-1);
         }
         oldNoteIndex5 = _5Note;
         
-        if (abs(_6Note - oldNoteIndex6)>=_intervalDist) {
-            int _note6Scaled = scaleSetting.noteSelector(baseSelection, 6, _6Note);
+        if (abs(_6Note - oldNoteIndex6) >= _intervalDist) {
             scoreNote6.push_back(_6Note);
         } else {
             scoreNote6.push_back(-1);
