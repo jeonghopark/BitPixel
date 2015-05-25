@@ -57,6 +57,8 @@ void ofApp::setup(){
         //        fontSize = 28 / 1536.0 * _sizeF;
         lineScoreStepX = 40 / 1536.0 * _sizeF;
         lineScoreStepY = 5 / 1536.0 * _sizeF;
+        stepBasePos = 105 / 1536.0 * _sizeF;
+
     } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
         pixelCircleSize = 5 / 640.0 * _sizeF;
@@ -66,6 +68,7 @@ void ofApp::setup(){
         //        fontSize = 36 / 640.0 * _sizeF;
         lineScoreStepX = 20 / 640.0 * _sizeF;
         lineScoreStepY = 3 / 640.0 * _sizeF;
+        stepBasePos = 63 / 640.0 * _sizeF;
     }
     
     index = 0;
@@ -115,12 +118,11 @@ void ofApp::setup(){
     
     //    informationText.load("verdana.ttf", fontSize);
     
-    float _stepBasePos = 105 / 1536.0 * _sizeF;
     float _posIndex = 13.5;
-    base5Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + _stepBasePos );
-    base6Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + _stepBasePos * 2 );
-    base7Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + _stepBasePos * 3 );
-    base8Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + _stepBasePos * 4 );
+    base5Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos );
+    base6Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 2 );
+    base7Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 3 );
+    base8Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 4 );
     baseSize = ctrlRectS * 0.55;
     
     bPlayNote = false;
@@ -211,9 +213,13 @@ void ofApp::triggerReceive(float & metro){
     index++;
     noteIndex = index;
     
-    //    noteTrigger();
-    noteTrig();
-    
+    trigScoreNote( scoreNote1, synth1, 1 );
+    trigScoreNote( scoreNote2, synth2, 2 );
+    trigScoreNote( scoreNote3, synth3, 3 );
+    trigScoreNote( scoreNote4, synth4, 4 );
+    trigScoreNote( scoreNote5, synth5, 5 );
+    trigScoreNote( scoreNote6, synth6, 6 );
+
     
 }
 
@@ -610,159 +616,12 @@ void ofApp::drawLineScore(){
     ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
     ofSetColor( 0, 120 );
     
-    
-
-    if (scoreNote1.size()>0) {
-        
-        for (int i=0; i<_xNumber; i++){
-            int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - scoreNote1[_indexLoopLine] * _stepY;
-            if (scoreNote1[_indexLoopLine]>0) {
-                ofDrawCircle( _x1, _y1, _size );
-            }
-
-        }
-        
-        for (int i=0; i<_xNumber-1; i++){
-            int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - scoreNote1[_indexLoopLineS] * _stepY;
-            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-            float _y2 = _defaultNote - scoreNote1[_indexLoopLineE] * _stepY;
-            if ((scoreNote1[_indexLoopLineS]>0)&&(scoreNote1[_indexLoopLineE]>0)) {
-                ofDrawLine( _x1, _y1, _x2, _y2 );
-            }
-        }
-        
-    }
-
-    
-    
-    
-//    if (scoreNote2.size()>_xNumber) {
-//        scoreNote2.erase(scoreNote2.begin());
-//    }
-//    for (int i=0; i<scoreNote2.size(); i++){
-//        float _x2a = _xDefaultPos - i * _stepX;
-//        float _y2a = _defaultNote - scoreNote2[i] * _stepY;
-//        if (scoreNote2[i]>0) {
-//            ofDrawCircle( _x2a, _y2a, _size );
-//        }
-//    }
-//    
-//    if (scoreNote2.size()>0) {
-//        for (int i=0; i<scoreNote2.size()-1; i++){
-//            float _x1 = _xDefaultPos - i * _stepX;
-//            float _y1 = _defaultNote - scoreNote2[i] * _stepY;
-//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-//            float _y2 = _defaultNote - scoreNote2[i+1] * _stepY;
-//            if ((scoreNote2[i]>0)&&(scoreNote2[i+1]>0)) {
-//                ofDrawLine( _x1, _y1, _x2, _y2 );
-//            }
-//        }
-//    }
-//    
-//    
-//    
-//    if (scoreNote3.size()>_xNumber) {
-//        scoreNote3.erase(scoreNote3.begin());
-//    }
-//    for (int i=0; i<scoreNote3.size(); i++){
-//        float _x3a = _xDefaultPos - i * _stepX;
-//        float _y3a = _defaultNote - scoreNote3[i] * _stepY;
-//        if (scoreNote3[i]>0) {
-//            ofDrawCircle( _x3a, _y3a, _size );
-//        }
-//    }
-//    
-//    if (scoreNote3.size()>0) {
-//        for (int i=0; i<scoreNote3.size()-1; i++){
-//            float _x1 = _xDefaultPos - i * _stepX;
-//            float _y1 = _defaultNote - scoreNote3[i] * _stepY;
-//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-//            float _y2 = _defaultNote - scoreNote3[i+1] * _stepY;
-//            if ((scoreNote3[i]>0)&&(scoreNote3[i+1]>0)) {
-//                ofDrawLine( _x1, _y1, _x2, _y2 );
-//            }
-//        }
-//    }
-//    
-//    
-//    
-//    
-//    if (scoreNote4.size()>_xNumber) {
-//        scoreNote4.erase(scoreNote4.begin());
-//    }
-//    for (int i=0; i<scoreNote4.size(); i++){
-//        float _x4a = _xDefaultPos - i * _stepX;
-//        float _y4a = _defaultNote - scoreNote4[i] * _stepY;
-//        if (scoreNote4[i]>0) {
-//            ofDrawCircle( _x4a, _y4a, _size );
-//        }
-//    }
-//    
-//    if (scoreNote4.size()>0) {
-//        for (int i=0; i<scoreNote4.size()-1; i++){
-//            float _x1 = _xDefaultPos - i * _stepX;
-//            float _y1 = _defaultNote - scoreNote4[i] * _stepY;
-//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-//            float _y2 = _defaultNote - scoreNote4[i+1] * _stepY;
-//            if ((scoreNote4[i]>0)&&(scoreNote4[i+1]>0)) {
-//                ofDrawLine( _x1, _y1, _x2, _y2 );
-//            }
-//        }
-//    }
-//    
-//    
-//    
-//    if (scoreNote5.size()>_xNumber) {
-//        scoreNote5.erase(scoreNote5.begin());
-//    }
-//    for (int i=0; i<scoreNote5.size(); i++){
-//        float _x5a = _xDefaultPos - i * _stepX;
-//        float _y5a = _defaultNote - scoreNote5[i] * _stepY;
-//        if (scoreNote5[i]>0) {
-//            ofDrawCircle( _x5a, _y5a, _size );
-//        }
-//    }
-//    
-//    if (scoreNote5.size()>0) {
-//        for (int i=0; i<scoreNote5.size()-1; i++){
-//            float _x1 = _xDefaultPos - i * _stepX;
-//            float _y1 = _defaultNote - scoreNote5[i] * _stepY;
-//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-//            float _y2 = _defaultNote - scoreNote5[i+1] * _stepY;
-//            if ((scoreNote5[i]>0)&&(scoreNote5[i+1]>0)) {
-//                ofDrawLine( _x1, _y1, _x2, _y2 );
-//            }
-//        }
-//    }
-//    
-//    
-//    if (scoreNote6.size()>_xNumber) {
-//        scoreNote6.erase(scoreNote6.begin());
-//    }
-//    for (int i=0; i<scoreNote6.size(); i++){
-//        float _x6a = _xDefaultPos - i * _stepX;
-//        float _y6a = _defaultNote - scoreNote6[i] * _stepY;
-//        if (scoreNote6[i]>0) {
-//            ofDrawCircle( _x6a, _y6a, _size );
-//        }
-//    }
-//    
-//    if (scoreNote6.size()>0) {
-//        for (int i=0; i<scoreNote6.size()-1; i++){
-//            float _x1 = _xDefaultPos - i * _stepX;
-//            float _y1 = _defaultNote - scoreNote6[i] * _stepY;
-//            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-//            float _y2 = _defaultNote - scoreNote6[i+1] * _stepY;
-//            if ((scoreNote6[i]>0)&&(scoreNote6[i+1]>0)) {
-//                ofDrawLine( _x1, _y1, _x2, _y2 );
-//            }
-//        }
-//    }
+    drawScoreCircleLine(scoreNote1);
+    drawScoreCircleLine(scoreNote2);
+    drawScoreCircleLine(scoreNote3);
+    drawScoreCircleLine(scoreNote4);
+    drawScoreCircleLine(scoreNote5);
+    drawScoreCircleLine(scoreNote6);
     
     
     
@@ -787,6 +646,72 @@ void ofApp::drawLineScore(){
     ofPopMatrix();
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::drawScoreCircleLine( vector<int> _vNote ){
+    
+    
+    int _xNumber = 22;
+    int _stepX = lineScoreStepX;
+    int _stepY = lineScoreStepY;
+    int _defaultNote = 56;
+    int _size = 3;
+    int _xDefaultPos = _stepX * (_xNumber-1);
+    
+    vector<int> _scoreNote = _vNote;
+    
+    
+    
+    if (_scoreNote.size()>0) {
+        
+        for (int i=0; i<_xNumber; i++){
+            int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineOld = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
+            
+            int _note = _scoreNote[_indexLoopLine];
+            int _noteOld = _scoreNote[_indexLoopLineOld];
+            
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - _note * _stepY;
+            
+            if ( abs(_noteOld-_note) >= intervalDist ) {
+                if (_note>0) {
+                    ofDrawCircle( _x1, _y1, _size );
+                }
+            }
+            
+        }
+        
+        for (int i=0; i<_xNumber-1; i++){
+            int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
+            
+            int _indexLoopLineEOld = ((i + 2 + noteIndex) % (whitePixels.size()-1)) + 1;
+            
+            int _noteS = _scoreNote[_indexLoopLineS];
+            int _noteE = _scoreNote[_indexLoopLineE];
+            int _noteEOld = _scoreNote[_indexLoopLineEOld];
+            
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - _noteS * _stepY;
+            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+            float _y2 = _defaultNote - _noteE * _stepY;
+            
+            
+            if ( (abs(_noteE-_noteS) >= intervalDist) && abs(_noteEOld-_noteE) >= intervalDist ) {
+                if ( _noteS > 0 && _noteE > 0 ) {
+                    ofDrawLine( _x1, _y1, _x2, _y2 );
+                }
+            }
+        }
+        
+    }
+
+    
+    
+}
+
 
 
 //--------------------------------------------------------------
@@ -1006,7 +931,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             float _maxY = screenH - speedCSize * 0.75;
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 intervalPos.y = touch.y;
-                float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 4);
+                float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
                 intervalDist = _interval;
             }
         }
@@ -1195,8 +1120,8 @@ void ofApp::synthSetting(){
 
 
 //--------------------------------------------------------------
-//void ofApp::noteTrigger(){
-//
+void ofApp::noteTrigger(){
+
 //    vector<int> _bitNumber;
 //    _bitNumber.resize(6);
 //
@@ -1271,9 +1196,9 @@ void ofApp::synthSetting(){
 //        scoreNote6.push_back(-1);
 //    }
 //    oldNoteIndex6 = _6Note;
-//
-//
-//}
+
+
+}
 
 
 //--------------------------------------------------------------
@@ -1285,6 +1210,8 @@ void ofApp::scoreMake(){
     scoreNote4.clear();
     scoreNote5.clear();
     scoreNote6.clear();
+    
+    int _intervalDist = 1;
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -1303,7 +1230,7 @@ void ofApp::scoreMake(){
         int _6Note = _bitNumber[5];
         
         
-        if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
+        if (abs(_1Note - oldNoteIndex1)>=_intervalDist) {
             int _note1Scaled = scaleSetting.noteSelector(baseSelection, 1, _1Note);
             scoreNote1.push_back(_note1Scaled);
         } else {
@@ -1311,7 +1238,7 @@ void ofApp::scoreMake(){
         }
         oldNoteIndex1 = _1Note;
         
-        if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
+        if (abs(_2Note - oldNoteIndex2)>=_intervalDist) {
             int _note2Scaled = scaleSetting.noteSelector(baseSelection, 2, _2Note);
             scoreNote2.push_back(_note2Scaled);
         } else {
@@ -1319,7 +1246,7 @@ void ofApp::scoreMake(){
         }
         oldNoteIndex2 = _2Note;
         
-        if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
+        if (abs(_3Note - oldNoteIndex3)>=_intervalDist) {
             int _note3Scaled = scaleSetting.noteSelector(baseSelection, 3, _3Note);
             scoreNote3.push_back(_note3Scaled);
         } else {
@@ -1327,7 +1254,7 @@ void ofApp::scoreMake(){
         }
         oldNoteIndex3 = _3Note;
         
-        if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
+        if (abs(_4Note - oldNoteIndex4)>=_intervalDist) {
             int _note4Scaled = scaleSetting.noteSelector(baseSelection, 4, _4Note);
             scoreNote4.push_back(_note4Scaled);
         } else {
@@ -1335,7 +1262,7 @@ void ofApp::scoreMake(){
         }
         oldNoteIndex4 = _4Note;
         
-        if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
+        if (abs(_5Note - oldNoteIndex5)>=_intervalDist) {
             int _note5Scaled = scaleSetting.noteSelector(baseSelection, 5, _5Note);
             scoreNote5.push_back(_note5Scaled);
         } else {
@@ -1343,7 +1270,7 @@ void ofApp::scoreMake(){
         }
         oldNoteIndex5 = _5Note;
         
-        if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
+        if (abs(_6Note - oldNoteIndex6)>=_intervalDist) {
             int _note6Scaled = scaleSetting.noteSelector(baseSelection, 6, _6Note);
             scoreNote6.push_back(_note6Scaled);
         } else {
@@ -1360,31 +1287,78 @@ void ofApp::scoreMake(){
 void ofApp::noteTrig(){
     
     
+//    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+//    int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size()-1))+1;
+//    
+//    int _note1 = scoreNote1[_indexLoop];
+//    int _note1Old = scoreNote1[_indexLoopOld];
+//    
+//    if ( abs(_note1Old - _note1) >= intervalDist ) {
+//        if (_note1>0) {
+//            synth1.setParameter("trigger1", 1);
+//            synth1.setParameter("carrierPitch1", _note1);
+//        }
+//    }
+//    
+//    
+//    
+//    if ( abs(_note1Old - _note1) >= intervalDist ) {
+//        if (_note1>0) {
+//            synth1.setParameter("trigger1", 1);
+//            synth1.setParameter("carrierPitch1", _note1);
+//        }
+//    }
+
+    
+//    synth2.setParameter("trigger2", 1);
+//    int _note2 = scoreNote2[_indexLoop];
+//    synth2.setParameter("carrierPitch2", _note2);
+//    
+//    synth3.setParameter("trigger3", 1);
+//    int _note3 = scoreNote3[_indexLoop];
+//    synth3.setParameter("carrierPitch3", _note3);
+//    
+//    synth4.setParameter("trigger4", 1);
+//    int _note4 = scoreNote4[_indexLoop];
+//    synth4.setParameter("carrierPitch4", _note4);
+//    
+//    synth5.setParameter("trigger5", 1);
+//    int _note5 = scoreNote5[_indexLoop];
+//    synth5.setParameter("carrierPitch5", _note5);
+//    
+//    synth6.setParameter("trigger6", 1);
+//    int _note6 = scoreNote6[_indexLoop];
+//    synth6.setParameter("carrierPitch6", _note6);
+    
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh ){
+    
     int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+    int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size()-1))+1;
     
-    synth1.setParameter("trigger1", 1);
-    int _note1 = scoreNote1[_indexLoop];
-    synth1.setParameter("carrierPitch1", _note1);
     
-    synth2.setParameter("trigger2", 1);
-    int _note2 = scoreNote2[_indexLoop];
-    synth2.setParameter("carrierPitch2", _note2);
+    vector<int> _scoreNote = _vNote;
+    ofxTonicSynth _synth = _synthIn;
     
-    synth3.setParameter("trigger3", 1);
-    int _note3 = scoreNote3[_indexLoop];
-    synth3.setParameter("carrierPitch3", _note3);
+    int _note1 = _scoreNote[_indexLoop];
+    int _note1Old = _scoreNote[_indexLoopOld];
     
-    synth4.setParameter("trigger4", 1);
-    int _note4 = scoreNote4[_indexLoop];
-    synth4.setParameter("carrierPitch4", _note4);
     
-    synth5.setParameter("trigger5", 1);
-    int _note5 = scoreNote5[_indexLoop];
-    synth5.setParameter("carrierPitch5", _note5);
     
-    synth6.setParameter("trigger6", 1);
-    int _note6 = scoreNote6[_indexLoop];
-    synth6.setParameter("carrierPitch6", _note6);
+    string tName = "trigger" + ofToString(_scoreCh);
+    string tPitch = "carrierPitch" + ofToString(_scoreCh);
+    
+    
+    if ( abs(_note1Old - _note1) >= intervalDist ) {
+        if (_note1>0) {
+            _synth.setParameter( tName, 1);
+            _synth.setParameter( tPitch, _note1);
+        }
+    }
     
     
 }

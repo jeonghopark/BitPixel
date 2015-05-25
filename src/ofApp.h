@@ -78,7 +78,7 @@ public:
     int oldNoteIndex4;
     int oldNoteIndex5;
     int oldNoteIndex6;
-//    void noteTrigger();
+    void noteTrigger();
 
     
     // Main
@@ -124,7 +124,8 @@ public:
     int maxSpeed, minSpeed;
     void controlGuide();
 
-
+    float stepBasePos;
+    
     float ctrlRectS;
 
     ofPoint speedCPos;
@@ -179,6 +180,16 @@ public:
     
     ScaleSetting scaleSetting;
     
+    
+    int playOldNote1;
+    int drawOldPointNote1;
+    int drawOldLineNote1;
+    
+    
+    void drawScoreCircleLine( vector<int> _vNote );
+    void trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh );
+    
+
 };
 
 
