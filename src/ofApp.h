@@ -116,6 +116,8 @@ public:
     void drawCircleNumberNotes();
     void drawPlayingShapeNotes();
     
+    void drawPlayingShapeNote( vector<int> _vNote, int _scoreCh );
+    
     // control Panel
     void drawControlElement();
     void debugControlPDraw();
@@ -148,8 +150,10 @@ public:
     ofPoint base8Pos;
     float baseSize;
     void drawShapeCeterLine(ofPoint pos, int base, int size);
+    void drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
-    void pixelShapeDraw();
+    void drawPixelAllNoteShape();
+    void drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh );
     void drawPixelShapeColorSize();
     
     
@@ -189,6 +193,8 @@ public:
     void drawScoreCircleLine( vector<int> _vNote, int _scoreCh );
     void trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh );
     
+    
+    float pixeShapeSize;
 
 };
 

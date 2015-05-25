@@ -58,6 +58,8 @@ void ofApp::setup(){
         lineScoreStepX = 40 / 1536.0 * _sizeF;
         lineScoreStepY = 5 / 1536.0 * _sizeF;
         stepBasePos = 105 / 1536.0 * _sizeF;
+        
+        pixeShapeSize = 1 / 1536.0 * _sizeF;
 
     } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
@@ -69,6 +71,9 @@ void ofApp::setup(){
         lineScoreStepX = 20 / 640.0 * _sizeF;
         lineScoreStepY = 3 / 640.0 * _sizeF;
         stepBasePos = 63 / 640.0 * _sizeF;
+
+        pixeShapeSize = 0.65 / 640.0 * _sizeF;
+
     }
     
     index = 0;
@@ -254,7 +259,7 @@ void ofApp::draw(){
 
     ofPushStyle();
     if (bPlayNote) {
-        ofSetColor( 0, 70 );
+        ofSetColor( 0, 30 );
     } else {
         ofSetColor( 0, 160 );
     }
@@ -263,10 +268,27 @@ void ofApp::draw(){
 
     
     if (bPlayNote) {
+
         drawCircleNumberNotes();
-        drawPlayingShapeNotes();
-                pixelShapeDraw();
-//        drawPixelShapeColorSize();
+//        drawPlayingShapeNotes();
+//        drawPixelAllNoteShape();
+
+        drawPixelAllNoteShapes( scoreNote1, 1 );
+        drawPixelAllNoteShapes( scoreNote2, 2 );
+        drawPixelAllNoteShapes( scoreNote3, 3 );
+        drawPixelAllNoteShapes( scoreNote4, 4 );
+        drawPixelAllNoteShapes( scoreNote5, 5 );
+        drawPixelAllNoteShapes( scoreNote6, 6 );
+
+        //        drawPixelShapeColorSize();
+        
+        drawPlayingShapeNote( scoreNote1, 1 );
+        drawPlayingShapeNote( scoreNote2, 2 );
+        drawPlayingShapeNote( scoreNote3, 3 );
+        drawPlayingShapeNote( scoreNote4, 4 );
+        drawPlayingShapeNote( scoreNote5, 5 );
+        drawPlayingShapeNote( scoreNote6, 6 );
+        
     }
     
     drawControlElement();
@@ -442,7 +464,7 @@ void ofApp::drawTrianglePixel(){
 
 
 //--------------------------------------------------------------
-void ofApp::pixelShapeDraw(){
+void ofApp::drawPixelAllNoteShape(){
     
     ofPushMatrix();
     ofPushStyle();
@@ -470,6 +492,56 @@ void ofApp::pixelShapeDraw(){
     
     
 }
+
+
+
+//--------------------------------------------------------------
+void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofEnableAntiAliasing();
+    
+    ofSetColor( 0, 0, 0, 120 );
+    
+    for (int i=0; i<whitePixels.size(); i++) {
+        
+        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint( _x, _y );
+        
+        
+        int _indexLoopLine = ((i) % (whitePixels.size()-1)) + 1;
+        int _indexLoopLineOld = ((i + 1) % (whitePixels.size()-1)) + 1;
+        
+        int _note = _vNote[_indexLoopLine];
+        int _noteOld = _vNote[_indexLoopLineOld];
+        
+        int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        
+        if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+            if (_note>0) {
+                float _size = _noteScaled * pixeShapeSize;
+                drawShape( _p, baseSelection, _size );
+            }
+        }
+
+        
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+    
+}
+
 
 
 
@@ -609,6 +681,52 @@ void ofApp::drawPlayingShapeNotes(){
 }
 
 
+//--------------------------------------------------------------
+void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    float _h = ofMap( _scoreCh, 1, 6, 0, 255 );
+    ofColor _c = ofColor::fromHsb( _h, 125, 255, 180 );
+    
+    if (whitePixels.size()>0) {
+        
+        int _noteLoopIndex = ((noteIndex) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint( _x, _y );
+        
+        int _indexLoopLineOld = ((1 + noteIndex) % (whitePixels.size()-1)) + 1;
+
+        int _note = _vNote[_noteLoopIndex];
+        int _noteOld = _vNote[_indexLoopLineOld];
+        
+        int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+            if (_note>0) {
+//                drawShapeCeterLine( _p, baseSelection, _pixelNumbers);
+                
+                float _size = _noteScaled * pixeShapeSize;
+                drawShapeCeterLineColorRotation( _p, baseSelection, _size, _c );
+            }
+        }
+
+        
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+    
+}
+
 
 //--------------------------------------------------------------
 void ofApp::drawLineScore(){
@@ -673,6 +791,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     if (_scoreNote.size()>0) {
         
         for (int i=0; i<_xNumber; i++){
+
             int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
             int _indexLoopLineOld = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
             
@@ -694,6 +813,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
         }
         
         for (int i=0; i<_xNumber-1; i++){
+
             int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
             int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
             
@@ -794,6 +914,50 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     ofPopStyle();
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color){
+    
+    ofPoint _pos = pos;
+    
+    vector<ofPoint> posLine;
+    
+    int _base = base;
+    int _size = size;
+    
+    for (int i=0; i<_base; i++) {
+        float _sizeDegree = i * 360 / _base + 180.0;
+        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
+        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        
+        ofPoint _p = ofPoint( _x, _y );
+        posLine.push_back( _p );
+    }
+    
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate( _pos );
+    ofRotateZ( 45 );
+    
+    ofSetColor( color.r, color.g, color.b, color.a * 0.2 );
+    for (int i=0; i<posLine.size(); i++){
+        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+    }
+    
+    ofSetColor( color );
+    for (int i=0; i<posLine.size()-1; i++){
+        ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
+    }
+    ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
+    
+    ofPopMatrix();
+    ofPopStyle();
+    
+}
+
 
 
 
