@@ -195,6 +195,8 @@ public:
     
     
     float pixeShapeSize;
+    
+    ofImage backgroundControPanel;
 
 };
 
