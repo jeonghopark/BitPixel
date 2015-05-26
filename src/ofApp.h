@@ -163,10 +163,6 @@ public:
     
     ofxCvGrayscaleImage grayImage;
     
-    // Information
-//    void information();
-//    ofTrueTypeFont informationText;
-//    int fontSize;
     
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);

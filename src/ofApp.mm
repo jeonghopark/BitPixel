@@ -40,8 +40,6 @@ void ofApp::setup(){
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5);
     
-    //    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
-    
     pixelStepS = 4;
     camSize = cam.getWidth();
     changedCamSize = camSize / pixelStepS;  // 90
@@ -56,8 +54,7 @@ void ofApp::setup(){
         ctrlRectS = 80 / 1536.0 * _sizeF;
         guideWidthStepSize = 96 / 1536.0 * _sizeF;
         guideHeightStepSize = 64 / 1536.0 * _sizeF;
-        //        fontSize = 28 / 1536.0 * _sizeF;
-        lineScoreStepX = 40 / 1536.0 * _sizeF;
+        lineScoreStepX = 35 / 1536.0 * _sizeF;
         lineScoreStepY = 5 / 1536.0 * _sizeF;
         stepBasePos = 105 / 1536.0 * _sizeF;
         
@@ -69,7 +66,6 @@ void ofApp::setup(){
         ctrlRectS = 50 / 640.0 * _sizeF;
         guideWidthStepSize = ctrlPnW / 16;
         guideHeightStepSize = ctrlPnH / 8;
-        //        fontSize = 36 / 640.0 * _sizeF;
         lineScoreStepX = 20 / 640.0 * _sizeF;
         lineScoreStepY = 3 / 640.0 * _sizeF;
         stepBasePos = 63 / 640.0 * _sizeF;
@@ -95,16 +91,6 @@ void ofApp::setup(){
     oldScoreNote5 = 0;
     oldScoreNote6 = 0;
     
-    //    cam.setDesiredFrameRate(30);
-    //    cam.initGrabber( 480, 360 );
-    
-    //    ofSetOrientation(OF_ORIENTATION_DEFAULT);
-    
-    //    if ( !cam.isInitialized() ) {
-    //        return;
-    //    } else {
-    //    }
-    
     speedCSize = ctrlRectS;
     speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bSpeedCtrl = false;
@@ -123,8 +109,6 @@ void ofApp::setup(){
     grayThreshold = 120;
     
     
-    //    informationText.load("verdana.ttf", fontSize);
-    
     float _posIndex = 13.5;
     base5Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos );
     base6Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 2 );
@@ -137,7 +121,7 @@ void ofApp::setup(){
     
     scaleSetting.setup();
     
-    lineScoreNumber = 22;
+    lineScoreNumber = 23;
     
 }
 
@@ -150,7 +134,7 @@ void ofApp::update(){
         
         convertColor(cam, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
-        //        erode(gray);
+//                erode(gray);
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         thin(edge);
         //        invert(edge);
@@ -237,9 +221,15 @@ void ofApp::triggerReceive(float & metro){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    ofPushMatrix();
+    
+    ofTranslate( 10, 0 );
+    
     ofPushStyle();
+
     if (!bCameraCapturePlay) {
         ofSetColor( 255, 150 );
+        
         edge.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
@@ -251,6 +241,7 @@ void ofApp::draw(){
         bufferImg.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
+    ofPopMatrix();
     
     //    ofPushStyle();
     //    ofSetColor(255,230);
@@ -300,9 +291,6 @@ void ofApp::draw(){
     
     drawBaseInterface();
     
-    //    if (bCameraCapturePlay) {
-    //        information();
-    //    }
     
 }
 
@@ -334,17 +322,12 @@ void ofApp::drawControlElement(){
     ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
     
     
-    //    for (int j=0; j<7; j++){
-    //        float _y1 = j * guideHeightStepSize + guideHeightStepSize;
-    //        ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
-    //    }
-    
     ofPopStyle();
     ofPopMatrix();
     
-    
+    int _alpha = 180;
     ofPushStyle();
-    ofSetColor( 255, 210 );
+    ofSetColor( 255, _alpha );
     ofSetCircleResolution(48);
     float _sX = speedCPos.x;
     float _sY = speedCPos.y;
@@ -353,7 +336,7 @@ void ofApp::drawControlElement(){
     ofPopStyle();
     
     ofPushStyle();
-    ofSetColor( 255, 210 );
+    ofSetColor( 255, _alpha );
     ofNoFill();
     float _sizeF = 1.1;
     float _x1 = thresholdCPos.x;
@@ -367,7 +350,7 @@ void ofApp::drawControlElement(){
     
     
     ofPushStyle();
-    ofSetColor( 255, 210 );
+    ofSetColor( 255, _alpha );
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
@@ -388,6 +371,9 @@ void ofApp::drawControlElement(){
     
     float _xL2 = ctrlPnW * 0.5 + _xDefaultPos * 0.5;
     ofDrawLine( _xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
+
+    float _xM = ctrlPnW * 0.5;
+    ofDrawLine( _xM, ctrlPnY + _yD, _xM, screenH - _yD);
     
     ofPopStyle();
     ofPopMatrix();
@@ -395,55 +381,6 @@ void ofApp::drawControlElement(){
     
 }
 
-
-//--------------------------------------------------------------
-//void ofApp::information(){
-//
-//    ofPushStyle();
-//    ofSetColor( 120 );
-//
-//    if (whitePixels.size()>0) {
-//
-//        int _loopIndex = ((noteIndex) % (whitePixels.size()-1))+1;
-//        int _whitePixels = whitePixels[ _loopIndex ].pixelN;
-//
-//        float _x = screenW * 0.5 - 200;
-//        float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
-//
-//        informationText.drawString( ofToString(_whitePixels), _x, _y );
-//
-//        //        vector<int> _10bitNumber;
-//        //        _10bitNumber.resize(4);
-//        //        _10bitNumber = convertDecimalToNBase( _whitePixels, 10, _10bitNumber.size() );
-//        //        for (int i=0; i<_10bitNumber.size(); i++) {
-//        //            informationText.drawString( ofToString(_10bitNumber[i]), screenW * 0.5 - fontSize * i + fontSize * 1.5, ctrlPnY + fontSize * 1 + fontSize * 1.1 );
-//        //        }
-//
-//        vector<int> _8bitNumber;
-//        if ((baseSelection==5)||(baseSelection==6)) {
-//            _8bitNumber.resize(6);
-//            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, (int)_8bitNumber.size() );
-//            for (int i=0; i<_8bitNumber.size(); i++) {
-//                float _x = screenW * 0.5 - fontSize * i + fontSize * 1.5;
-//                float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
-//                informationText.drawString( ofToString(_8bitNumber[i]), _x, _y );
-//            }
-//        }
-//        if ((baseSelection==7)||(baseSelection==8)) {
-//            _8bitNumber.resize(5);
-//            _8bitNumber = convertDecimalToNBase( _whitePixels, baseSelection, (int)_8bitNumber.size() );
-//            for (int i=0; i<_8bitNumber.size(); i++) {
-//                float _x = screenW * 0.5 - fontSize * i + fontSize * 1.5;
-//                float _y = ctrlPnY + fontSize * 1 + fontSize * 1.1;
-//                informationText.drawString( ofToString(_8bitNumber[i]), _x, _y );
-//            }
-//        }
-//
-//    }
-//
-//    ofPopStyle();
-//
-//}
 
 
 
@@ -456,8 +393,6 @@ void ofApp::drawTrianglePixel(){
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
-    
-    //    ofSetColor( 0, 160 );
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -522,7 +457,7 @@ void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 255, 120 );
+    ofSetColor( 255, 80 );
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -551,8 +486,6 @@ void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
                 drawShape( _p, baseSelection, _size );
             }
         }
-        
-        
         
     }
     
@@ -589,8 +522,6 @@ void ofApp::drawPixelShapeColorSize(){
         int _5Note = _bitNumber[4];
         int _6Note = _bitNumber[5];
         
-        //        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
-        //        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _indexLoop ].indexPos - _pixelNumbers;
         
         float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -600,18 +531,18 @@ void ofApp::drawPixelShapeColorSize(){
         int _min = 10;
         int _max = 100;
         
-        //        float _size1 = ofMap( _1Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size1 );
-        //        float _size2 = ofMap( _2Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size2 );
-        //        float _size3 = ofMap( _3Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size3 );
-        //        float _size4 = ofMap( _4Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size4 );
-        //        float _size5 = ofMap( _5Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size5 );
-        //        float _size6 = ofMap( _6Note, 0, baseSelection-1, _min, _max );
-        //        drawShape( _p, baseSelection, _size6 );
+        float _size1 = ofMap( _1Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size1 );
+        float _size2 = ofMap( _2Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size2 );
+        float _size3 = ofMap( _3Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size3 );
+        float _size4 = ofMap( _4Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size4 );
+        float _size5 = ofMap( _5Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size5 );
+        float _size6 = ofMap( _6Note, 0, baseSelection-1, _min, _max );
+        drawShape( _p, baseSelection, _size6 );
         
         
         if (scoreNote1[i]>0) {
@@ -620,10 +551,8 @@ void ofApp::drawPixelShapeColorSize(){
         
     }
     
-    
     ofPopStyle();
     ofPopMatrix();
-    
     
 }
 
@@ -635,7 +564,6 @@ void ofApp::drawPixelNumbersCircleNotes(){
     
     int _pixelSize = pixelCircleSize;
     float _ellipseSizeR = 0.7;
-    
     
     ofPushMatrix();
     ofPushStyle();
@@ -668,9 +596,8 @@ void ofApp::drawPixelNumbersCircleNotes(){
     ofPopStyle();
     ofPopMatrix();
     
-    
-    
 }
+
 
 
 //--------------------------------------------------------------
@@ -698,8 +625,8 @@ void ofApp::drawPlayingShapeNotes(){
     ofPopStyle();
     ofPopMatrix();
     
-    
 }
+
 
 
 //--------------------------------------------------------------
@@ -738,13 +665,10 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
             }
         }
         
-        
-        
     }
     
     ofPopStyle();
     ofPopMatrix();
-    
     
 }
 
@@ -752,7 +676,7 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
 //--------------------------------------------------------------
 void ofApp::drawLineScore(){
     
-    int _xNumber = 22;
+    int _xNumber = lineScoreNumber;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
@@ -776,8 +700,6 @@ void ofApp::drawLineScore(){
     ofPopStyle();
     ofPopMatrix();
     
-    
-    
 }
 
 
@@ -786,6 +708,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     
     
     int _xNumber = lineScoreNumber;
+    int _middle = _xNumber * 0.5;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
@@ -794,19 +717,19 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     
     vector<int> _scoreNote = _vNote;
     
-    ofPushStyle();
-    
-    
     float _h = ofMap( _scoreCh, 1, 6, 0, 255 );
     ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
-    ofSetColor( _c );
+
     
     if (_scoreNote.size()>0) {
         
+        ofPushStyle();
+        ofSetColor( _c );
+
         for (int i=0; i<_xNumber; i++){
             
-            int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineOld = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLine = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
             
             int _note = _scoreNote[_indexLoopLine];
             int _noteOld = _scoreNote[_indexLoopLineOld];
@@ -825,12 +748,18 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             
         }
         
+        ofPopStyle();
+
+        ofPushStyle();
+        ofSetColor( _c, 100 );
+
+        
         for (int i=0; i<_xNumber-1; i++){
             
-            int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
             
-            int _indexLoopLineEOld = ((i + 2 + noteIndex) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
             
             int _noteS = _scoreNote[_indexLoopLineS];
             int _noteE = _scoreNote[_indexLoopLineE];
@@ -853,9 +782,10 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             }
         }
         
+        ofPopStyle();
+        
     }
     
-    ofPopStyle();
     
     
     
@@ -1064,7 +994,6 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             bSpeedCtrl = false;
         }
         
-        //        float _sizeF = 0.7;
         float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , touch.x, touch.y );
         
         if (_distT<thresholdCSize) {
@@ -1109,18 +1038,9 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 thresholdCPos.y = touch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
-                //                cannyThreshold1 = _threshold;
-                //                cannyThreshold2 = _threshold;
                 grayThreshold = _threshold;
             }
             
-            //            float _minX = 1 * 96;
-            //            float _maxX = 3 * 96;
-            //            if ((touch.x>_minX)&&(touch.x<_maxX)) {
-            //                thresholdCPos.x = touch.x;
-            //                float _threshold = ofMap(thresholdCPos.x, _minX, _maxX, 255, 20);
-            //                grayThreshold = _threshold;
-            //            }
             
         }
         
@@ -1167,8 +1087,6 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     if ( (touch.x<guideWidthStepSize * 11)&&(touch.x>guideWidthStepSize * 4) && (touch.y>ctrlPnY)&&(touch.y<ofGetHeight()) && bCameraCapturePlay ) {
 
         bPlayNote = !bPlayNote;
-        
-        cout << "bang" << endl;
         
         if ( !bPlayNote ) {
             ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
