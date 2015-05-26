@@ -133,8 +133,11 @@ void ofApp::setup(){
     baseSize = ctrlRectS * 0.55;
     
     bPlayNote = false;
+    bCameraCapturePlay = false;
     
     scaleSetting.setup();
+    
+    lineScoreNumber = 22;
     
 }
 
@@ -155,7 +158,7 @@ void ofApp::update(){
         edge.update();
         
         
-        if ( bPlayNote ) {
+        if ( bCameraCapturePlay ) {
             noteIndex = index;
         } else {
             
@@ -235,7 +238,7 @@ void ofApp::triggerReceive(float & metro){
 void ofApp::draw(){
     
     ofPushStyle();
-    if (!bPlayNote) {
+    if (!bCameraCapturePlay) {
         ofSetColor( 255, 150 );
         edge.draw( 0, 0, screenW, screenH);
     }
@@ -243,7 +246,7 @@ void ofApp::draw(){
     
     
     ofPushStyle();
-    if (bPlayNote) {
+    if (bCameraCapturePlay) {
         ofSetColor( 255, 120 );
         bufferImg.draw( 0, 0, screenW, screenH);
     }
@@ -256,7 +259,7 @@ void ofApp::draw(){
     
     
     ofPushStyle();
-    if (bPlayNote) {
+    if (bCameraCapturePlay) {
         ofSetColor( 255, 60 );
     } else {
         ofSetColor( 255, 160 );
@@ -265,7 +268,7 @@ void ofApp::draw(){
     ofPopStyle();
     
     
-    if (bPlayNote) {
+    if (bCameraCapturePlay) {
         
         drawPixelNumbersCircleNotes();
         //        drawPlayingShapeNotes();
@@ -291,13 +294,13 @@ void ofApp::draw(){
     
     drawControlElement();
     
-    if (bPlayNote) {
+    if (bCameraCapturePlay) {
         drawLineScore();
     }
     
     drawBaseInterface();
     
-    //    if (bPlayNote) {
+    //    if (bCameraCapturePlay) {
     //        information();
     //    }
     
@@ -372,6 +375,23 @@ void ofApp::drawControlElement(){
     ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
     ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
     ofPopStyle();
+    
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofSetColor( 255, 80 );
+    
+    int _xDefaultPos = lineScoreStepX * (lineScoreNumber-1);
+
+    float _xL1 = ctrlPnW * 0.5 - _xDefaultPos * 0.5;
+    ofDrawLine( _xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
+    
+    float _xL2 = ctrlPnW * 0.5 + _xDefaultPos * 0.5;
+    ofDrawLine( _xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
+    
+    ofPopStyle();
+    ofPopMatrix();
+
     
 }
 
@@ -757,19 +777,6 @@ void ofApp::drawLineScore(){
     ofPopMatrix();
     
     
-    ofPushMatrix();
-    ofPushStyle();
-    ofSetColor( 255, 80 );
-    
-    float _yD = 20;
-    float _x1 = ctrlPnW * 0.5 - _xDefaultPos * 0.5;
-    ofDrawLine( _x1, ctrlPnY + _yD, _x1, screenH - _yD);
-    
-    float _x2 = ctrlPnW * 0.5 + _xDefaultPos * 0.5;
-    ofDrawLine( _x2, ctrlPnY + _yD, _x2, screenH - _yD);
-    
-    ofPopStyle();
-    ofPopMatrix();
     
 }
 
@@ -778,7 +785,7 @@ void ofApp::drawLineScore(){
 void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     
     
-    int _xNumber = 22;
+    int _xNumber = lineScoreNumber;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
@@ -1138,22 +1145,39 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     
     if ( (touch.x>0)&&(touch.x<ctrlPnW) && (touch.y<ctrlPnY)&&(touch.y>0) ) {
         if ((whitePixels.size()!=0)&&( touch.id==0 )) {
-            bPlayNote = !bPlayNote;
+            bCameraCapturePlay = !bCameraCapturePlay;
             //            blur(edge, 3);
             bufferImg = edge;
             
-            if ( !bPlayNote ) {
+            if ( !bCameraCapturePlay ) {
                 index = 0;
                 ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
             } else {
                 scoreMake();
                 //                noteIndex = index;
                 ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+                bPlayNote = true;
             }
             
         }
         
     }
+
+    
+    if ( (touch.x<guideWidthStepSize * 11)&&(touch.x>guideWidthStepSize * 4) && (touch.y>ctrlPnY)&&(touch.y<ofGetHeight()) && bCameraCapturePlay ) {
+
+        bPlayNote = !bPlayNote;
+        
+        cout << "bang" << endl;
+        
+        if ( !bPlayNote ) {
+            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+        } else {
+            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+        }
+
+    }
+
     
     
     float _5BaseDist = ofDist( touch.x, touch.y, base5Pos.x, base5Pos.y );

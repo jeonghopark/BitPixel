@@ -60,6 +60,7 @@ public:
 
     
     bool bPlayNote;
+    bool bCameraCapturePlay;
 
     
     // ofxTonic
@@ -197,6 +198,9 @@ public:
     float pixeShapeSize;
     
     ofImage backgroundControPanel;
+    
+    
+    int lineScoreNumber;
 
 };
 
