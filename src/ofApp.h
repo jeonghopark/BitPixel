@@ -113,7 +113,7 @@ public:
 
     
     // Graphics
-    void drawCircleNumberNotes();
+    void drawPixelNumbersCircleNotes();
     void drawPlayingShapeNotes();
     
     void drawPlayingShapeNote( vector<int> _vNote, int _scoreCh );

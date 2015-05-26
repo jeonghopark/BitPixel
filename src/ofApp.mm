@@ -62,7 +62,7 @@ void ofApp::setup(){
         stepBasePos = 105 / 1536.0 * _sizeF;
         
         pixeShapeSize = 1 / 1536.0 * _sizeF;
-
+        
     } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
         pixelCircleSize = 5 / 640.0 * _sizeF;
@@ -73,9 +73,9 @@ void ofApp::setup(){
         lineScoreStepX = 20 / 640.0 * _sizeF;
         lineScoreStepY = 3 / 640.0 * _sizeF;
         stepBasePos = 63 / 640.0 * _sizeF;
-
+        
         pixeShapeSize = 0.65 / 640.0 * _sizeF;
-
+        
     }
     
     index = 0;
@@ -150,7 +150,7 @@ void ofApp::update(){
         //        erode(gray);
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         thin(edge);
-//        invert(edge);
+        //        invert(edge);
         
         edge.update();
         
@@ -226,7 +226,7 @@ void ofApp::triggerReceive(float & metro){
     trigScoreNote( scoreNote4, synth4, 4 );
     trigScoreNote( scoreNote5, synth5, 5 );
     trigScoreNote( scoreNote6, synth6, 6 );
-
+    
     
 }
 
@@ -235,9 +235,7 @@ void ofApp::triggerReceive(float & metro){
 void ofApp::draw(){
     
     ofPushStyle();
-    if (bPlayNote) {
-        ofSetColor( 0, 0 );
-    } else {
+    if (!bPlayNote) {
         ofSetColor( 255, 150 );
         edge.draw( 0, 0, screenW, screenH);
     }
@@ -248,8 +246,6 @@ void ofApp::draw(){
     if (bPlayNote) {
         ofSetColor( 255, 120 );
         bufferImg.draw( 0, 0, screenW, screenH);
-    } else {
-        ofSetColor( 255, 0 );
     }
     ofPopStyle();
     
@@ -258,7 +254,7 @@ void ofApp::draw(){
     //    ofDrawRectangle(0, 0, screenW, screenH);
     //    ofPopStyle();
     
-
+    
     ofPushStyle();
     if (bPlayNote) {
         ofSetColor( 255, 60 );
@@ -267,21 +263,21 @@ void ofApp::draw(){
     }
     drawTrianglePixel();
     ofPopStyle();
-
+    
     
     if (bPlayNote) {
-
-        drawCircleNumberNotes();
-//        drawPlayingShapeNotes();
-//        drawPixelAllNoteShape();
-
+        
+        drawPixelNumbersCircleNotes();
+        //        drawPlayingShapeNotes();
+        //        drawPixelAllNoteShape();
+        
         drawPixelAllNoteShapes( scoreNote1, 1 );
         drawPixelAllNoteShapes( scoreNote2, 2 );
         drawPixelAllNoteShapes( scoreNote3, 3 );
         drawPixelAllNoteShapes( scoreNote4, 4 );
         drawPixelAllNoteShapes( scoreNote5, 5 );
         drawPixelAllNoteShapes( scoreNote6, 6 );
-
+        
         //        drawPixelShapeColorSize();
         
         drawPlayingShapeNote( scoreNote1, 1 );
@@ -441,7 +437,7 @@ void ofApp::drawTrianglePixel(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-//    ofSetColor( 0, 160 );
+    //    ofSetColor( 0, 160 );
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -535,7 +531,7 @@ void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
                 drawShape( _p, baseSelection, _size );
             }
         }
-
+        
         
         
     }
@@ -615,7 +611,7 @@ void ofApp::drawPixelShapeColorSize(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawCircleNumberNotes(){
+void ofApp::drawPixelNumbersCircleNotes(){
     
     int _pixelSize = pixelCircleSize;
     float _ellipseSizeR = 0.7;
@@ -640,6 +636,7 @@ void ofApp::drawCircleNumberNotes(){
             ofFill();
             ofSetColor( 255, 20 );
             ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
+           
             ofNoFill();
             ofSetColor( 255, 120 );
             ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
@@ -705,7 +702,7 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
         ofPoint _p = ofPoint( _x, _y );
         
         int _indexLoopLineOld = ((1 + noteIndex) % (whitePixels.size()-1)) + 1;
-
+        
         int _note = _vNote[_noteLoopIndex];
         int _noteOld = _vNote[_indexLoopLineOld];
         
@@ -714,13 +711,13 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
         
         if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
             if (_note>0) {
-//                drawShapeCeterLine( _p, baseSelection, _pixelNumbers);
+                //                drawShapeCeterLine( _p, baseSelection, _pixelNumbers);
                 
                 float _size = _noteScaled * pixeShapeSize;
                 drawShapeCeterLineColorRotation( _p, baseSelection, _size, _c );
             }
         }
-
+        
         
         
     }
@@ -745,7 +742,7 @@ void ofApp::drawLineScore(){
     
     ofPushMatrix();
     ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
-
+    
     ofPushStyle();
     ofSetColor( 255, 120 );
     
@@ -800,7 +797,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     if (_scoreNote.size()>0) {
         
         for (int i=0; i<_xNumber; i++){
-
+            
             int _indexLoopLine = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
             int _indexLoopLineOld = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
             
@@ -809,7 +806,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             
             int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
             int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-
+            
             float _x1 = _xDefaultPos - i * _stepX;
             float _y1 = _defaultNote - _noteScaled * _stepY;
             
@@ -822,7 +819,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
         }
         
         for (int i=0; i<_xNumber-1; i++){
-
+            
             int _indexLoopLineS = ((i + noteIndex) % (whitePixels.size()-1)) + 1;
             int _indexLoopLineE = ((i + 1 + noteIndex) % (whitePixels.size()-1)) + 1;
             
@@ -831,11 +828,11 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             int _noteS = _scoreNote[_indexLoopLineS];
             int _noteE = _scoreNote[_indexLoopLineE];
             int _noteEOld = _scoreNote[_indexLoopLineEOld];
-
+            
             int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
             int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
             int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
-
+            
             float _x1 = _xDefaultPos - i * _stepX;
             float _y1 = _defaultNote - _noteSScaled * _stepY;
             float _x2 = _xDefaultPos - (i + 1) * _stepX;
@@ -852,7 +849,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     }
     
     ofPopStyle();
-
+    
     
     
 }
@@ -1089,16 +1086,19 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         if (bSpeedCtrl) {
             float _minY = ctrlPnY + speedCSize * 0.75;
             float _maxY = screenH - speedCSize * 0.75;
+            
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 speedCPos.y = touch.y;
                 float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
                 synthMain.setParameter("tempo", _tempo);
             }
+            
         }
         
         if (bthresholdCtrl) {
             float _minY = ctrlPnY + speedCSize * 0.75;
             float _maxY = screenH - speedCSize * 0.75;
+            
             if ((touch.y>_minY)&&(touch.y<_maxY)) {
                 thresholdCPos.y = touch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
@@ -1158,25 +1158,25 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     
     float _5BaseDist = ofDist( touch.x, touch.y, base5Pos.x, base5Pos.y );
     if ( _5BaseDist < baseSize ) {
-//        index = 0;
+        //        index = 0;
         baseSelection = 5;
     }
     
     float _6BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base6Pos.y );
     if ( _6BaseDist < baseSize ) {
-//        index = 0;
+        //        index = 0;
         baseSelection = 6;
     }
     
     float _7BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base7Pos.y );
     if ( _7BaseDist < baseSize ) {
-//        index = 0;
+        //        index = 0;
         baseSelection = 7;
     }
     
     float _8BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base8Pos.y );
     if ( _8BaseDist < baseSize ) {
-//        index = 0;
+        //        index = 0;
         baseSelection = 8;
     }
     
@@ -1313,83 +1313,83 @@ void ofApp::synthSetting(){
 
 //--------------------------------------------------------------
 void ofApp::noteTrigger(){
-
-//    vector<int> _bitNumber;
-//    _bitNumber.resize(6);
-//
-//    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
-//    int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
-//    _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
-//
-//    int _1Note = _bitNumber[0];
-//    int _2Note = _bitNumber[1];
-//    int _3Note = _bitNumber[2];
-//    int _4Note = _bitNumber[3];
-//    int _5Note = _bitNumber[4];
-//    int _6Note = _bitNumber[5];
-//
-//
-//    if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
-//        synth1.setParameter("trigger1", 1);
-//        int _note1 = scaleSetting.noteSelector(baseSelection, 1, _1Note);
-//        synth1.setParameter("carrierPitch1", _note1);
-//        scoreNote1.push_back(_note1);
-//    } else {
-//        scoreNote1.push_back(-1);
-//    }
-//    oldNoteIndex1 = _1Note;
-//
-//    if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
-//        synth2.setParameter("trigger2", 1);
-//        int _note2 = scaleSetting.noteSelector(baseSelection, 2, _2Note);
-//        synth2.setParameter("carrierPitch2", _note2);
-//        scoreNote2.push_back(_note2);
-//    } else {
-//        scoreNote2.push_back(-1);
-//    }
-//    oldNoteIndex2 = _2Note;
-//
-//    if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
-//        synth3.setParameter("trigger3", 1);
-//        int _note3 = scaleSetting.noteSelector(baseSelection, 3, _3Note);
-//        synth3.setParameter("carrierPitch3", _note3);
-//        scoreNote3.push_back(_note3);
-//    } else {
-//        scoreNote3.push_back(-1);
-//    }
-//    oldNoteIndex3 = _3Note;
-//
-//    if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
-//        synth4.setParameter("trigger4", 1);
-//        int _note4 = scaleSetting.noteSelector(baseSelection, 4, _4Note);
-//        synth4.setParameter("carrierPitch4", _note4);
-//        scoreNote4.push_back(_note4);
-//    } else {
-//        scoreNote4.push_back(-1);
-//    }
-//    oldNoteIndex4 = _4Note;
-//
-//    if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
-//        synth5.setParameter("trigger5", 1);
-//        int _note5 = scaleSetting.noteSelector(baseSelection, 5, _5Note);
-//        synth5.setParameter("carrierPitch5", _note5);
-//        scoreNote5.push_back(_note5);
-//    } else {
-//        scoreNote5.push_back(-1);
-//    }
-//    oldNoteIndex5 = _5Note;
-//
-//    if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
-//        synth6.setParameter("trigger6", 1);
-//        int _note6 = scaleSetting.noteSelector(baseSelection, 6, _6Note);
-//        synth6.setParameter("carrierPitch6", _note6);
-//        scoreNote6.push_back(_note6);
-//    } else {
-//        scoreNote6.push_back(-1);
-//    }
-//    oldNoteIndex6 = _6Note;
-
-
+    
+    //    vector<int> _bitNumber;
+    //    _bitNumber.resize(6);
+    //
+    //    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+    //    int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
+    //    _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
+    //
+    //    int _1Note = _bitNumber[0];
+    //    int _2Note = _bitNumber[1];
+    //    int _3Note = _bitNumber[2];
+    //    int _4Note = _bitNumber[3];
+    //    int _5Note = _bitNumber[4];
+    //    int _6Note = _bitNumber[5];
+    //
+    //
+    //    if (abs(_1Note - oldNoteIndex1)>=intervalDist) {
+    //        synth1.setParameter("trigger1", 1);
+    //        int _note1 = scaleSetting.noteSelector(baseSelection, 1, _1Note);
+    //        synth1.setParameter("carrierPitch1", _note1);
+    //        scoreNote1.push_back(_note1);
+    //    } else {
+    //        scoreNote1.push_back(-1);
+    //    }
+    //    oldNoteIndex1 = _1Note;
+    //
+    //    if (abs(_2Note - oldNoteIndex2)>=intervalDist) {
+    //        synth2.setParameter("trigger2", 1);
+    //        int _note2 = scaleSetting.noteSelector(baseSelection, 2, _2Note);
+    //        synth2.setParameter("carrierPitch2", _note2);
+    //        scoreNote2.push_back(_note2);
+    //    } else {
+    //        scoreNote2.push_back(-1);
+    //    }
+    //    oldNoteIndex2 = _2Note;
+    //
+    //    if (abs(_3Note - oldNoteIndex3)>=intervalDist) {
+    //        synth3.setParameter("trigger3", 1);
+    //        int _note3 = scaleSetting.noteSelector(baseSelection, 3, _3Note);
+    //        synth3.setParameter("carrierPitch3", _note3);
+    //        scoreNote3.push_back(_note3);
+    //    } else {
+    //        scoreNote3.push_back(-1);
+    //    }
+    //    oldNoteIndex3 = _3Note;
+    //
+    //    if (abs(_4Note - oldNoteIndex4)>=intervalDist) {
+    //        synth4.setParameter("trigger4", 1);
+    //        int _note4 = scaleSetting.noteSelector(baseSelection, 4, _4Note);
+    //        synth4.setParameter("carrierPitch4", _note4);
+    //        scoreNote4.push_back(_note4);
+    //    } else {
+    //        scoreNote4.push_back(-1);
+    //    }
+    //    oldNoteIndex4 = _4Note;
+    //
+    //    if (abs(_5Note - oldNoteIndex5)>=intervalDist) {
+    //        synth5.setParameter("trigger5", 1);
+    //        int _note5 = scaleSetting.noteSelector(baseSelection, 5, _5Note);
+    //        synth5.setParameter("carrierPitch5", _note5);
+    //        scoreNote5.push_back(_note5);
+    //    } else {
+    //        scoreNote5.push_back(-1);
+    //    }
+    //    oldNoteIndex5 = _5Note;
+    //
+    //    if (abs(_6Note - oldNoteIndex6)>=intervalDist) {
+    //        synth6.setParameter("trigger6", 1);
+    //        int _note6 = scaleSetting.noteSelector(baseSelection, 6, _6Note);
+    //        synth6.setParameter("carrierPitch6", _note6);
+    //        scoreNote6.push_back(_note6);
+    //    } else {
+    //        scoreNote6.push_back(-1);
+    //    }
+    //    oldNoteIndex6 = _6Note;
+    
+    
 }
 
 
@@ -1473,48 +1473,48 @@ void ofApp::scoreMake(){
 void ofApp::noteTrig(){
     
     
-//    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
-//    int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size()-1))+1;
-//    
-//    int _note1 = scoreNote1[_indexLoop];
-//    int _note1Old = scoreNote1[_indexLoopOld];
-//    
-//    if ( abs(_note1Old - _note1) >= intervalDist ) {
-//        if (_note1>0) {
-//            synth1.setParameter("trigger1", 1);
-//            synth1.setParameter("carrierPitch1", _note1);
-//        }
-//    }
-//    
-//    
-//    
-//    if ( abs(_note1Old - _note1) >= intervalDist ) {
-//        if (_note1>0) {
-//            synth1.setParameter("trigger1", 1);
-//            synth1.setParameter("carrierPitch1", _note1);
-//        }
-//    }
-
+    //    int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
+    //    int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size()-1))+1;
+    //
+    //    int _note1 = scoreNote1[_indexLoop];
+    //    int _note1Old = scoreNote1[_indexLoopOld];
+    //
+    //    if ( abs(_note1Old - _note1) >= intervalDist ) {
+    //        if (_note1>0) {
+    //            synth1.setParameter("trigger1", 1);
+    //            synth1.setParameter("carrierPitch1", _note1);
+    //        }
+    //    }
+    //
+    //
+    //
+    //    if ( abs(_note1Old - _note1) >= intervalDist ) {
+    //        if (_note1>0) {
+    //            synth1.setParameter("trigger1", 1);
+    //            synth1.setParameter("carrierPitch1", _note1);
+    //        }
+    //    }
     
-//    synth2.setParameter("trigger2", 1);
-//    int _note2 = scoreNote2[_indexLoop];
-//    synth2.setParameter("carrierPitch2", _note2);
-//    
-//    synth3.setParameter("trigger3", 1);
-//    int _note3 = scoreNote3[_indexLoop];
-//    synth3.setParameter("carrierPitch3", _note3);
-//    
-//    synth4.setParameter("trigger4", 1);
-//    int _note4 = scoreNote4[_indexLoop];
-//    synth4.setParameter("carrierPitch4", _note4);
-//    
-//    synth5.setParameter("trigger5", 1);
-//    int _note5 = scoreNote5[_indexLoop];
-//    synth5.setParameter("carrierPitch5", _note5);
-//    
-//    synth6.setParameter("trigger6", 1);
-//    int _note6 = scoreNote6[_indexLoop];
-//    synth6.setParameter("carrierPitch6", _note6);
+    
+    //    synth2.setParameter("trigger2", 1);
+    //    int _note2 = scoreNote2[_indexLoop];
+    //    synth2.setParameter("carrierPitch2", _note2);
+    //
+    //    synth3.setParameter("trigger3", 1);
+    //    int _note3 = scoreNote3[_indexLoop];
+    //    synth3.setParameter("carrierPitch3", _note3);
+    //
+    //    synth4.setParameter("trigger4", 1);
+    //    int _note4 = scoreNote4[_indexLoop];
+    //    synth4.setParameter("carrierPitch4", _note4);
+    //
+    //    synth5.setParameter("trigger5", 1);
+    //    int _note5 = scoreNote5[_indexLoop];
+    //    synth5.setParameter("carrierPitch5", _note5);
+    //
+    //    synth6.setParameter("trigger6", 1);
+    //    int _note6 = scoreNote6[_indexLoop];
+    //    synth6.setParameter("carrierPitch6", _note6);
     
     
 }
@@ -1540,13 +1540,13 @@ void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scor
     string tName = "trigger" + ofToString(_scoreCh);
     string tPitch = "carrierPitch" + ofToString(_scoreCh);
     
-
+    
     
     if ( abs(_noteOldScaled - _noteScaled) >= intervalDist ) {
         if (_note>0) {
-
+            
             int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-
+            
             _synth.setParameter( tName, 1);
             _synth.setParameter( tPitch, _noteScaled);
             
