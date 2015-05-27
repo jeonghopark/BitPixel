@@ -581,9 +581,9 @@ void ofApp::drawPixelNumbersCircleNotes(){
             float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
             float _yS = (int)((_indexPixes+i) / changedCamSize) * pixelStepS * cameraScreenRatio;
             
-            ofFill();
-            ofSetColor( 255, 20 );
-            ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
+//            ofFill();
+//            ofSetColor( 255, 20 );
+//            ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
            
             ofNoFill();
             ofSetColor( 255, 120 );
@@ -680,7 +680,6 @@ void ofApp::drawLineScore(){
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
-    int _size = 3;
     int _xDefaultPos = _stepX * (_xNumber-1);
     
     
