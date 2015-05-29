@@ -17,7 +17,7 @@ void ofApp::setup(){
     ofEnableAlphaBlending();
     
     screenW = ofGetWidth();
-    screenH = ofGetHeight();
+    screenH = ofGetWidth() * 4.0 / 3.0;
     
     ctrlPnX = 0;
     ctrlPnY = screenW;
@@ -43,13 +43,16 @@ void ofApp::setup(){
     pixelStepS = 4;
     camSize = cam.getWidth();
     changedCamSize = camSize / pixelStepS;  // 90
-    cameraScreenRatio = screenW / cam.getWidth();
+//    cameraScreenRatio = screenW / cam.getWidth();
     thresholdValue = 80;
     
     float _sizeF = screenW;
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+
+        cameraScreenRatio = screenW / cam.getWidth();
+
         pixelCircleSize = 10 / 1536.0 * _sizeF;
         ctrlRectS = 80 / 1536.0 * _sizeF;
         guideWidthStepSize = 96 / 1536.0 * _sizeF;
@@ -62,6 +65,9 @@ void ofApp::setup(){
         
     } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
+        
+        cameraScreenRatio = screenW / cam.getWidth();
+
         pixelCircleSize = 5 / 640.0 * _sizeF;
         ctrlRectS = 50 / 640.0 * _sizeF;
         guideWidthStepSize = ctrlPnW / 16;
