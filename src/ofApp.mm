@@ -12,25 +12,45 @@ void ofApp::setup(){
     
     baseSelection = 7;
     
-    ofBackground( 0 );
+    ofBackground( 15 );
     ofSetFrameRate( 60 );
     ofEnableAlphaBlending();
     
-    screenW = ofGetWidth();
-    screenH = ofGetWidth() * 4.0 / 3.0;
-    
-    ctrlPnX = 0;
-    ctrlPnY = screenW;
-    ctrlPnW = screenW;
-    ctrlPnH = screenH - screenW;
-    
-    backgroundControPanel.load("test_background.png");
+    backgroundControPanel.load("controlBackground.png");
     
     cam.setDeviceID( 0 );
     cam.setup( 480, 360 );
     cam.setDesiredFrameRate(15);
     
+    screenW = ofGetWidth();
+    screenH = ofGetWidth() * 4.0 / 3.0;
+    
+    
+    float _sizeF = screenW;
+    ctrlPnX = 0;
+    ctrlPnY = screenW;
+    ctrlPnW = screenW;
+    ctrlPnH = screenH - ctrlPnY;
+
+    
+    shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
+
+    
     bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
+    
+    cameraScreenRatio = screenW / cam.getWidth();
+    
+    pixelCircleSize = 10 / 1536.0 * _sizeF;
+    ctrlRectS = 80 / 1536.0 * _sizeF;
+    guideWidthStepSize = 96 / 1536.0 * _sizeF;
+    guideHeightStepSize = 64 / 1536.0 * _sizeF;
+    lineScoreStepX = 35 / 1536.0 * _sizeF;
+    lineScoreStepY = 5 / 1536.0 * _sizeF;
+    stepBasePos = 105 / 1536.0 * _sizeF;
+    
+    pixeShapeSize = 1 / 1536.0 * _sizeF;
+
+    
     
     synthSetting();
     maxSpeed = 200;
@@ -46,38 +66,13 @@ void ofApp::setup(){
 //    cameraScreenRatio = screenW / cam.getWidth();
     thresholdValue = 80;
     
-    float _sizeF = screenW;
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
-
-        cameraScreenRatio = screenW / cam.getWidth();
-
-        pixelCircleSize = 10 / 1536.0 * _sizeF;
-        ctrlRectS = 80 / 1536.0 * _sizeF;
-        guideWidthStepSize = 96 / 1536.0 * _sizeF;
-        guideHeightStepSize = 64 / 1536.0 * _sizeF;
-        lineScoreStepX = 35 / 1536.0 * _sizeF;
-        lineScoreStepY = 5 / 1536.0 * _sizeF;
-        stepBasePos = 105 / 1536.0 * _sizeF;
-        
-        pixeShapeSize = 1 / 1536.0 * _sizeF;
-        
+        bIPhone = false;
     } else {
         ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
-        
-        cameraScreenRatio = screenW / cam.getWidth();
-
-        pixelCircleSize = 5 / 640.0 * _sizeF;
-        ctrlRectS = 50 / 640.0 * _sizeF;
-        guideWidthStepSize = ctrlPnW / 16;
-        guideHeightStepSize = ctrlPnH / 8;
-        lineScoreStepX = 20 / 640.0 * _sizeF;
-        lineScoreStepY = 3 / 640.0 * _sizeF;
-        stepBasePos = 63 / 640.0 * _sizeF;
-        
-        pixeShapeSize = 0.65 / 640.0 * _sizeF;
-        
+        bIPhone = true;
     }
     
     index = 0;
@@ -227,9 +222,11 @@ void ofApp::triggerReceive(float & metro){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    ofTranslate( 0, shiftValueIphoneY );
+
     ofPushMatrix();
     
-    ofTranslate( 10, 0 );
+    ofTranslate( 0, 0 );
     
     ofPushStyle();
 
@@ -406,7 +403,7 @@ void ofApp::drawTrianglePixel(){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
         float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
@@ -989,27 +986,31 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
     
+    float _tolerance = 2;
+    
+    ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    
     if ( touch.id==0 ) {
         
-        float _distS = ofDist( speedCPos.x, speedCPos.y , touch.x, touch.y );
+        float _distS = ofDist( speedCPos.x, speedCPos.y , _changedTouch.x, _changedTouch.y );
         
-        if (_distS<thresholdCSize) {
+        if (_distS < thresholdCSize * _tolerance) {
             bSpeedCtrl = true;
         } else {
             bSpeedCtrl = false;
         }
         
-        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , touch.x, touch.y );
+        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _changedTouch.x, _changedTouch.y );
         
-        if (_distT<thresholdCSize) {
+        if (_distT < thresholdCSize * _tolerance) {
             bthresholdCtrl = true;
         } else {
             bthresholdCtrl = false;
         }
         
-        float _distI = ofDist( intervalPos.x, intervalPos.y , touch.x, touch.y );
+        float _distI = ofDist( intervalPos.x, intervalPos.y , _changedTouch.x, _changedTouch.y );
         
-        if (_distI<intervalSize) {
+        if (_distI < intervalSize * _tolerance) {
             bInterval = true;
         } else {
             bInterval = false;
@@ -1022,14 +1023,16 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void ofApp::touchMoved(ofTouchEventArgs & touch){
     
+    ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+
     if ( touch.id==0 ) {
         
         if (bSpeedCtrl) {
             float _minY = ctrlPnY + speedCSize * 0.75;
             float _maxY = screenH - speedCSize * 0.75;
             
-            if ((touch.y>_minY)&&(touch.y<_maxY)) {
-                speedCPos.y = touch.y;
+            if ((_changedTouch.y>_minY)&&(_changedTouch.y<_maxY)) {
+                speedCPos.y = _changedTouch.y;
                 float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
                 synthMain.setParameter("tempo", _tempo);
             }
@@ -1040,8 +1043,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             float _minY = ctrlPnY + speedCSize * 0.75;
             float _maxY = screenH - speedCSize * 0.75;
             
-            if ((touch.y>_minY)&&(touch.y<_maxY)) {
-                thresholdCPos.y = touch.y;
+            if ((_changedTouch.y>_minY)&&(_changedTouch.y<_maxY)) {
+                thresholdCPos.y = _changedTouch.y;
                 float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
                 grayThreshold = _threshold;
             }
@@ -1053,8 +1056,8 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         if (bInterval) {
             float _minY = ctrlPnY + speedCSize * 0.75;
             float _maxY = screenH - speedCSize * 0.75;
-            if ((touch.y>_minY)&&(touch.y<_maxY)) {
-                intervalPos.y = touch.y;
+            if ((_changedTouch.y>_minY)&&(_changedTouch.y<_maxY)) {
+                intervalPos.y = _changedTouch.y;
                 float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
                 intervalDist = _interval;
             }
@@ -1068,7 +1071,9 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
 //--------------------------------------------------------------
 void ofApp::touchUp(ofTouchEventArgs & touch){
     
-    if ( (touch.x>0)&&(touch.x<ctrlPnW) && (touch.y<ctrlPnY)&&(touch.y>0) ) {
+    ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+
+    if ( (_changedTouch.x>0)&&(_changedTouch.x<ctrlPnW) && (_changedTouch.y<ctrlPnY)&&(_changedTouch.y>0) ) {
         if ((whitePixels.size()!=0)&&( touch.id==0 )) {
             bCameraCapturePlay = !bCameraCapturePlay;
             //            blur(edge, 3);
@@ -1089,7 +1094,7 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     }
 
     
-    if ( (touch.x<guideWidthStepSize * 11)&&(touch.x>guideWidthStepSize * 4) && (touch.y>ctrlPnY)&&(touch.y<ofGetHeight()) && bCameraCapturePlay ) {
+    if ( (_changedTouch.x<guideWidthStepSize * 11)&&(_changedTouch.x>guideWidthStepSize * 4) && (_changedTouch.y>ctrlPnY)&&(_changedTouch.y<screenH) && bCameraCapturePlay ) {
 
         bPlayNote = !bPlayNote;
         
@@ -1103,25 +1108,25 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
 
     
     
-    float _5BaseDist = ofDist( touch.x, touch.y, base5Pos.x, base5Pos.y );
+    float _5BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base5Pos.x, base5Pos.y );
     if ( _5BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 5;
     }
     
-    float _6BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base6Pos.y );
+    float _6BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base6Pos.y );
     if ( _6BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 6;
     }
     
-    float _7BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base7Pos.y );
+    float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base7Pos.y );
     if ( _7BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 7;
     }
     
-    float _8BaseDist = ofDist( touch.x, touch.y, base6Pos.x, base8Pos.y );
+    float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base8Pos.y );
     if ( _8BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 8;
@@ -1166,6 +1171,12 @@ void ofApp::deviceOrientationChanged(int newOrientation){
 void ofApp::audioRequested (float * output, int bufferSize, int nChannels){
     
     synthMain.fillBufferOfFloats(output, bufferSize, nChannels);
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::audioReceived(float * output, int bufferSize, int nChannels){
     
 }
 

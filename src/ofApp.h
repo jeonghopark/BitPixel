@@ -57,6 +57,7 @@ public:
     void deviceOrientationChanged(int newOrientation);
     
     void audioRequested (float * output, int bufferSize, int nChannels);
+    void audioReceived(float * input, int bufferSize, int nChannels);
 
     
     bool bPlayNote;
@@ -197,6 +198,11 @@ public:
     
     
     int lineScoreNumber;
+    
+    bool bIPhone;
+    float shiftValueIphoneY;
+    
+//    ofSoundStream soundStream;
 
 };
 
