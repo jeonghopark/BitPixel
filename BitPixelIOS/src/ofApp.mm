@@ -741,7 +741,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             
             float _x1 = _xDefaultPos - i * _stepX;
             float _y1 = _defaultNote - _noteScaled * _stepY;
-            
+                        
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
                 if (_note>0) {
                     ofDrawCircle( _x1, _y1, _size );
