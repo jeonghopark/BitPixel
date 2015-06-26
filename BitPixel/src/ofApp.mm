@@ -101,7 +101,7 @@ void ofApp::setup(){
     bthresholdCtrl = false;
     
     intervalSize = ctrlRectS * 0.5;
-    intervalPos = ofPoint( 2.5 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bthresholdCtrl = false;
     intervalDist = 1;
     
@@ -110,11 +110,12 @@ void ofApp::setup(){
     grayThreshold = 120;
     
     
-    float _posIndex = 13.5;
-    base5Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos );
-    base6Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 2 );
-    base7Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 3 );
-    base8Pos = ofPoint( guideWidthStepSize * _posIndex, ctrlPnY + stepBasePos * 4 );
+    float _posIndexRight = 13.5;
+    float _posIndexLeft = 2.5;
+    base5Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 1.5);
+    base6Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 3.5 );
+    base7Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 1.5 );
+    base8Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 3.5 );
     baseSize = ctrlRectS * 0.55;
     
     bPlayNote = false;
@@ -321,8 +322,8 @@ void ofApp::drawControlElement(){
     float _thresholdX = guideWidthStepSize * 15;
     ofDrawLine( _thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
     
-    float _intervalX = guideWidthStepSize * 2.5;
-    ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
+//    float _intervalX = guideWidthStepSize * 2.5;
+//    ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
     
     
     ofPopStyle();
@@ -338,18 +339,18 @@ void ofApp::drawControlElement(){
     ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
     ofPopStyle();
     
-    ofPushStyle();
-    ofSetColor( 255, _alpha );
-    ofNoFill();
-    float _sizeF = 1.1;
-    float _x1 = thresholdCPos.x;
-    float _y1 = thresholdCPos.y - thresholdCSize * _sizeF;
-    float _x2 = thresholdCPos.x - cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    float _y2 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    float _x3 = thresholdCPos.x + cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    float _y3 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    ofDrawTriangle( _x1, _y1, _x2, _y2, _x3, _y3 );
-    ofPopStyle();
+//    ofPushStyle();
+//    ofSetColor( 255, _alpha );
+//    ofNoFill();
+//    float _sizeF = 1.1;
+//    float _x1 = thresholdCPos.x;
+//    float _y1 = thresholdCPos.y - thresholdCSize * _sizeF;
+//    float _x2 = thresholdCPos.x - cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
+//    float _y2 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
+//    float _x3 = thresholdCPos.x + cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
+//    float _y3 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
+//    ofDrawTriangle( _x1, _y1, _x2, _y2, _x3, _y3 );
+//    ofPopStyle();
     
     
     ofPushStyle();
@@ -1000,13 +1001,13 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             bSpeedCtrl = false;
         }
         
-        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _changedTouch.x, _changedTouch.y );
+//        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _changedTouch.x, _changedTouch.y );
         
-        if (_distT < thresholdCSize * _tolerance) {
-            bthresholdCtrl = true;
-        } else {
-            bthresholdCtrl = false;
-        }
+//        if (_distT < thresholdCSize * _tolerance) {
+//            bthresholdCtrl = true;
+//        } else {
+//            bthresholdCtrl = false;
+//        }
         
         float _distI = ofDist( intervalPos.x, intervalPos.y , _changedTouch.x, _changedTouch.y );
         
@@ -1015,6 +1016,16 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
         } else {
             bInterval = false;
         }
+        
+        
+        if ( (_changedTouch.x>0)&&(_changedTouch.x<ctrlPnW) && (_changedTouch.y<ctrlPnY)&&(_changedTouch.y>0) ) {
+            
+            grayThreshold = 120;
+            touchDownDefault = _changedTouch.y;
+            
+        }
+
+
         
     }
     
@@ -1039,18 +1050,16 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             
         }
         
-        if (bthresholdCtrl) {
-            float _minY = ctrlPnY + speedCSize * 0.75;
-            float _maxY = screenH - speedCSize * 0.75;
-            
-            if ((_changedTouch.y>_minY)&&(_changedTouch.y<_maxY)) {
-                thresholdCPos.y = _changedTouch.y;
-                float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
-                grayThreshold = _threshold;
-            }
-            
-            
-        }
+//        if (bthresholdCtrl) {
+//            float _minY = ctrlPnY + speedCSize * 0.75;
+//            float _maxY = screenH - speedCSize * 0.75;
+//            
+//            if ((_changedTouch.y>_minY)&&(_changedTouch.y<_maxY)) {
+//                thresholdCPos.y = _changedTouch.y;
+//                float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
+//                grayThreshold = _threshold;
+//            }
+//        }
         
         
         if (bInterval) {
@@ -1061,6 +1070,13 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
                 float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
                 intervalDist = _interval;
             }
+        }
+        
+        
+        if ( (_changedTouch.x>0)&&(_changedTouch.x<ctrlPnW) && (_changedTouch.y<ctrlPnY)&&(_changedTouch.y>0) ) {
+            
+            grayThreshold = 120 + (_changedTouch.y - touchDownDefault);
+            
         }
         
     }
@@ -1089,6 +1105,8 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
                 bPlayNote = true;
             }
             
+            grayThreshold = 120;
+            touchDownDefault = 0;
         }
         
     }
@@ -1120,13 +1138,13 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
         baseSelection = 6;
     }
     
-    float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base7Pos.y );
+    float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base7Pos.x, base7Pos.y );
     if ( _7BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 7;
     }
     
-    float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base8Pos.y );
+    float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base8Pos.x, base8Pos.y );
     if ( _8BaseDist < baseSize ) {
         //        index = 0;
         baseSelection = 8;

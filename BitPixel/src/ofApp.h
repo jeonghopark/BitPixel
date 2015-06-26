@@ -203,6 +203,9 @@ public:
     float shiftValueIphoneY;
     
 //    ofSoundStream soundStream;
+    
+    
+    float touchDownDefault;
 
 };
 

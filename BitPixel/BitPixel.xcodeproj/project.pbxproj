@@ -40,11 +40,6 @@
 		61DD0EB4BD8830BAAE5A53F9 /* Mixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 16CC054CE0E0E760149C1582 /* Mixer.cpp */; };
 		6514DC7E22C3B7DC1FB0C3B3 /* CombFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51EEEAC49AD83E19752B5831 /* CombFilter.cpp */; };
 		66A3482341B5C5D1B8E1A18C /* RingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC4A78C1BA5C9EF4288B6336 /* RingBuffer.cpp */; };
-		678E130817951530005B6D19 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130717951530005B6D19 /* Icon@2x.png */; };
-		678E130A17951536005B6D19 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130917951536005B6D19 /* Icon.png */; };
-		678E130C1795153C005B6D19 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130B1795153C005B6D19 /* Default.png */; };
-		678E130E17951540005B6D19 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130D17951540005B6D19 /* Default@2x.png */; };
-		678E131017951549005B6D19 /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 678E130F17951549005B6D19 /* Default-568h@2x~iphone.png */; };
 		67DFA53619F92A69003B3434 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67DFA53419F92A5E003B3434 /* Accelerate.framework */; };
 		6B63FC7F9131A4458144B291 /* ControlChangeNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5849E73038106DB581B4586A /* ControlChangeNotifier.cpp */; };
 		6D4AD5F084913BF4D630A2B4 /* LFNoise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 809953FDECE2567422DA48F6 /* LFNoise.cpp */; };
@@ -262,11 +257,6 @@
 		6562077805242C1697831008 /* hdf5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = hdf5.h; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/flann/hdf5.h; sourceTree = SOURCE_ROOT; };
 		6679C1CB8D75805249152B16 /* ControlRandom.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ControlRandom.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/ControlRandom.cpp; sourceTree = SOURCE_ROOT; };
 		677CBFB73381E88198EC8A8C /* AudioFileUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = AudioFileUtils.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/AudioFileUtils.cpp; sourceTree = SOURCE_ROOT; };
-		678E130717951530005B6D19 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "bin/data/Icon@2x.png"; sourceTree = "<group>"; };
-		678E130917951536005B6D19 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = bin/data/Icon.png; sourceTree = "<group>"; };
-		678E130B1795153C005B6D19 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = bin/data/Default.png; sourceTree = "<group>"; };
-		678E130D17951540005B6D19 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "bin/data/Default@2x.png"; sourceTree = "<group>"; };
-		678E130F17951549005B6D19 /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x~iphone.png"; path = "bin/data/Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		67DFA53419F92A5E003B3434 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		687A6CE8339BEB440CC638C0 /* DelayUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = DelayUtils.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/DelayUtils.cpp; sourceTree = SOURCE_ROOT; };
 		68A1164B42DD7CDE75FC5EC4 /* DSPUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DSPUtils.h; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/DSPUtils.h; sourceTree = SOURCE_ROOT; };
@@ -766,11 +756,6 @@
 			isa = PBXGroup;
 			children = (
 				A8641D0C1B3D4E3700C3D747 /* Images.xcassets */,
-				678E130917951536005B6D19 /* Icon.png */,
-				678E130717951530005B6D19 /* Icon@2x.png */,
-				678E130B1795153C005B6D19 /* Default.png */,
-				678E130D17951540005B6D19 /* Default@2x.png */,
-				678E130F17951549005B6D19 /* Default-568h@2x~iphone.png */,
 				E4D8936A11527B74007E1F53 /* src */,
 				BB24E1F710DAA51900E9C588 /* openFrameworks */,
 				BB16F26B0F2B646B00518274 /* addons */,
@@ -1366,11 +1351,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8641D0D1B3D4E3700C3D747 /* Images.xcassets in Resources */,
-				678E130817951530005B6D19 /* Icon@2x.png in Resources */,
-				678E130A17951536005B6D19 /* Icon.png in Resources */,
-				678E130C1795153C005B6D19 /* Default.png in Resources */,
-				678E130E17951540005B6D19 /* Default@2x.png in Resources */,
-				678E131017951549005B6D19 /* Default-568h@2x~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
