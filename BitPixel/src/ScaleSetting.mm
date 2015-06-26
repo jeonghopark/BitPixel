@@ -9,6 +9,15 @@
 #include "ScaleSetting.h"
 
 
+int scale41[4] = {0, 4, 7, 9};
+int scale42[4] = {0, 5, 7, 9};
+int scale43[4] = {0, 4, 7, 9};
+int scale44[4] = {0, 5, 7, 9};
+int scale45[4] = {0, 4, 7, 9};
+int scale46[4] = {0, 4, 7, 9};
+int scale47[2] = {0, 7};
+
+
 int scale51[5] = {0, 2, 4, 7, 9};
 int scale52[5] = {0, 2, 5, 7, 9};
 int scale53[5] = {0, 2, 4, 7, 9};
@@ -35,6 +44,12 @@ int scale83[8] = {0, 5, 6, 7, 9, 11, 12, 17};
 int scale84[8] = {0, 5, 6, 7, 9, 11, 12, 17};
 int scale85[2] = {0, 7};
 
+int scale91[9] = {0, 4, 5, 7, 9, 12, 16, 17, 19};
+int scale92[9] = {0, 5, 7, 11, 12, 16, 19, 21, 24};
+int scale93[9] = {0, 4, 5, 7, 9, 12, 16, 17, 19};
+int scale94[9] = {0, 4, 5, 7, 9, 12, 16, 17, 19};
+int scale95[2] = {0, 5};
+
 
 
 //--------------------------------------------------------------
@@ -52,8 +67,37 @@ int ScaleSetting::noteSelector(int _n, int _index, int _subIndex){
     int _result = 0;
     
     switch (_n) {
-        case 5:
+        case 4:
+            switch (_index) {
+                case 1:
+                    _result = scale41[_subIndex];
+                    break;
+                case 2:
+                    _result = scale42[_subIndex];
+                    break;
+                case 3:
+                    _result = scale43[_subIndex];
+                    break;
+                case 4:
+                    _result = scale44[_subIndex];
+                    break;
+                case 5:
+                    _result = scale45[_subIndex];
+                    break;
+                case 6:
+                    _result = scale46[_subIndex];
+                    break;
+                case 7:
+                    _result = scale47[_subIndex];
+                    break;
+                    
+                default:
+                    break;
+            }
             
+            break;
+
+        case 5:
             switch (_index) {
                 case 1:
                     _result = scale51[_subIndex];
@@ -156,6 +200,31 @@ int ScaleSetting::noteSelector(int _n, int _index, int _subIndex){
             }
             
             break;
+
+        case 9:
+            switch (_index) {
+                    
+                case 1:
+                    _result = scale91[_subIndex];
+                    break;
+                case 2:
+                    _result = scale92[_subIndex];
+                    break;
+                case 3:
+                    _result = scale93[_subIndex];
+                    break;
+                case 4:
+                    _result = scale94[_subIndex];
+                    break;
+                case 5:
+                    _result = scale95[_subIndex];
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            break;
             
         default:
             break;
@@ -169,6 +238,19 @@ int ScaleSetting::noteSelector(int _n, int _index, int _subIndex){
 
 //--------------------------------------------------------------
 void ScaleSetting::changeScale(){
+    
+    for (int i=0; i<4; i++){
+        scale41[i] = scale41[i] + 64;
+        scale42[i] = scale42[i] + 84;
+        scale43[i] = scale43[i] + 72;
+        scale44[i] = scale44[i] + 48;
+        scale45[i] = scale45[i] + 36;
+        scale46[i] = scale46[i] + 36;
+    }
+    for (int i=0; i<2; i++){
+        scale47[i] = scale47[i] + 36;
+    }
+
     
     for (int i=0; i<5; i++){
         scale51[i] = scale51[i] + 64;
@@ -211,5 +293,15 @@ void ScaleSetting::changeScale(){
     for (int i=0; i<2; i++){
         scale85[i] = scale85[i] + 36;
     }
-    
+
+    for (int i=0; i<9; i++){
+        scale91[i] = scale91[i] + 64;
+        scale92[i] = scale92[i] + 84;
+        scale93[i] = scale93[i] + 72;
+        scale94[i] = scale94[i] + 48;
+    }
+    for (int i=0; i<2; i++){
+        scale95[i] = scale95[i] + 36;
+    }
+
 }

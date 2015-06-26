@@ -37,6 +37,7 @@ class ofApp : public ofxiOSApp {
     ofxTonicSynth synth4;
     ofxTonicSynth synth5;
     ofxTonicSynth synth6;
+    ofxTonicSynth synth7;
     ofxTonicSynth synthMain;
     
 public:
@@ -80,6 +81,7 @@ public:
     int oldNoteIndex4;
     int oldNoteIndex5;
     int oldNoteIndex6;
+    int oldNoteIndex7;
     void noteTrigger();
 
     
@@ -146,10 +148,12 @@ public:
     
     // base Interface
     void drawBaseInterface();
+    ofPoint base4Pos;
     ofPoint base5Pos;
     ofPoint base6Pos;
     ofPoint base7Pos;
     ofPoint base8Pos;
+    ofPoint base9Pos;
     float baseSize;
     void drawShapeCeterLine(ofPoint pos, int base, int size);
     void drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color);
@@ -170,9 +174,9 @@ public:
 
     // Line Score
     void drawLineScore();
-    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6;
+    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6, oldScoreNote7;
     
-    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6;
+    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6, scoreNote7;
     int lineScoreStepX, lineScoreStepY;
     void scoreMake();
     void noteTrig();
