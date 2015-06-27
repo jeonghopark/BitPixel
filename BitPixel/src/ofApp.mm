@@ -44,7 +44,7 @@ void ofApp::setup(){
     ctrlRectS = 80 / 1536.0 * _sizeF;
     guideWidthStepSize = 96 / 1536.0 * _sizeF;
     guideHeightStepSize = 64 / 1536.0 * _sizeF;
-    lineScoreStepX = 35 / 1536.0 * _sizeF;
+    lineScoreStepX = 35.5 / 1536.0 * _sizeF;
     lineScoreStepY = 5 / 1536.0 * _sizeF;
     stepBasePos = 105 / 1536.0 * _sizeF;
     
@@ -384,6 +384,7 @@ void ofApp::drawControlElement(){
     ofDrawLine( _xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
 
     float _xM = ctrlPnW * 0.5;
+    ofSetColor( 255, 40 );
     ofDrawLine( _xM, ctrlPnY + _yD, _xM, screenH - _yD);
     
     ofPopStyle();
@@ -738,7 +739,6 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
     if (_scoreNote.size()>0) {
         
         ofPushStyle();
-        ofSetColor( _c );
 
         for (int i=0; i<_xNumber; i++){
             
@@ -755,7 +755,14 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
             float _y1 = _defaultNote - _noteScaled * _stepY;
                         
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+                ofColor _c;
+                if (i==11) {
+                    _c = ofColor::fromHsb( _h, 255, 255, 255 );
+                } else {
+                    _c = ofColor::fromHsb( _h, 180, 255, 120 );
+                }
                 if (_note>0) {
+                    ofSetColor( _c );
                     ofDrawCircle( _x1, _y1, _size );
                 }
             }
@@ -765,7 +772,7 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
         ofPopStyle();
 
         ofPushStyle();
-        ofSetColor( _c, 100 );
+        ofSetColor( _c, 60 );
 
         
         for (int i=0; i<_xNumber-1; i++){
@@ -865,7 +872,7 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
         ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
     }
     
-    ofSetColor( 255, 210 );
+    ofSetColor( 255, 180 );
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
