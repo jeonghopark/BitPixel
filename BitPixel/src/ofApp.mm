@@ -1044,10 +1044,45 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             touchDownDefault = _changedTouch.y;
             
         }
-
-
-        
+   
     }
+    
+    float _4BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base4Pos.x, base4Pos.y );
+    if ( _4BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 4;
+    }
+    
+    float _5BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base5Pos.x, base5Pos.y );
+    if ( _5BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 5;
+    }
+    
+    float _6BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base6Pos.y );
+    if ( _6BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 6;
+    }
+    
+    float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base7Pos.x, base7Pos.y );
+    if ( _7BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 7;
+    }
+    
+    float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base8Pos.x, base8Pos.y );
+    if ( _8BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 8;
+    }
+    
+    float _9BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base9Pos.x, base9Pos.y );
+    if ( _9BaseDist < baseSize ) {
+        //        index = 0;
+        baseSelection = 9;
+    }
+    
     
 }
 
@@ -1146,42 +1181,6 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
 
     
     
-    float _4BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base4Pos.x, base4Pos.y );
-    if ( _4BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 4;
-    }
-
-    float _5BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base5Pos.x, base5Pos.y );
-    if ( _5BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 5;
-    }
-    
-    float _6BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base6Pos.y );
-    if ( _6BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 6;
-    }
-    
-    float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base7Pos.x, base7Pos.y );
-    if ( _7BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 7;
-    }
-    
-    float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base8Pos.x, base8Pos.y );
-    if ( _8BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 8;
-    }
-    
-    float _9BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base9Pos.x, base9Pos.y );
-    if ( _9BaseDist < baseSize ) {
-        //        index = 0;
-        baseSelection = 9;
-    }
-
     
 }
 

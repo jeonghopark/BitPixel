@@ -210,6 +210,9 @@ public:
     
     
     float touchDownDefault;
+    
+    vector<ofVec3f> touchPos;
+    vector<bool> ctrlSlider;
 
 };
 
