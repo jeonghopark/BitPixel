@@ -12,7 +12,12 @@ void ofApp::setup(){
     
     baseSelection = 7;
     
-    ofBackground( 15 );
+    if (WHITE_VIEW) {
+        ofBackground( 255 );
+    } else {
+        ofBackground( 15 );
+    }
+
     ofSetFrameRate( 60 );
     ofEnableAlphaBlending();
     
@@ -141,7 +146,10 @@ void ofApp::update(){
 //                erode(gray);
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         thin(edge);
-        //        invert(edge);
+        
+        if (WHITE_VIEW) {
+            invert(edge);
+        }
         
         edge.update();
         
@@ -173,7 +181,14 @@ void ofApp::update(){
             
             for (int i=0; i<pixelBright.size(); i++) {
                 
-                if ( pixelBright[i] == 0 ) {
+                int _whitePixel;
+                if (WHITE_VIEW) {
+                    _whitePixel = 255;
+                } else {
+                    _whitePixel = 0;
+                }
+
+                if ( pixelBright[i] == _whitePixel ) {
                     
                     if ( _bCounter==0 ) {
                         blackWhitePixels _bWP;
@@ -235,8 +250,13 @@ void ofApp::draw(){
     ofPushStyle();
 
     if (!bCameraCapturePlay) {
-        ofSetColor( 255, 150 );
-        
+
+        if (WHITE_VIEW) {
+            ofSetColor( 255, 255 );
+        } else {
+            ofSetColor( 255, 150 );
+        }
+
         edge.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
@@ -244,7 +264,11 @@ void ofApp::draw(){
     
     ofPushStyle();
     if (bCameraCapturePlay) {
-        ofSetColor( 255, 120 );
+        if (WHITE_VIEW) {
+            ofSetColor( 255, 255 );
+        } else {
+            ofSetColor( 255, 120 );
+        }
         bufferImg.draw( 0, 0, screenW, screenH);
     }
     ofPopStyle();
@@ -309,15 +333,28 @@ void ofApp::drawControlElement(){
     
     
     ofPushStyle();
-    ofSetColor( 0 );
+    if (WHITE_VIEW) {
+        ofSetColor( 255 );
+    } else {
+        ofSetColor( 0 );
+    }
     ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
-    ofSetColor( 255, 20 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 20 );
+    } else {
+        ofSetColor( 255, 20 );
+    }
     backgroundControPanel.draw( 0, ctrlPnY, ctrlPnW, 140 );
     ofPopStyle();
     
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 255, 80 );
+
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 80 );
+    } else {
+        ofSetColor( 255, 80 );
+    }
     
     float _speedX = guideWidthStepSize;
     float _yD = 20;
@@ -334,7 +371,11 @@ void ofApp::drawControlElement(){
     
     int _alpha = 180;
     ofPushStyle();
-    ofSetColor( 255, _alpha );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, _alpha );
+    } else {
+        ofSetColor( 255, _alpha );
+    }
     ofSetCircleResolution(48);
     float _sX = speedCPos.x;
     float _sY = speedCPos.y;
@@ -357,7 +398,11 @@ void ofApp::drawControlElement(){
     
     
     ofPushStyle();
-    ofSetColor( 255, _alpha );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, _alpha );
+    } else {
+        ofSetColor( 255, _alpha );
+    }
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
@@ -369,7 +414,11 @@ void ofApp::drawControlElement(){
     
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 255, 80 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 160 );
+    } else {
+        ofSetColor( 255, 80 );
+    }
     
     int _xDefaultPos = lineScoreStepX * (lineScoreNumber-1);
 
@@ -380,7 +429,11 @@ void ofApp::drawControlElement(){
     ofDrawLine( _xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
 
     float _xM = ctrlPnW * 0.5;
-    ofSetColor( 255, 40 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 40 );
+    } else {
+        ofSetColor( 255, 40 );
+    }
     ofDrawLine( _xM, ctrlPnY + _yD, _xM, screenH - _yD);
     
     ofPopStyle();
@@ -433,7 +486,11 @@ void ofApp::drawPixelAllNoteShape(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 255, 180 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 180 );
+    } else {
+        ofSetColor( 255, 180 );
+    }
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -465,7 +522,11 @@ void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 255, 80 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 80 );
+    } else {
+        ofSetColor( 255, 80 );
+    }
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -513,7 +574,11 @@ void ofApp::drawPixelShapeColorSize(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    ofSetColor( 255, 45 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 45 );
+    } else {
+        ofSetColor( 255, 45 );
+    }
     
     for (int i=0; i<whitePixels.size(); i++) {
         
@@ -579,7 +644,12 @@ void ofApp::drawPixelNumbersCircleNotes(){
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
-    ofSetColor( 255, 120 );
+
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 120 );
+    } else {
+        ofSetColor( 255, 120 );
+    }
     
     if (whitePixels.size()>0) {
         
@@ -597,7 +667,11 @@ void ofApp::drawPixelNumbersCircleNotes(){
 //            ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
            
             ofNoFill();
-            ofSetColor( 255, 120 );
+            if (WHITE_VIEW) {
+                ofSetColor( 0, 120 );
+            } else {
+                ofSetColor( 255, 120 );
+            }
             ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
             
         }
@@ -617,7 +691,11 @@ void ofApp::drawPlayingShapeNotes(){
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
-    ofSetColor( 255, 120 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 120 );
+    } else {
+        ofSetColor( 255, 120 );
+    }
     
     if (whitePixels.size()>0) {
         
@@ -698,7 +776,11 @@ void ofApp::drawLineScore(){
     ofTranslate( ctrlPnW * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
     
     ofPushStyle();
-    ofSetColor( 255, 120 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 120 );
+    } else {
+        ofSetColor( 255, 120 );
+    }
     
     drawScoreCircleLine(scoreNote1, 1);
     drawScoreCircleLine(scoreNote2, 2);
@@ -863,12 +945,20 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     
     ofTranslate( _pos );
     
-    ofSetColor( 245, 60 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 60 );
+    } else {
+        ofSetColor( 255, 60 );
+    }
     for (int i=0; i<posLine.size(); i++){
         ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
     }
     
-    ofSetColor( 255, 180 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 180 );
+    } else {
+        ofSetColor( 255, 180 );
+    }
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
@@ -968,7 +1058,11 @@ void ofApp::debugControlPDraw(){
     
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 245 );
+    if (WHITE_VIEW) {
+        ofSetColor( 0 );
+    } else {
+        ofSetColor( 255 );
+    }
     
     for (int i=0; i<15; i++){
         float _x1 = i * guideWidthStepSize + guideWidthStepSize;

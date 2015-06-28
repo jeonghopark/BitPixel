@@ -11,6 +11,7 @@
 #include "ScaleSetting.h"
 
 
+
 struct blackWhitePixels{
     int indexPos;
     int pixelN;
@@ -39,6 +40,9 @@ class ofApp : public ofxiOSApp {
     ofxTonicSynth synth6;
     ofxTonicSynth synth7;
     ofxTonicSynth synthMain;
+    
+    const bool WHITE_VIEW = true;
+
     
 public:
     void setup();
