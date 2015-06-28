@@ -340,7 +340,7 @@ void ofApp::drawControlElement(){
     }
     ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
     if (WHITE_VIEW) {
-        ofSetColor( 0, 20 );
+        ofSetColor( 0, 10 );
     } else {
         ofSetColor( 255, 20 );
     }
@@ -1101,7 +1101,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     
     ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
     
-    touchPos[touch.id] = ofVec2f( touch.x, touch.y );
+    touchPos[touch.id] = _changedTouch;
     
     distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
     
@@ -1212,7 +1212,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
         float _minY = ctrlPnY + speedCSize * 0.75;
         float _maxY = screenH - speedCSize * 0.75;
         
-        if ( (touchPos[touch.id].y>_minY) && (touchPos[touch.id].y<_maxY) && touchPos[touch.id].x>speedCPos.x - (ofGetWidth()-speedCPos.x) ) {
+        if ( (touchPos[touch.id].y>_minY) && (touchPos[touch.id].y<_maxY) && touchPos[touch.id].x>speedCPos.x - (ctrlPnW-speedCPos.x) ) {
             speedCPos.y = touchPos[touch.id].y;
             float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
             synthMain.setParameter("tempo", _tempo);
