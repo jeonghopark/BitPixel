@@ -213,7 +213,8 @@ public:
     
     vector<ofVec3f> touchPos;
     vector<bool> ctrlSlider;
-
+    float distS[2];
+    float distI[2];
 };
 
 
