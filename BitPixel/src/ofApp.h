@@ -211,7 +211,7 @@ public:
     
     float touchDownDefault;
     
-    vector<ofVec3f> touchPos;
+    vector<ofVec2f> touchPos;
     vector<bool> ctrlSlider;
     float distS[2];
     float distI[2];

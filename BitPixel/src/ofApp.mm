@@ -31,26 +31,22 @@ void ofApp::setup(){
     ctrlPnY = screenW;
     ctrlPnW = screenW;
     ctrlPnH = screenH - ctrlPnY;
-
     
     shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
-
     
     bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
     
     cameraScreenRatio = screenW / cam.getWidth();
     
-    pixelCircleSize = 10 / 1536.0 * _sizeF;
-    ctrlRectS = 80 / 1536.0 * _sizeF;
-    guideWidthStepSize = 96 / 1536.0 * _sizeF;
-    guideHeightStepSize = 64 / 1536.0 * _sizeF;
-    lineScoreStepX = 35.5 / 1536.0 * _sizeF;
-    lineScoreStepY = 5 / 1536.0 * _sizeF;
-    stepBasePos = 105 / 1536.0 * _sizeF;
-    
-    pixeShapeSize = 1 / 1536.0 * _sizeF;
-
-    
+    float _widthDefault = 1536.0;
+    pixelCircleSize = 10 / _widthDefault * _sizeF;
+    ctrlRectS = 80 / _widthDefault * _sizeF;
+    guideWidthStepSize = 96 / _widthDefault * _sizeF;
+    guideHeightStepSize = 64 / _widthDefault * _sizeF;
+    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
+    lineScoreStepY = 5 / _widthDefault * _sizeF;
+    stepBasePos = 105 / _widthDefault * _sizeF;
+    pixeShapeSize = 1 / _widthDefault * _sizeF;
     
     synthSetting();
     maxSpeed = 200;
@@ -129,7 +125,7 @@ void ofApp::setup(){
     
     lineScoreNumber = 23;
     
-    touchPos.assign(2, ofVec3f());
+    touchPos.assign(2, ofVec2f());
     
 }
 
@@ -319,7 +315,6 @@ void ofApp::drawControlElement(){
     backgroundControPanel.draw( 0, ctrlPnY, ctrlPnW, 140 );
     ofPopStyle();
     
-    
     ofPushMatrix();
     ofPushStyle();
     ofSetColor( 255, 80 );
@@ -333,7 +328,6 @@ void ofApp::drawControlElement(){
     
 //    float _intervalX = guideWidthStepSize * 2.5;
 //    ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
-    
     
     ofPopStyle();
     ofPopMatrix();
