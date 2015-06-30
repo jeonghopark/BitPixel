@@ -283,9 +283,17 @@ void ofApp::draw(){
     
     ofPushStyle();
     if (bCameraCapturePlay) {
-        ofSetColor( 255, 60 );
+        if (WHITE_VIEW) {
+            ofSetColor( 0, 60 );
+        } else {
+            ofSetColor( 255, 60 );
+        }
     } else {
-        ofSetColor( 255, 160 );
+        if (WHITE_VIEW) {
+            ofSetColor( 0, 160 );
+        } else {
+            ofSetColor( 255, 160 );
+        }
     }
     drawTrianglePixel();
     ofPopStyle();
@@ -324,7 +332,6 @@ void ofApp::draw(){
     }
     
     drawBaseInterface();
-    
     
 }
 
@@ -1125,6 +1132,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
 
     }
     
+    
     distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
     
     for (int i=0; i<2; i++) {
@@ -1309,7 +1317,7 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
 
     if ( (_changedTouch.x>0)&&(_changedTouch.x<ctrlPnW) && (_changedTouch.y<ctrlPnY)&&(_changedTouch.y>0) ) {
-        if ((whitePixels.size()!=0)&&( touch.id==0 )) {
+        if ((whitePixels.size()>2)&&( touch.id==0 )) {
             bCameraCapturePlay = !bCameraCapturePlay;
             //            blur(edge, 3);
             bufferImg = edge;
