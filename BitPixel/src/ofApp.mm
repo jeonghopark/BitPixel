@@ -13,7 +13,7 @@ void ofApp::setup(){
     baseSelection = 7;
     
     if (WHITE_VIEW) {
-        ofBackground( 255 );
+        ofBackground( 40 );
     } else {
         ofBackground( 15 );
     }
@@ -245,8 +245,6 @@ void ofApp::draw(){
 
     ofPushMatrix();
     
-    ofTranslate( 0, 0 );
-    
     ofPushStyle();
 
     if (!bCameraCapturePlay) {
@@ -264,8 +262,11 @@ void ofApp::draw(){
     
     ofPushStyle();
     if (bCameraCapturePlay) {
+        ofSetColor( 255, 255 );
+        ofDrawRectangle(0, 0, screenW, screenH);
+
         if (WHITE_VIEW) {
-            ofSetColor( 255, 255 );
+            ofSetColor( 255, 80 );
         } else {
             ofSetColor( 255, 120 );
         }
@@ -906,13 +907,23 @@ void ofApp::drawBaseInterface(){
     
     ofPushMatrix();
     ofPushStyle();
+
+    ofColor _c[6];
     
-    drawShapeCeterLine( base4Pos, 4, baseSize );
-    drawShapeCeterLine( base5Pos, 5, baseSize );
-    drawShapeCeterLine( base6Pos, 6, baseSize );
-    drawShapeCeterLine( base7Pos, 7, baseSize );
-    drawShapeCeterLine( base8Pos, 8, baseSize );
-    drawShapeCeterLine( base9Pos, 9, baseSize );
+    for (int i=0; i<6; i++) {
+        if ( baseSelection == (4 + i) ) {
+            _c[i] = ofColor::fromHsb( i*40, 180, 255 );
+        } else {
+            _c[i] = ofColor(0, 0, 0);
+        }
+    }
+
+    drawShapeCeterLine( base4Pos, 4, baseSize, _c[0] );
+    drawShapeCeterLine( base5Pos, 5, baseSize, _c[1] );
+    drawShapeCeterLine( base6Pos, 6, baseSize, _c[2] );
+    drawShapeCeterLine( base7Pos, 7, baseSize, _c[3] );
+    drawShapeCeterLine( base8Pos, 8, baseSize, _c[4] );
+    drawShapeCeterLine( base9Pos, 9, baseSize, _c[5] );
     
     ofPopMatrix();
     ofPopStyle();
@@ -921,7 +932,7 @@ void ofApp::drawBaseInterface(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
+void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     
     ofPoint _pos = pos;
     
@@ -946,18 +957,18 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size){
     ofTranslate( _pos );
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 60 );
+        ofSetColor( _c, 60 );
     } else {
-        ofSetColor( 255, 60 );
+        ofSetColor( _c, 60 );
     }
     for (int i=0; i<posLine.size(); i++){
         ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 180 );
+        ofSetColor( _c, 180 );
     } else {
-        ofSetColor( 255, 180 );
+        ofSetColor( _c, 180 );
     }
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
@@ -1097,7 +1108,7 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
     
-    float _tolerance = 2;
+    float _tolerance = 3;
     
     ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
     
@@ -1108,7 +1119,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     for (int i=0; i<2; i++) {
         
         float _distS = ofDist( speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y );
-        if (_distS < thresholdCSize * _tolerance && bSpeedCtrl == false) {
+        if ( (_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
             bSpeedCtrl = true;
         }
 
@@ -1118,7 +1129,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     
     for (int i=0; i<2; i++) {
         float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
-        if (_distI < intervalSize * _tolerance && bInterval == false) {
+        if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
             bInterval = true;
         }
 

@@ -11,7 +11,6 @@
 #include "ScaleSetting.h"
 
 
-
 struct blackWhitePixels{
     int indexPos;
     int pixelN;
@@ -159,7 +158,7 @@ public:
     ofPoint base8Pos;
     ofPoint base9Pos;
     float baseSize;
-    void drawShapeCeterLine(ofPoint pos, int base, int size);
+    void drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c);
     void drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
     void drawPixelAllNoteShape();
