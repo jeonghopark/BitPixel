@@ -919,7 +919,7 @@ void ofApp::drawBaseInterface(){
     
     for (int i=0; i<6; i++) {
         if ( baseSelection == (4 + i) ) {
-            _c[i] = ofColor::fromHsb( i*40, 180, 255 );
+            _c[i] = ofColor::fromHsb( i*40, 180, 180 );
         } else {
             _c[i] = ofColor(0, 0, 0);
         }
