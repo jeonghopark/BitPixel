@@ -290,7 +290,7 @@ void ofApp::draw(){
         }
     } else {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 160 );
+            ofSetColor( 0, 220 );
         } else {
             ofSetColor( 255, 160 );
         }
@@ -423,7 +423,7 @@ void ofApp::drawControlElement(){
     ofPushMatrix();
     ofPushStyle();
     if (WHITE_VIEW) {
-        ofSetColor( 0, 160 );
+        ofSetColor( 0, 80 );
     } else {
         ofSetColor( 255, 80 );
     }
