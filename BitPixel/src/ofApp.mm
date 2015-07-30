@@ -72,7 +72,7 @@ void ofApp::setup(){
         ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
         bIPhone = false;
     } else {
-        ofSoundStreamSetup(2, 1, this, 44100, 256, 4);
+        ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
         bIPhone = true;
     }
     
