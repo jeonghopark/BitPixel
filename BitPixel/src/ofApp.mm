@@ -3,12 +3,20 @@
 
 #include "ofApp.h"
 
+#include <AVFoundation/AVFoundation.h>
+
 using namespace ofxCv;
 using namespace cv;
 
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    
+//    [[AVAudioSession sharedInstance] setDelegate:self];
+//    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
     baseSelection = 7;
     
