@@ -94,6 +94,7 @@ public:
     
     //openCV
     ofVideoGrabber cam;
+    ofImage squareCam;
     ofImage edge;
     ofPixels gray;
     bool camOpen;

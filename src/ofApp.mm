@@ -47,7 +47,17 @@ void ofApp::setup(){
     
     shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
     
-    bufferImg.allocate(screenW, screenW, OF_IMAGE_GRAYSCALE);
+    pixelStepS = 4;
+    camSize = cam.getWidth();
+    changedCamSize = camSize / pixelStepS;  // 90
+    //    cameraScreenRatio = screenW / cam.getWidth();
+    thresholdValue = 80;
+
+    
+    bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR);
     
     cameraScreenRatio = screenW / cam.getWidth();
     
@@ -69,11 +79,6 @@ void ofApp::setup(){
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7);
     
-    pixelStepS = 4;
-    camSize = cam.getWidth();
-    changedCamSize = camSize / pixelStepS;  // 90
-//    cameraScreenRatio = screenW / cam.getWidth();
-    thresholdValue = 80;
     
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -149,7 +154,9 @@ void ofApp::update(){
     
     if(cam.isFrameNew()) {
         
-        convertColor(cam, gray, CV_RGB2GRAY);
+        squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        
+        convertColor(squareCam, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
 //                erode(gray);
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
@@ -263,7 +270,7 @@ void ofApp::draw(){
             ofSetColor( 255, 150 );
         }
 
-        edge.draw( 0, 0, screenW, screenH);
+        edge.draw( 0, 0, screenW, screenW);
     }
     ofPopStyle();
     
@@ -271,14 +278,14 @@ void ofApp::draw(){
     ofPushStyle();
     if (bCameraCapturePlay) {
         ofSetColor( 255, 255 );
-        ofDrawRectangle(0, 0, screenW, screenH);
+        ofDrawRectangle(0, 0, screenW, screenW);
 
         if (WHITE_VIEW) {
             ofSetColor( 255, 80 );
         } else {
             ofSetColor( 255, 120 );
         }
-        bufferImg.draw( 0, 0, screenW, screenH);
+        bufferImg.draw( 0, 0, screenW, screenW);
     }
     ofPopStyle();
     ofPopMatrix();
@@ -333,13 +340,13 @@ void ofApp::draw(){
         
     }
     
-    drawControlElement();
-    
-    if (bCameraCapturePlay) {
-        drawLineScore();
-    }
-    
-    drawBaseInterface();
+//    drawControlElement();
+//    
+//    if (bCameraCapturePlay) {
+//        drawLineScore();
+//    }
+//    
+//    drawBaseInterface();
     
 }
 
