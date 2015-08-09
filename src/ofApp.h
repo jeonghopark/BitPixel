@@ -89,7 +89,13 @@ public:
 
     
     // Main
-    int screenW, screenH;
+    void setIPad();
+    void setIPhone();
+    void drawIPad();
+    void drawIPhone();
+    float screenW, screenH;
+    
+    float iPhonePreviewSize;
     
     
     //openCV
@@ -116,7 +122,7 @@ public:
     int pixelCircleSize;
     
     //Video
-    int videoGrabberW, videoGrabberH, camSize, changedCamSize;
+    float videoGrabberW, videoGrabberH, camSize, changedCamSize;
     float cameraScreenRatio;
 
     

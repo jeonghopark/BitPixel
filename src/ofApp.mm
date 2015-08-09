@@ -18,6 +18,7 @@ void ofApp::setup(){
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
 //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
+
     baseSelection = 7;
     
     if (WHITE_VIEW) {
@@ -30,46 +31,32 @@ void ofApp::setup(){
     ofEnableAlphaBlending();
     
     backgroundControPanel.load("controlBackground.png");
-    
+
+
     cam.setDeviceID( 0 );
     cam.setup( 480, 360 );
     cam.setDesiredFrameRate(15);
     
-    screenW = ofGetWidth();
-    screenH = ofGetWidth() * 4.0 / 3.0;
-    
-    
-    float _sizeF = screenW;
-    ctrlPnX = 0;
-    ctrlPnY = screenW;
-    ctrlPnW = screenW;
-    ctrlPnH = screenH - ctrlPnY;
-    
-    shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
-    
-    pixelStepS = 4;
-    camSize = cam.getWidth();
-    changedCamSize = camSize / pixelStepS;  // 90
-    //    cameraScreenRatio = screenW / cam.getWidth();
-    thresholdValue = 80;
-
-    
+    camSize = cam.getWidth(); // 360
     bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR);
     
-    cameraScreenRatio = screenW / cam.getWidth();
-    
-    float _widthDefault = 1536.0;
-    pixelCircleSize = 10 / _widthDefault * _sizeF;
-    ctrlRectS = 80 / _widthDefault * _sizeF;
-    guideWidthStepSize = 96 / _widthDefault * _sizeF;
-    guideHeightStepSize = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
-    lineScoreStepY = 5 / _widthDefault * _sizeF;
-    stepBasePos = 105 / _widthDefault * _sizeF;
-    pixeShapeSize = 1 / _widthDefault * _sizeF;
+
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        bIPhone = false;
+        screenW = ofGetWidth();
+        screenH = ofGetWidth() * 4.0 / 3.0;
+        setIPad();
+    } else {
+        bIPhone = true;
+        iPhonePreviewSize = 480;
+        screenW = ofGetWidth();
+        screenH = ofGetWidth() * 16.0 / 9.0;
+        setIPhone();
+    }
+
     
     synthSetting();
     maxSpeed = 200;
@@ -80,15 +67,14 @@ void ofApp::setup(){
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7);
     
     
+    cannyThreshold1 = 120;
+    cannyThreshold2 = 120;
+    grayThreshold = 120;
     
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
-        bIPhone = false;
-    } else {
-        ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
-        bIPhone = true;
-    }
     
+    
+
+    // note music play
     index = 0;
     noteIndex = 0;
     
@@ -108,6 +94,52 @@ void ofApp::setup(){
     oldScoreNote6 = 0;
     oldScoreNote7 = 0;
     
+    bPlayNote = false;
+    bCameraCapturePlay = false;
+    
+    scaleSetting.setup();
+    
+    lineScoreNumber = 23;
+    
+    touchPos.assign(2, ofVec2f());
+    
+    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setIPad(){
+    
+ 
+    float _sizeF = screenW;
+    ctrlPnX = 0;
+    ctrlPnY = screenW;
+    ctrlPnW = screenW;
+    ctrlPnH = screenH - ctrlPnY;
+    
+    shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
+    
+    pixelStepS = 4;
+    changedCamSize = camSize / pixelStepS;  // 90
+    //    cameraScreenRatio = screenW / cam.getWidth();
+    thresholdValue = 80;
+    
+    
+    
+    cameraScreenRatio = screenW / camSize;  // 4.2666666
+    
+    float _widthDefault = 1536.0;
+    pixelCircleSize = 10 / _widthDefault * _sizeF;
+    ctrlRectS = 80 / _widthDefault * _sizeF;
+    guideWidthStepSize = 96 / _widthDefault * _sizeF;
+    guideHeightStepSize = 64 / _widthDefault * _sizeF;
+    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
+    lineScoreStepY = 5 / _widthDefault * _sizeF;
+    stepBasePos = 105 / _widthDefault * _sizeF;
+    pixeShapeSize = 1 / _widthDefault * _sizeF;
+    
+    
     speedCSize = ctrlRectS;
     speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bSpeedCtrl = false;
@@ -120,11 +152,7 @@ void ofApp::setup(){
     intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     bthresholdCtrl = false;
     intervalDist = 1;
-    
-    cannyThreshold1 = 120;
-    cannyThreshold2 = 120;
-    grayThreshold = 120;
-    
+
     
     float _posIndexRight = 13.5;
     float _posIndexLeft = 2.5;
@@ -135,17 +163,68 @@ void ofApp::setup(){
     base8Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 2.5 );
     base9Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 4 );
     baseSize = ctrlRectS * 0.55;
+
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::setIPhone(){
     
-    bPlayNote = false;
-    bCameraCapturePlay = false;
+    float _sizeF = screenW;
+    ctrlPnX = 0;
+    ctrlPnY = screenW;
+    ctrlPnW = screenW;
+    ctrlPnH = screenH - ctrlPnY;
     
-    scaleSetting.setup();
+    shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
     
-    lineScoreNumber = 23;
+    pixelStepS = 4;
+    changedCamSize = camSize / pixelStepS;  // 90
+    //    cameraScreenRatio = screenW / cam.getWidth();
+    thresholdValue = 80;
     
-    touchPos.assign(2, ofVec2f());
+    
+    cameraScreenRatio = iPhonePreviewSize / camSize; // 1.77777777
+    
+    float _widthDefault = 1536.0;
+    pixelCircleSize = 10 / _widthDefault * _sizeF;
+    ctrlRectS = 80 / _widthDefault * _sizeF;
+    guideWidthStepSize = 96 / _widthDefault * _sizeF;
+    guideHeightStepSize = 64 / _widthDefault * _sizeF;
+    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
+    lineScoreStepY = 5 / _widthDefault * _sizeF;
+    stepBasePos = 105 / _widthDefault * _sizeF;
+    pixeShapeSize = 1 / _widthDefault * _sizeF;
+    
+    speedCSize = ctrlRectS;
+    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    bSpeedCtrl = false;
+    
+    thresholdCSize = ctrlRectS * 0.5;
+    thresholdCPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    bthresholdCtrl = false;
+    
+    intervalSize = ctrlRectS * 0.5;
+    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    bthresholdCtrl = false;
+    intervalDist = 1;
+
+    float _posIndexRight = 13.5;
+    float _posIndexLeft = 2.5;
+    base4Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 1 );
+    base5Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 2.5 );
+    base6Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 4 );
+    base7Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 1 );
+    base8Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 2.5 );
+    base9Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 4 );
+    baseSize = ctrlRectS * 0.55;
+
     
 }
+
+
+
 
 //--------------------------------------------------------------
 void ofApp::update(){
@@ -159,6 +238,7 @@ void ofApp::update(){
         convertColor(squareCam, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
 //                erode(gray);
+        
         Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
         thin(edge);
         
@@ -174,7 +254,7 @@ void ofApp::update(){
         } else {
             
             unsigned char * _src = edge.getPixels().getData();
-            
+
             noteIndex = 0;
             ofImage _tImage;
             
@@ -182,13 +262,28 @@ void ofApp::update(){
             whitePixels.clear();
             blackPixels.clear();
             
-            for (int j=0; j<camSize; j+=pixelStepS) {
-                for (int i=0; i<camSize; i+=pixelStepS) {
-                    int _index = i + j * camSize;
-                    float _brightness = _src[_index];
-                    pixelBright.push_back(_brightness);
+
+            if (!bIPhone) {
+                
+                for (int j=0; j<camSize; j+=pixelStepS) {
+                    for (int i=0; i<camSize; i+=pixelStepS) {
+                        int _index = i + j * camSize;
+                        float _brightness = _src[_index];
+                        pixelBright.push_back(_brightness);
+                    }
+                }
+                
+            } else {
+                
+                for (int j=0; j<camSize; j+=pixelStepS) {
+                    for (int i=0; i<camSize; i+=pixelStepS) {
+                        int _index = i + j * camSize;
+                        float _brightness = _src[_index];
+                        pixelBright.push_back(_brightness);
+                    }
                 }
             }
+            
             
             
             int _wCounter = 0;
@@ -256,20 +351,31 @@ void ofApp::triggerReceive(float & metro){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    ofTranslate( 0, shiftValueIphoneY );
 
+    if (!bIPhone) {
+        drawIPad();
+    } else {
+        drawIPhone();
+    }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawIPad(){
+    
     ofPushMatrix();
     
     ofPushStyle();
-
+    
     if (!bCameraCapturePlay) {
-
+        
         if (WHITE_VIEW) {
             ofSetColor( 255, 255 );
         } else {
             ofSetColor( 255, 150 );
         }
-
+        
         edge.draw( 0, 0, screenW, screenW);
     }
     ofPopStyle();
@@ -279,7 +385,7 @@ void ofApp::draw(){
     if (bCameraCapturePlay) {
         ofSetColor( 255, 255 );
         ofDrawRectangle(0, 0, screenW, screenW);
-
+        
         if (WHITE_VIEW) {
             ofSetColor( 255, 80 );
         } else {
@@ -340,15 +446,117 @@ void ofApp::draw(){
         
     }
     
-//    drawControlElement();
-//    
-//    if (bCameraCapturePlay) {
-//        drawLineScore();
-//    }
-//    
-//    drawBaseInterface();
+    drawControlElement();
+    
+    if (bCameraCapturePlay) {
+        drawLineScore();
+    }
+    
+    drawBaseInterface();
+
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::drawIPhone(){
+    
+    
+    ofPushMatrix();
+    
+    ofPushStyle();
+    
+    if (!bCameraCapturePlay) {
+        
+        if (WHITE_VIEW) {
+            ofSetColor( 255, 255 );
+        } else {
+            ofSetColor( 255, 150 );
+        }
+        
+        edge.draw( 0, 0, iPhonePreviewSize, iPhonePreviewSize);
+    }
+    ofPopStyle();
+    
+    
+    ofPushStyle();
+    if (bCameraCapturePlay) {
+        ofSetColor( 255, 255 );
+        ofDrawRectangle(0, 0, iPhonePreviewSize, iPhonePreviewSize);
+        
+        if (WHITE_VIEW) {
+            ofSetColor( 255, 80 );
+        } else {
+            ofSetColor( 255, 120 );
+        }
+        bufferImg.draw( 0, 0, iPhonePreviewSize, iPhonePreviewSize);
+    }
+    ofPopStyle();
+    ofPopMatrix();
+    
+    //    ofPushStyle();
+    //    ofSetColor(255,230);
+    //    ofDrawRectangle(0, 0, screenW, screenH);
+    //    ofPopStyle();
+    
+    
+    ofPushStyle();
+    if (bCameraCapturePlay) {
+        if (WHITE_VIEW) {
+            ofSetColor( 0, 60 );
+        } else {
+            ofSetColor( 255, 60 );
+        }
+    } else {
+        if (WHITE_VIEW) {
+            ofSetColor( 0, 220 );
+        } else {
+            ofSetColor( 255, 160 );
+        }
+    }
+    
+    drawTrianglePixel();
+    
+    ofPopStyle();
+    
+    
+    if (bCameraCapturePlay) {
+        
+        drawPixelNumbersCircleNotes();
+        //        drawPlayingShapeNotes();
+        //        drawPixelAllNoteShape();
+        
+        drawPixelAllNoteShapes( scoreNote1, 1 );
+        drawPixelAllNoteShapes( scoreNote2, 2 );
+        drawPixelAllNoteShapes( scoreNote3, 3 );
+        drawPixelAllNoteShapes( scoreNote4, 4 );
+        drawPixelAllNoteShapes( scoreNote5, 5 );
+        drawPixelAllNoteShapes( scoreNote6, 6 );
+        drawPixelAllNoteShapes( scoreNote7, 7 );
+        
+        //        drawPixelShapeColorSize();
+        
+        drawPlayingShapeNote( scoreNote1, 1 );
+        drawPlayingShapeNote( scoreNote2, 2 );
+        drawPlayingShapeNote( scoreNote3, 3 );
+        drawPlayingShapeNote( scoreNote4, 4 );
+        drawPlayingShapeNote( scoreNote5, 5 );
+        drawPlayingShapeNote( scoreNote6, 6 );
+        drawPlayingShapeNote( scoreNote7, 7 );
+        
+    }
+    
+    drawControlElement();
+    
+    if (bCameraCapturePlay) {
+        drawLineScore();
+    }
+    
+    drawBaseInterface();
     
 }
+
+
 
 
 //--------------------------------------------------------------
@@ -484,8 +692,8 @@ void ofApp::drawTrianglePixel(){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         
         ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
         ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
@@ -521,8 +729,8 @@ void ofApp::drawPixelAllNoteShape(){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
         float _size = ofMap( _pixelNumbers, 0, 400, 5, 100 );
@@ -557,8 +765,8 @@ void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
         
@@ -621,8 +829,8 @@ void ofApp::drawPixelShapeColorSize(){
         
         int _indexPixes = whitePixels[ _indexLoop ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
         int _min = 10;
@@ -682,8 +890,8 @@ void ofApp::drawPixelNumbersCircleNotes(){
         
         for (int i=0; i<_pixelNumbers; i++){
             
-            float _xS = ((_indexPixes+i) % changedCamSize) * pixelStepS * cameraScreenRatio;
-            float _yS = (int)((_indexPixes+i) / changedCamSize) * pixelStepS * cameraScreenRatio;
+            float _xS = ((_indexPixes+i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            float _yS = (int)((_indexPixes+i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
             
 //            ofFill();
 //            ofSetColor( 255, 20 );
@@ -726,8 +934,8 @@ void ofApp::drawPlayingShapeNotes(){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
         drawShape( _p, baseSelection, _pixelNumbers);
@@ -756,8 +964,8 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
         int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
         int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
         
-        float _x = ((_indexPixes) % changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_indexPixes) / changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
         int _indexLoopLineOld = ((1 + noteIndex) % (whitePixels.size()-1)) + 1;
