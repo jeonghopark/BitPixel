@@ -285,41 +285,80 @@ void ofApp::update(){
             }
             
             
-            
-            int _wCounter = 0;
-            int _bCounter = 0;
-            
-            for (int i=0; i<pixelBright.size(); i++) {
+            if (!bIPhone) {
+                int _wCounter = 0;
+                int _bCounter = 0;
                 
-                int _whitePixel;
-                if (WHITE_VIEW) {
-                    _whitePixel = 255;
-                } else {
-                    _whitePixel = 0;
+                for (int i=0; i<pixelBright.size(); i++) {
+                    
+                    int _whitePixel;
+                    if (WHITE_VIEW) {
+                        _whitePixel = 255;
+                    } else {
+                        _whitePixel = 0;
+                    }
+                    
+                    if ( pixelBright[i] == _whitePixel ) {
+                        
+                        if ( _bCounter==0 ) {
+                            blackWhitePixels _bWP;
+                            _bWP.indexPos = i;
+                            _bWP.pixelN = _wCounter;
+                            blackPixels.push_back(_bWP);
+                        }
+                        _bCounter++;
+                        _wCounter = 0;
+                        
+                    } else {
+                        
+                        if ( _wCounter==0 ) {
+                            blackWhitePixels _bWP;
+                            _bWP.indexPos = i;
+                            _bWP.pixelN = _bCounter;
+                            whitePixels.push_back(_bWP);
+                        }
+                        _wCounter++;
+                        _bCounter = 0;
+                    }
+                }
+            } else {
+
+                int _wCounter = 0;
+                int _bCounter = 0;
+                
+                for (int i=0; i<pixelBright.size(); i++) {
+                    
+                    int _whitePixel;
+                    if (WHITE_VIEW) {
+                        _whitePixel = 255;
+                    } else {
+                        _whitePixel = 0;
+                    }
+                    
+                    if ( pixelBright[i] == _whitePixel ) {
+                        
+                        if ( _bCounter==0 ) {
+                            blackWhitePixels _bWP;
+                            _bWP.indexPos = i;
+                            _bWP.pixelN = _wCounter;
+                            blackPixels.push_back(_bWP);
+                        }
+                        _bCounter++;
+                        _wCounter = 0;
+                        
+                    } else {
+                        
+                        if ( _wCounter==0 ) {
+                            blackWhitePixels _bWP;
+                            _bWP.indexPos = i;
+                            _bWP.pixelN = _bCounter;
+                            whitePixels.push_back(_bWP);
+                        }
+                        _wCounter++;
+                        _bCounter = 0;
+                    }
                 }
 
-                if ( pixelBright[i] == _whitePixel ) {
-                    
-                    if ( _bCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _wCounter;
-                        blackPixels.push_back(_bWP);
-                    }
-                    _bCounter++;
-                    _wCounter = 0;
-                    
-                } else {
-                    
-                    if ( _wCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _bCounter;
-                        whitePixels.push_back(_bWP);
-                    }
-                    _wCounter++;
-                    _bCounter = 0;
-                }
             }
             
             
@@ -515,7 +554,7 @@ void ofApp::drawIPhone(){
         }
     }
     
-    drawTrianglePixel();
+    drawIPhoneTrianglePixel();
     
     ofPopStyle();
     
@@ -708,6 +747,46 @@ void ofApp::drawTrianglePixel(){
     
     
 }
+
+
+
+//--------------------------------------------------------------
+void ofApp::drawIPhoneTrianglePixel(){
+    
+    int _pixelSize = pixelCircleSize;  // 10
+    float _ellipseSizeR = 1.7;
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofEnableAntiAliasing();
+    
+    for (int i=0; i<whitePixels.size(); i++) {
+        
+        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        
+        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
+        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        
+        float _x90R = 480 - _y;
+        float _y90R = _x;
+        
+        ofPoint _1P = ofPoint( _x90R, _y90R - _pixelSize * _ellipseSizeR * 0.75 );
+        ofPoint _2P = ofPoint( _x90R - _pixelSize * _ellipseSizeR * 0.55, _y90R + _pixelSize * _ellipseSizeR * 0.25 );
+        ofPoint _3P = ofPoint( _x90R + _pixelSize * _ellipseSizeR * 0.55, _y90R + _pixelSize * _ellipseSizeR * 0.25 );
+        
+        ofDrawTriangle( _1P, _2P, _3P );
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+    
+}
+
+
 
 
 //--------------------------------------------------------------
