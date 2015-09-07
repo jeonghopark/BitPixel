@@ -226,6 +226,12 @@ public:
     vector<bool> ctrlSlider;
     float distS[2];
     float distI[2];
+    
+    
+    // iPHone
+    float screenPosRightX, screenPosLeftX, screenPosBottom;
+    
+    
 };
 
 
