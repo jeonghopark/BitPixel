@@ -66,14 +66,10 @@ void ofApp::setup(){
     metroOut = synthMain.createOFEvent(metro);
     synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7);
     
-    
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
     grayThreshold = 120;
     
-    
-    
-
     // note music play
     index = 0;
     noteIndex = 0;
@@ -179,7 +175,10 @@ void ofApp::setIPhone(){
     
     shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
     
-    screenPosRightX = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5;
+    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5;
+    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5;
+    
+    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
     
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
@@ -494,7 +493,7 @@ void ofApp::drawIPad(){
     drawControlElement();
     
     if (bCameraCapturePlay) {
-        drawLineScore();
+        drawLineScoreIPad();
     }
     
     drawBaseInterface();
@@ -507,7 +506,7 @@ void ofApp::drawIPad(){
 void ofApp::drawIPhone(){
     
     ofPushMatrix();
-    ofTranslate(screenW, screenPosRightX);
+    ofTranslate(screenW, screenPosLeftY);
     ofRotateZ( 90 );
 
     
@@ -605,11 +604,32 @@ void ofApp::drawIPhone(){
     
 //    drawControlElement();
     
+
+    ofPushMatrix();
+    ofPushStyle();
+    ofSetColor( 120, 0, 0, 255 );
+    ofDrawRectangle( 0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize );
+    ofPopStyle();
+    ofPopMatrix();
+
+    
+    ofPushMatrix();
+    ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + 150, 0);
+    
+    ofRotateZ( 90 );
+
     if (bCameraCapturePlay) {
-        drawLineScore();
+        drawLineScoreIPhone();
     }
+    ofPopMatrix();
     
 //    drawBaseInterface();
+ 
+    
+
+    ofSetColor(0, 255, 0);
+    ofDrawLine( lineScoreRightX, 0, lineScoreRightX, screenPosRightY );
+
     
 }
 
@@ -618,7 +638,6 @@ void ofApp::drawIPhone(){
 
 //--------------------------------------------------------------
 void ofApp::drawControlElement(){
-    
     
     ofPushStyle();
     if (WHITE_VIEW) {
@@ -699,7 +718,6 @@ void ofApp::drawControlElement(){
     ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
     ofPopStyle();
     
-    
     ofPushMatrix();
     ofPushStyle();
     if (WHITE_VIEW) {
@@ -726,7 +744,6 @@ void ofApp::drawControlElement(){
     
     ofPopStyle();
     ofPopMatrix();
-
     
 }
 
@@ -797,10 +814,8 @@ void ofApp::drawIPhoneTrianglePixel(){
     
     ofPopStyle();
     ofPopMatrix();
-    
-    
-}
 
+}
 
 
 
@@ -1088,7 +1103,7 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
 
 
 //--------------------------------------------------------------
-void ofApp::drawLineScore(){
+void ofApp::drawLineScoreIPad(){
     
     int _xNumber = lineScoreNumber;
     int _stepX = lineScoreStepX;
@@ -1107,13 +1122,13 @@ void ofApp::drawLineScore(){
         ofSetColor( 255, 120 );
     }
     
-    drawScoreCircleLine(scoreNote1, 1);
-    drawScoreCircleLine(scoreNote2, 2);
-    drawScoreCircleLine(scoreNote3, 3);
-    drawScoreCircleLine(scoreNote4, 4);
-    drawScoreCircleLine(scoreNote5, 5);
-    drawScoreCircleLine(scoreNote6, 6);
-    drawScoreCircleLine(scoreNote7, 7);
+    drawScoreCircleLineIPad(scoreNote1, 1);
+    drawScoreCircleLineIPad(scoreNote2, 2);
+    drawScoreCircleLineIPad(scoreNote3, 3);
+    drawScoreCircleLineIPad(scoreNote4, 4);
+    drawScoreCircleLineIPad(scoreNote5, 5);
+    drawScoreCircleLineIPad(scoreNote6, 6);
+    drawScoreCircleLineIPad(scoreNote7, 7);
     
     ofPopStyle();
     ofPopMatrix();
@@ -1122,7 +1137,7 @@ void ofApp::drawLineScore(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
+void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
     
     
     int _xNumber = lineScoreNumber;
@@ -1210,10 +1225,137 @@ void ofApp::drawScoreCircleLine( vector<int> _vNote, int _scoreCh ){
         
     }
     
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::drawLineScoreIPhone(){
+    
+    int _xNumber = lineScoreNumber;
+    int _stepX = lineScoreStepX;
+    int _stepY = lineScoreStepY;
+    int _defaultNote = 56;
+    int _xDefaultPos = _stepX * (_xNumber-1);
     
     
+    ofPushMatrix();
+
+    ofTranslate( screenH * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
+
+    
+    ofPushStyle();
+    if (WHITE_VIEW) {
+        ofSetColor( 0, 120 );
+    } else {
+        ofSetColor( 255, 120 );
+    }
+    
+    drawScoreCircleLineIPhone(scoreNote1, 1);
+    drawScoreCircleLineIPhone(scoreNote2, 2);
+    drawScoreCircleLineIPhone(scoreNote3, 3);
+    drawScoreCircleLineIPhone(scoreNote4, 4);
+    drawScoreCircleLineIPhone(scoreNote5, 5);
+    drawScoreCircleLineIPhone(scoreNote6, 6);
+    drawScoreCircleLineIPhone(scoreNote7, 7);
+    
+    ofPopStyle();
+    ofPopMatrix();
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
+    
+    
+    int _xNumber = lineScoreNumber;
+    int _middle = _xNumber * 0.5;
+    int _stepX = lineScoreStepX;
+    int _stepY = lineScoreStepY;
+    int _defaultNote = 56;
+    int _size = 3;
+    int _xDefaultPos = _stepX * (_xNumber-1);
+    
+    vector<int> _scoreNote = _vNote;
+    
+    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
+    
+    
+    if (_scoreNote.size()>0) {
+        
+        ofPushStyle();
+        
+        for (int i=0; i<_xNumber; i++){
+            
+            int _indexLoopLine = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            
+            int _note = _scoreNote[_indexLoopLine];
+            int _noteOld = _scoreNote[_indexLoopLineOld];
+            
+            int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+            int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+            
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - _noteScaled * _stepY;
+            
+            if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+                ofColor _c;
+                if (i==11) {
+                    _c = ofColor::fromHsb( _h, 255, 255, 255 );
+                } else {
+                    _c = ofColor::fromHsb( _h, 180, 255, 120 );
+                }
+                if (_note>0) {
+                    ofSetColor( _c );
+                    ofDrawCircle( _x1, _y1, _size );
+                }
+            }
+            
+        }
+        
+        ofPopStyle();
+        
+        ofPushStyle();
+        ofSetColor( _c, 60 );
+        
+        
+        for (int i=0; i<_xNumber-1; i++){
+            
+            int _indexLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            int _indexLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            
+            int _indexLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+            
+            int _noteS = _scoreNote[_indexLoopLineS];
+            int _noteE = _scoreNote[_indexLoopLineE];
+            int _noteEOld = _scoreNote[_indexLoopLineEOld];
+            
+            int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
+            int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
+            int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
+            
+            float _x1 = _xDefaultPos - i * _stepX;
+            float _y1 = _defaultNote - _noteSScaled * _stepY;
+            float _x2 = _xDefaultPos - (i + 1) * _stepX;
+            float _y2 = _defaultNote - _noteEScaled * _stepY;
+            
+            
+            if ( (abs(_noteEScaled-_noteSScaled) >= intervalDist) && abs(_noteEOldScaled-_noteEScaled) >= intervalDist ) {
+                if ( _noteS > 0 && _noteE > 0 ) {
+                    ofDrawLine( _x1, _y1, _x2, _y2 );
+                }
+            }
+        }
+        
+        ofPopStyle();
+        
+    }
+    
+}
+
 
 
 
@@ -1658,8 +1800,8 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
         }
     } else {
         
-        float _xL = screenPosRightX;
-        float _xR = screenPosRightX + iPhonePreviewSize;
+        float _xL = screenPosLeftY;
+        float _xR = screenPosLeftY + iPhonePreviewSize;
         if ( (_changedTouch.x > (screenW-iPhonePreviewSize)) && (_changedTouch.x < screenW) && (_changedTouch.y < _xR) && (_changedTouch.y > _xL) ) {
             if ((whitePixels.size()>2)&&( touch.id==0 )) {
                 bCameraCapturePlay = !bCameraCapturePlay;
@@ -1685,18 +1827,39 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
     }
 
 
-    
-    if ( (_changedTouch.x<guideWidthStepSize * 11)&&(_changedTouch.x>guideWidthStepSize * 4) && (_changedTouch.y>ctrlPnY)&&(_changedTouch.y<screenH) && bCameraCapturePlay ) {
+    if (!bIPhone) {
 
-        bPlayNote = !bPlayNote;
-        
-        if ( !bPlayNote ) {
-            ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
-        } else {
-            ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+        if ( (_changedTouch.x<guideWidthStepSize * 11)&&(_changedTouch.x>guideWidthStepSize * 4) && (_changedTouch.y>ctrlPnY)&&(_changedTouch.y<screenH) && bCameraCapturePlay ) {
+            
+            bPlayNote = !bPlayNote;
+            
+            if ( !bPlayNote ) {
+                ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+            } else {
+                ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+            }
+            
         }
+        
+
+    } else {
+        
+        if ( (_changedTouch.x < lineScoreRightX) && (_changedTouch.x > 0) && ( _changedTouch.y > screenPosLeftY ) && ( _changedTouch.y < screenPosRightY ) && bCameraCapturePlay ) {
+            
+            bPlayNote = !bPlayNote;
+            
+            if ( !bPlayNote ) {
+                ofRemoveListener(* metroOut, this, &ofApp::triggerReceive);
+            } else {
+                ofAddListener(* metroOut, this, &ofApp::triggerReceive);
+            }
+            
+        }
+        
 
     }
+    
+    
 
     float _tolerance = 2;
     
@@ -2138,4 +2301,3 @@ vector<int> ofApp::convertDecimalToNBase(int n, int base, int size) {
     return a;
     
 }
-

@@ -184,7 +184,8 @@ public:
     vector<int> convertDecimalToNBase(int n, int base, int size);
 
     // Line Score
-    void drawLineScore();
+    void drawLineScoreIPad();
+    void drawLineScoreIPhone();
     float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6, oldScoreNote7;
     
     vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6, scoreNote7;
@@ -203,7 +204,8 @@ public:
     int drawOldLineNote1;
     
     
-    void drawScoreCircleLine( vector<int> _vNote, int _scoreCh );
+    void drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh );
+    void drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh );
     void trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh );
     
     
@@ -229,7 +231,8 @@ public:
     
     
     // iPHone
-    float screenPosRightX, screenPosLeftX, screenPosBottom;
+    float screenPosRightY, screenPosLeftY, screenPosBottom;
+    float lineScoreRightX;
     
     
 };

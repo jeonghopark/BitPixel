@@ -61,6 +61,13 @@
 		A73EDFAC6CB643433FB88056 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F827B230E9791F94B8B16 /* Calibration.cpp */; };
 		A8641D0B1B3D4D8200C3D747 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8641D0A1B3D4D8200C3D747 /* AssetsLibrary.framework */; };
 		A8641D0D1B3D4E3700C3D747 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8641D0C1B3D4E3700C3D747 /* Images.xcassets */; };
+		A8AA344B1B9ED2E8006A78C4 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34441B9ED2E8006A78C4 /* Default-568h@2x.png */; };
+		A8AA344C1B9ED2E8006A78C4 /* Default-iPhone6~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34451B9ED2E8006A78C4 /* Default-iPhone6~iphone.png */; };
+		A8AA344D1B9ED2E8006A78C4 /* Default-iPhone6Plus~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34461B9ED2E8006A78C4 /* Default-iPhone6Plus~iphone.png */; };
+		A8AA344E1B9ED2E8006A78C4 /* Default@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34471B9ED2E8006A78C4 /* Default@2x~iphone.png */; };
+		A8AA344F1B9ED2E8006A78C4 /* Default~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34481B9ED2E8006A78C4 /* Default~iphone.png */; };
+		A8AA34501B9ED2E8006A78C4 /* Default@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA34491B9ED2E8006A78C4 /* Default@2x~ipad.png */; };
+		A8AA34511B9ED2E8006A78C4 /* Default~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = A8AA344A1B9ED2E8006A78C4 /* Default~ipad.png */; };
 		A90BD1857986C638E780E425 /* ofxCvGrayscaleImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07853DBFC70478F3562A1472 /* ofxCvGrayscaleImage.cpp */; };
 		A9D85B9BF0FB5A1B65DD3E34 /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BFA2AD0192A7419C5AB226 /* ofxCvShortImage.cpp */; };
 		B02424F31695B26B06225FD6 /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05514E5F6E1647A4B797112 /* fdog.cpp */; };
@@ -359,6 +366,13 @@
 		A7FCFCA6CC3DC54344CE4BBB /* streams.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = streams.hpp; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/legacy/streams.hpp; sourceTree = SOURCE_ROOT; };
 		A8641D0A1B3D4D8200C3D747 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		A8641D0C1B3D4E3700C3D747 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BitPixel/Images.xcassets; sourceTree = "<group>"; };
+		A8AA34441B9ED2E8006A78C4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "bin/data/Default-568h@2x.png"; sourceTree = "<group>"; };
+		A8AA34451B9ED2E8006A78C4 /* Default-iPhone6~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPhone6~iphone.png"; path = "bin/data/Default-iPhone6~iphone.png"; sourceTree = "<group>"; };
+		A8AA34461B9ED2E8006A78C4 /* Default-iPhone6Plus~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-iPhone6Plus~iphone.png"; path = "bin/data/Default-iPhone6Plus~iphone.png"; sourceTree = "<group>"; };
+		A8AA34471B9ED2E8006A78C4 /* Default@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x~iphone.png"; path = "bin/data/Default@2x~iphone.png"; sourceTree = "<group>"; };
+		A8AA34481B9ED2E8006A78C4 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "bin/data/Default~iphone.png"; sourceTree = "<group>"; };
+		A8AA34491B9ED2E8006A78C4 /* Default@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x~ipad.png"; path = "bin/data/Default@2x~ipad.png"; sourceTree = "<group>"; };
+		A8AA344A1B9ED2E8006A78C4 /* Default~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~ipad.png"; path = "bin/data/Default~ipad.png"; sourceTree = "<group>"; };
 		AA0130D578AA6F7698BDBE9D /* gpu.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gpu.hpp; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/gpu/gpu.hpp; sourceTree = SOURCE_ROOT; };
 		AA4F813F8FC93CFD10E41855 /* ControlCallback.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ControlCallback.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/ControlCallback.cpp; sourceTree = SOURCE_ROOT; };
 		ACCF177C70FC4A32CE6F95A1 /* ControlRecorder.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ControlRecorder.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/ControlRecorder.cpp; sourceTree = SOURCE_ROOT; };
@@ -756,6 +770,7 @@
 			isa = PBXGroup;
 			children = (
 				A8641D0C1B3D4E3700C3D747 /* Images.xcassets */,
+				A8AA34521B9EECE8006A78C4 /* LaunchImages */,
 				E4D8936A11527B74007E1F53 /* src */,
 				BB24E1F710DAA51900E9C588 /* openFrameworks */,
 				BB16F26B0F2B646B00518274 /* addons */,
@@ -764,6 +779,7 @@
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		29B97323FDCFA39411CA2CEA /* core frameworks */ = {
 			isa = PBXGroup;
@@ -1049,6 +1065,20 @@
 				C31E2C1E2BA41AE9FFBEB0CA /* wimage.hpp */,
 			);
 			name = core;
+			sourceTree = "<group>";
+		};
+		A8AA34521B9EECE8006A78C4 /* LaunchImages */ = {
+			isa = PBXGroup;
+			children = (
+				A8AA34441B9ED2E8006A78C4 /* Default-568h@2x.png */,
+				A8AA34451B9ED2E8006A78C4 /* Default-iPhone6~iphone.png */,
+				A8AA34461B9ED2E8006A78C4 /* Default-iPhone6Plus~iphone.png */,
+				A8AA34471B9ED2E8006A78C4 /* Default@2x~iphone.png */,
+				A8AA34481B9ED2E8006A78C4 /* Default~iphone.png */,
+				A8AA34491B9ED2E8006A78C4 /* Default@2x~ipad.png */,
+				A8AA344A1B9ED2E8006A78C4 /* Default~ipad.png */,
+			);
+			name = LaunchImages;
 			sourceTree = "<group>";
 		};
 		AAA97F42C2FE4A31ECFD0585 /* opencv */ = {
@@ -1350,7 +1380,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8AA344E1B9ED2E8006A78C4 /* Default@2x~iphone.png in Resources */,
 				A8641D0D1B3D4E3700C3D747 /* Images.xcassets in Resources */,
+				A8AA34501B9ED2E8006A78C4 /* Default@2x~ipad.png in Resources */,
+				A8AA344D1B9ED2E8006A78C4 /* Default-iPhone6Plus~iphone.png in Resources */,
+				A8AA34511B9ED2E8006A78C4 /* Default~ipad.png in Resources */,
+				A8AA344B1B9ED2E8006A78C4 /* Default-568h@2x.png in Resources */,
+				A8AA344C1B9ED2E8006A78C4 /* Default-iPhone6~iphone.png in Resources */,
+				A8AA344F1B9ED2E8006A78C4 /* Default~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1478,7 +1515,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ofxiOS_Prefix.pch;
@@ -1494,7 +1530,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ofxiOS_Prefix.pch;
@@ -1573,7 +1608,7 @@
 					../../../../openFrameworks/addons/ofxTonic/src/Tonic,
 					src,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_FRAMEWORKS)",
@@ -1668,7 +1703,7 @@
 					../../../../openFrameworks/addons/ofxTonic/src/Tonic,
 					src,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_FRAMEWORKS)",
