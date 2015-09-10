@@ -193,7 +193,7 @@ void ofApp::setIPhone(){
     ctrlRectS = 80 / _widthDefault * _sizeF;
     guideWidthStepSize = 96 / _widthDefault * _sizeF;
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
+    lineScoreStepX = 45.5 / _widthDefault * _sizeF;
     lineScoreStepY = 5 / _widthDefault * _sizeF;
     stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
@@ -607,7 +607,7 @@ void ofApp::drawIPhone(){
 
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 120, 0, 0, 255 );
+    ofSetColor( 255, 255 );
     ofDrawRectangle( 0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize );
     ofPopStyle();
     ofPopMatrix();
