@@ -134,7 +134,8 @@ public:
     void drawPlayingShapeNote( vector<int> _vNote, int _scoreCh );
     
     // control Panel
-    void drawControlElement();
+    void drawControlElementIPad();
+    void drawControlElementIPhone();
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStepSize, guideHeightStepSize;
