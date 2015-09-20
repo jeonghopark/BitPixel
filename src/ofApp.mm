@@ -1839,10 +1839,6 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             
         }
         
-        cout << "bSpeedCtrl : " << bSpeedCtrl << endl;
-        cout << "bInterval : " << bInterval << endl;
-        
-        
         
         if ( touch.id==0 ) {
             
