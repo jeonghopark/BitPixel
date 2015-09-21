@@ -1697,8 +1697,11 @@ void ofApp::debugControlPDraw(){
 void ofApp::exit(){
     
     cam.close();
+    std::exit(0);
     
 }
+
+
 
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch){
@@ -2022,7 +2025,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             float _maxX = screenW * 0.9;
             if ( (touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY ) {
                 speedCPos.x = touchPos[touch.id].x;
-                float _tempo = ofMap( speedCPos.x, _minX, _maxX, maxSpeed, minSpeed );
+                float _tempo = ofMap( speedCPos.x, _minX, _maxX, minSpeed, maxSpeed );
                 synthMain.setParameter("tempo", _tempo);
             }
         }
@@ -2044,7 +2047,7 @@ void ofApp::touchMoved(ofTouchEventArgs & touch){
             float _maxX = screenW * 0.9;
             if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x<_maxX) && touchPos[touch.id].y < intervalPos.y * 2 ) {
                 intervalPos.x = touchPos[touch.id].x;
-                float _interval = ofMap(intervalPos.x, _minX, _maxX, 0, 20);
+                float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
                 intervalDist = _interval;
             }
         }
