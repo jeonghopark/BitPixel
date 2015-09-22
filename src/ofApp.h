@@ -10,6 +10,7 @@
 
 #include "ScaleSetting.h"
 
+#define DEBUG_LAYOUT_MODE
 
 struct blackWhitePixels{
     int indexPos;
@@ -97,6 +98,8 @@ public:
     
     float iPhonePreviewSize;
     
+    
+    ofImage debugLayoutImage;
     
     //openCV
     ofVideoGrabber cam;
@@ -234,6 +237,9 @@ public:
     // iPHone
     float screenPosRightY, screenPosLeftY, screenPosBottom;
     float lineScoreRightX;
+    
+    
+    
     
     
 };
