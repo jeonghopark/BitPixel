@@ -10,7 +10,7 @@
 
 #include "ScaleSetting.h"
 
-#define DEBUG_LAYOUT_MODE
+//#define DEBUG_LAYOUT_MODE
 
 struct blackWhitePixels{
     int indexPos;
@@ -193,7 +193,7 @@ public:
     float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6, oldScoreNote7;
     
     vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6, scoreNote7;
-    int lineScoreStepX, lineScoreStepY;
+    float lineScoreStepX, lineScoreStepY;
     void scoreMake();
     void noteTrig();
     

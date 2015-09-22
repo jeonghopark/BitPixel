@@ -181,8 +181,9 @@ void ofApp::setIPhone(){
     ctrlPnY = screenW;
     ctrlPnW = screenW;
     ctrlPnH = screenH - ctrlPnY;
+    ctrlPnH = screenW * 4.0/5.0;
     
-    shiftValueIphoneY = ofGetHeight() * 0.5 - (ctrlPnY + ctrlPnH) * 0.5;
+    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
     
     screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5;
     screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5;
@@ -203,7 +204,7 @@ void ofApp::setIPhone(){
     guideWidthStepSize = 96 / _widthDefault * _sizeF;
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
     lineScoreStepX = (screenW * 0.07109375) / _widthDefault * _sizeF;
-    lineScoreStepY = (screenW * 0.0078125) / _widthDefault * _sizeF;
+    lineScoreStepY = (screenW * 0.0060125) / _widthDefault * _sizeF;
     stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
@@ -1519,8 +1520,8 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
 void ofApp::drawLineScoreIPhone(){
     
     int _xNumber = lineScoreNumber;
-    int _stepX = lineScoreStepX;
-    int _stepY = lineScoreStepY;
+    float _stepX = lineScoreStepX;
+    float _stepY = lineScoreStepY;
     int _defaultNote = screenW * 0.0875;
     int _xDefaultPos = _stepX * (_xNumber-1);
     
@@ -1557,8 +1558,8 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
     
     int _xNumber = lineScoreNumber;
     int _middle = _xNumber * 0.5;
-    int _stepX = lineScoreStepX;
-    int _stepY = lineScoreStepY;
+    float _stepX = lineScoreStepX;
+    float _stepY = lineScoreStepY;
     int _defaultNote = screenW * 0.0875;
     int _size = 3;
     int _xDefaultPos = _stepX * (_xNumber-1);
@@ -1708,6 +1709,16 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     
     ofTranslate( _pos );
     
+    if(!bIPhone) {
+        ofRotateZ(0);
+    } else {
+        if ( _base == 5 ) {
+            ofRotateZ(18);
+        } else {
+            ofRotateZ(0);
+        }
+    }
+    
     if (WHITE_VIEW) {
         ofSetColor( _c, 60 );
     } else {
@@ -1722,14 +1733,6 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     } else {
         ofSetColor( _c, 180 );
     }
-    
-    if (_base == 5) {
-        ofRotateZ(18);
-    } else {
-        ofRotateZ(0);
-    }
-    
-
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
@@ -1817,7 +1820,7 @@ void ofApp::drawShape(ofPoint pos, int base, int size){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
     ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
-
+    
     ofPopMatrix();
     
 }
