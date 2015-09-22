@@ -202,8 +202,8 @@ void ofApp::setIPhone(){
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStepSize = 96 / _widthDefault * _sizeF;
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = 45.5 / _widthDefault * _sizeF;
-    lineScoreStepY = 5 / _widthDefault * _sizeF;
+    lineScoreStepX = (screenW * 0.07109375) / _widthDefault * _sizeF;
+    lineScoreStepY = (screenW * 0.0078125) / _widthDefault * _sizeF;
     stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
@@ -1527,7 +1527,7 @@ void ofApp::drawLineScoreIPhone(){
     
     ofPushMatrix();
     
-    ofTranslate( screenH * 0.5 - _xDefaultPos * 0.5, ctrlPnY + 127 * _stepY - _defaultNote );
+    ofTranslate( screenH * 0.5 - _xDefaultPos * 0.5, ctrlPnY + (127 * _stepY) - _defaultNote );
     
     
     ofPushStyle();
@@ -1722,6 +1722,14 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     } else {
         ofSetColor( _c, 180 );
     }
+    
+    if (_base == 5) {
+        ofRotateZ(18);
+    } else {
+        ofRotateZ(0);
+    }
+    
+
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
@@ -1809,7 +1817,7 @@ void ofApp::drawShape(ofPoint pos, int base, int size){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
     ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
-    
+
     ofPopMatrix();
     
 }
