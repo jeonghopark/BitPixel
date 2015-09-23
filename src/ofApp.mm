@@ -1737,6 +1737,12 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     } else {
         if ( _base == 5 ) {
             ofRotateZ(18);
+        } else if ( _base == 7 ) {
+            ofRotateZ(38.571429);
+        } else if ( _base == 8 ) {
+            ofRotateZ(45);
+        } else if ( _base == 9 ) {
+            ofRotateZ(50);
         } else {
             ofRotateZ(0);
         }
