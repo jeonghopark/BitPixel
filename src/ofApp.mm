@@ -213,12 +213,18 @@ void ofApp::setIPhone(){
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
     lineScoreStepX = (screenW * 0.07109375) / _widthDefault * _sizeF;
     lineScoreStepY = (screenW * 0.0060125) / _widthDefault * _sizeF;
-    stepBasePos = 105 / _widthDefault * _sizeF;
+//    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
+    
+    
+    float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85/3.0;
+    float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15/3.0;
+
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     speedCPos = ofPoint( screenW * 0.5, screenH * 9.2/10.0 );
+    speedCPos = ofPoint( screenW * 0.5, screenPosRightY + _secondStepPosSideControl );
     bSpeedCtrl = false;
     
     
@@ -229,12 +235,17 @@ void ofApp::setIPhone(){
     
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
-    intervalPos = ofPoint( screenW * 0.5, screenH * 0.8/10.0 );
+//    intervalPos = ofPoint( screenW * 0.5, screenH * 0.8/10.0 );
+    intervalPos = ofPoint( screenW * 0.5, _firstStepPosSideControl );
     bthresholdCtrl = false;
     intervalDist = 1;
     
-    float _posIndexLeft = screenH * 1.84/10.0;
-    float _posIndexRight = screenH - _posIndexLeft;
+//    float _posIndexLeft = screenH * 1.84/10.0;
+//    float _posIndexRight = screenH - _posIndexLeft;
+
+    float _posIndexLeft = _secondStepPosSideControl;
+    float _posIndexRight = screenPosRightY + _firstStepPosSideControl;
+
     base4Pos = ofPoint( screenW * 3.0/4.0, _posIndexLeft );
     base5Pos = ofPoint( screenW * 2.0/4.0, _posIndexLeft );
     base6Pos = ofPoint( screenW * 1.0/4.0, _posIndexLeft );
@@ -944,7 +955,7 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor( 0, 180 );
     } else {
         ofSetColor( 255, 80 );
     }
@@ -1732,7 +1743,7 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 60 );
+        ofSetColor( _c, 160 );
     } else {
         ofSetColor( _c, 60 );
     }
@@ -1741,7 +1752,7 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 180 );
+        ofSetColor( _c, 240 );
     } else {
         ofSetColor( _c, 180 );
     }
@@ -1756,7 +1767,7 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
 }
 
 
-//--------------------------------------------------------------
+//---------------------------------------------du bist dumm-----------------
 void ofApp::drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color){
     
     ofPoint _pos = pos;
