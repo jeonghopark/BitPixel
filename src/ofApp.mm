@@ -19,6 +19,14 @@ void ofApp::setup(){
     //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
     
+    colorVar[0] = ofColor(192, 25, 30);
+    colorVar[1] = ofColor(79, 185, 73);
+    colorVar[2] = ofColor(255, 172, 0);
+    colorVar[3] = ofColor(68, 128, 173);
+    colorVar[4] = ofColor(58, 193, 197);
+    colorVar[5] = ofColor(249, 154, 30);
+    colorVar[6] = ofColor(142, 82, 137);
+    
     baseSelection = 7;
     
     if (WHITE_VIEW) {
@@ -1351,8 +1359,10 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
     ofPushMatrix();
     ofPushStyle();
     
-    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-    ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
+//    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+//    ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
+    
+    ofColor _c = colorVar[_scoreCh - 1];
     
     if (whitePixels.size()>0) {
         
@@ -1437,9 +1447,10 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
     
     vector<int> _scoreNote = _vNote;
     
-    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
+    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+    //    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
     
+    ofColor _c = colorVar[_scoreCh - 1];
     
     if (_scoreNote.size()>0) {
         
@@ -1460,11 +1471,11 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
             float _y1 = _defaultNote - _noteScaled * _stepY;
             
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-                ofColor _c;
+//                ofColor _c;
                 if (i==11) {
-                    _c = ofColor::fromHsb( _h, 255, 255, 255 );
+                    _c = ofColor( _c, 255 );
                 } else {
-                    _c = ofColor::fromHsb( _h, 180, 255, 120 );
+                    _c = ofColor( _c, 120 );
                 }
                 if (_note>0) {
                     ofSetColor( _c );
@@ -1566,9 +1577,10 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
     
     vector<int> _scoreNote = _vNote;
     
-    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
-    
+//    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+//    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
+
+    ofColor _c = colorVar[_scoreCh - 1];
     
     if (_scoreNote.size()>0) {
         
@@ -1589,11 +1601,11 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
             float _y1 = _defaultNote - _noteScaled * _stepY;
             
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-                ofColor _c;
+//                ofColor _c;
                 if (i==11) {
-                    _c = ofColor::fromHsb( _h, 255, 255, 255 );
+                    _c = ofColor( _c, 255 );
                 } else {
-                    _c = ofColor::fromHsb( _h, 180, 255, 120 );
+                    _c = ofColor( _c, 120 );
                 }
                 if (_note>0) {
                     ofSetColor( _c );
@@ -1665,7 +1677,7 @@ void ofApp::drawBaseInterface(){
     
     for (int i=0; i<6; i++) {
         if ( baseSelection == (4 + i) ) {
-            _c[i] = ofColor::fromHsb( i*40, 180, 180 );
+            _c[i] = colorVar[i];
         } else {
             _c[i] = ofColor(0, 0, 0);
         }
