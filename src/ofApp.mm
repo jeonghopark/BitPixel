@@ -1905,7 +1905,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
     
     if (!bIPhone) {
         
-        float _tolerance = 3;
+        float _tolerance = 2;
         
         ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
         
@@ -2011,7 +2011,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
         
     } else {
         
-        float _tolerance = 3;
+        float _tolerance = 2;
         
         ofPoint _changedTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
         
@@ -2079,38 +2079,39 @@ void ofApp::touchDown(ofTouchEventArgs & touch){
             
         }
         
+        float _torelanceTouchDownIPhone = 2;
         float _4BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base4Pos.x, base4Pos.y );
-        if ( _4BaseDist < baseSize ) {
+        if ( _4BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 4;
         }
         
         float _5BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base5Pos.x, base5Pos.y );
-        if ( _5BaseDist < baseSize ) {
+        if ( _5BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 5;
         }
         
         float _6BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base6Pos.x, base6Pos.y );
-        if ( _6BaseDist < baseSize ) {
+        if ( _6BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 6;
         }
         
         float _7BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base7Pos.x, base7Pos.y );
-        if ( _7BaseDist < baseSize ) {
+        if ( _7BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 7;
         }
         
         float _8BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base8Pos.x, base8Pos.y );
-        if ( _8BaseDist < baseSize ) {
+        if ( _8BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 8;
         }
         
         float _9BaseDist = ofDist( _changedTouch.x, _changedTouch.y, base9Pos.x, base9Pos.y );
-        if ( _9BaseDist < baseSize ) {
+        if ( _9BaseDist < baseSize * _torelanceTouchDownIPhone ) {
             //        index = 0;
             baseSelection = 9;
         }
@@ -2406,7 +2407,7 @@ void ofApp::touchUp(ofTouchEventArgs & touch){
         
         
         
-        float _tolerance = 3;
+        float _tolerance = 2;
         
         distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
         if ((distS[touch.id] < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl==true) {

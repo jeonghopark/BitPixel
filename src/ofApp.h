@@ -10,7 +10,7 @@
 
 #include "ScaleSetting.h"
 
-#define DEBUG_LAYOUT_MODE
+//#define DEBUG_LAYOUT_MODE
 
 struct blackWhitePixels{
     int indexPos;
