@@ -42,17 +42,18 @@ void ofApp::setup(){
     
     debugLayoutImage.load("debug_layout.jpg");
     
-#ifdef DEBUG_LAYOUT_MODE
-    //        cam.setDeviceID( 0 );
-    //        cam.setup( 480, 360 );
-    //        cam.setDesiredFrameRate(15);
-    camSize = 360; // 360
-#else
-    cam.setDeviceID( 0 );
-    cam.setup( 480, 360 );
-    cam.setDesiredFrameRate(15);
-    camSize = cam.getWidth(); // 360
-#endif
+    
+    if (TARGET_IPHONE_SIMULATOR) {
+        //        cam.setDeviceID( 0 );
+        //        cam.setup( 480, 360 );
+        //        cam.setDesiredFrameRate(15);
+        camSize = 360; // 360
+    } else {
+        cam.setDeviceID( 0 );
+        cam.setup( 480, 360 );
+        cam.setDesiredFrameRate(15);
+        camSize = cam.getWidth(); // 360
+    }
     
     
     bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
@@ -266,153 +267,9 @@ void ofApp::setIPhone(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-#ifdef DEBUG_LAYOUT_MODE
-    
-    
-    squareCam.setFromPixels(debugLayoutImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-    
-    convertColor(squareCam, gray, CV_RGB2GRAY);
-    threshold(gray, gray, grayThreshold);
-    //                erode(gray);
-    
-    Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
-    thin(edge);
-    
-    if (WHITE_VIEW) {
-        invert(edge);
-    }
-    
-    edge.update();
-    
-    
-    if ( bCameraCapturePlay ) {
-        noteIndex = index;
-    } else {
+    if (TARGET_IPHONE_SIMULATOR) {
         
-        
-        noteIndex = 0;
-        ofImage _tImage;
-        
-        pixelBright.clear();
-        whitePixels.clear();
-        blackPixels.clear();
-        
-        
-        if (!bIPhone) {
-            
-            unsigned char * _src = edge.getPixels().getData();
-            
-            for (int j=0; j<camSize; j+=pixelStepS) {
-                for (int i=0; i<camSize; i+=pixelStepS) {
-                    int _index = i + j * camSize;
-                    float _brightness = _src[_index];
-                    pixelBright.push_back(_brightness);
-                }
-            }
-            
-        } else {
-            
-            edge.rotate90(-1);
-            unsigned char * _src = edge.getPixels().getData();
-            
-            for (int j=0; j<camSize; j+=pixelStepS) {
-                for (int i=0; i<camSize; i+=pixelStepS) {
-                    int _index = i + j * camSize;
-                    float _brightness = _src[_index];
-                    pixelBright.push_back(_brightness);
-                }
-            }
-        }
-        
-        
-        if (!bIPhone) {
-            int _wCounter = 0;
-            int _bCounter = 0;
-            
-            for (int i=0; i<pixelBright.size(); i++) {
-                
-                int _whitePixel;
-                if (WHITE_VIEW) {
-                    _whitePixel = 255;
-                } else {
-                    _whitePixel = 0;
-                }
-                
-                if ( pixelBright[i] == _whitePixel ) {
-                    
-                    if ( _bCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _wCounter;
-                        blackPixels.push_back(_bWP);
-                    }
-                    _bCounter++;
-                    _wCounter = 0;
-                    
-                } else {
-                    
-                    if ( _wCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _bCounter;
-                        whitePixels.push_back(_bWP);
-                    }
-                    _wCounter++;
-                    _bCounter = 0;
-                }
-            }
-        } else {
-            
-            int _wCounter = 0;
-            int _bCounter = 0;
-            
-            for (int i=0; i<pixelBright.size(); i++) {
-                
-                int _whitePixel;
-                if (WHITE_VIEW) {
-                    _whitePixel = 255;
-                } else {
-                    _whitePixel = 0;
-                }
-                
-                if ( pixelBright[i] == _whitePixel ) {
-                    
-                    if ( _bCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _wCounter;
-                        blackPixels.push_back(_bWP);
-                    }
-                    _bCounter++;
-                    _wCounter = 0;
-                    
-                } else {
-                    
-                    if ( _wCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _bCounter;
-                        whitePixels.push_back(_bWP);
-                    }
-                    _wCounter++;
-                    _bCounter = 0;
-                }
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    
-#else
-    
-    cam.update();
-    
-    if(cam.isFrameNew()) {
-        
-        squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        squareCam.setFromPixels(debugLayoutImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
         
         convertColor(squareCam, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
@@ -546,13 +403,155 @@ void ofApp::update(){
             
             
         }
+
+        
+    } else {
+        
+        cam.update();
+        
+        if(cam.isFrameNew()) {
+            
+            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+            
+            convertColor(squareCam, gray, CV_RGB2GRAY);
+            threshold(gray, gray, grayThreshold);
+            //                erode(gray);
+            
+            Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
+            thin(edge);
+            
+            if (WHITE_VIEW) {
+                invert(edge);
+            }
+            
+            edge.update();
+            
+            
+            if ( bCameraCapturePlay ) {
+                noteIndex = index;
+            } else {
+                
+                
+                noteIndex = 0;
+                ofImage _tImage;
+                
+                pixelBright.clear();
+                whitePixels.clear();
+                blackPixels.clear();
+                
+                
+                if (!bIPhone) {
+                    
+                    unsigned char * _src = edge.getPixels().getData();
+                    
+                    for (int j=0; j<camSize; j+=pixelStepS) {
+                        for (int i=0; i<camSize; i+=pixelStepS) {
+                            int _index = i + j * camSize;
+                            float _brightness = _src[_index];
+                            pixelBright.push_back(_brightness);
+                        }
+                    }
+                    
+                } else {
+                    
+                    edge.rotate90(-1);
+                    unsigned char * _src = edge.getPixels().getData();
+                    
+                    for (int j=0; j<camSize; j+=pixelStepS) {
+                        for (int i=0; i<camSize; i+=pixelStepS) {
+                            int _index = i + j * camSize;
+                            float _brightness = _src[_index];
+                            pixelBright.push_back(_brightness);
+                        }
+                    }
+                }
+                
+                
+                if (!bIPhone) {
+                    int _wCounter = 0;
+                    int _bCounter = 0;
+                    
+                    for (int i=0; i<pixelBright.size(); i++) {
+                        
+                        int _whitePixel;
+                        if (WHITE_VIEW) {
+                            _whitePixel = 255;
+                        } else {
+                            _whitePixel = 0;
+                        }
+                        
+                        if ( pixelBright[i] == _whitePixel ) {
+                            
+                            if ( _bCounter==0 ) {
+                                blackWhitePixels _bWP;
+                                _bWP.indexPos = i;
+                                _bWP.pixelN = _wCounter;
+                                blackPixels.push_back(_bWP);
+                            }
+                            _bCounter++;
+                            _wCounter = 0;
+                            
+                        } else {
+                            
+                            if ( _wCounter==0 ) {
+                                blackWhitePixels _bWP;
+                                _bWP.indexPos = i;
+                                _bWP.pixelN = _bCounter;
+                                whitePixels.push_back(_bWP);
+                            }
+                            _wCounter++;
+                            _bCounter = 0;
+                        }
+                    }
+                } else {
+                    
+                    int _wCounter = 0;
+                    int _bCounter = 0;
+                    
+                    for (int i=0; i<pixelBright.size(); i++) {
+                        
+                        int _whitePixel;
+                        if (WHITE_VIEW) {
+                            _whitePixel = 255;
+                        } else {
+                            _whitePixel = 0;
+                        }
+                        
+                        if ( pixelBright[i] == _whitePixel ) {
+                            
+                            if ( _bCounter==0 ) {
+                                blackWhitePixels _bWP;
+                                _bWP.indexPos = i;
+                                _bWP.pixelN = _wCounter;
+                                blackPixels.push_back(_bWP);
+                            }
+                            _bCounter++;
+                            _wCounter = 0;
+                            
+                        } else {
+                            
+                            if ( _wCounter==0 ) {
+                                blackWhitePixels _bWP;
+                                _bWP.indexPos = i;
+                                _bWP.pixelN = _bCounter;
+                                whitePixels.push_back(_bWP);
+                            }
+                            _wCounter++;
+                            _bCounter = 0;
+                        }
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+
         
     }
-    
-    
-#endif
-    
-    
+        
 }
 
 
