@@ -152,6 +152,7 @@ void ofApp::setIPad(){
     stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
+    controlObjectLineWidth = 2;
     
     speedCSize = ctrlRectS;
     speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
@@ -211,11 +212,12 @@ void ofApp::setIPhone(){
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStepSize = 96 / _widthDefault * _sizeF;
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = (screenW * 0.07109375) / _widthDefault * _sizeF;
+    lineScoreStepX = (screenW * 0.0710936) / _widthDefault * _sizeF;
     lineScoreStepY = (screenW * 0.0060125) / _widthDefault * _sizeF;
 //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
+    controlObjectLineWidth = 2;
     
     float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85/3.0;
     float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15/3.0;
@@ -851,8 +853,11 @@ void ofApp::drawControlElementIPad(){
     ofPopStyle();
     ofPopMatrix();
     
+
+
     int _alpha = 180;
     ofPushStyle();
+    
     if (WHITE_VIEW) {
         ofSetColor( 0, _alpha );
     } else {
@@ -862,7 +867,11 @@ void ofApp::drawControlElementIPad(){
     float _sX = speedCPos.x;
     float _sY = speedCPos.y;
     ofNoFill();
+    
+    ofSetLineWidth(controlObjectLineWidth);
+
     ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
+
     ofPopStyle();
     
     //    ofPushStyle();
@@ -880,6 +889,7 @@ void ofApp::drawControlElementIPad(){
     
     
     ofPushStyle();
+
     if (WHITE_VIEW) {
         ofSetColor( 0, _alpha );
     } else {
@@ -887,12 +897,17 @@ void ofApp::drawControlElementIPad(){
     }
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
+    
+    ofSetLineWidth(controlObjectLineWidth);
+
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
     ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
     ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
     ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
+    
     ofPopStyle();
     
+
     ofPushMatrix();
     ofPushStyle();
     if (WHITE_VIEW) {
@@ -987,6 +1002,9 @@ void ofApp::drawControlElementIPhone(){
     float _sX = speedCPos.x;
     float _sY = speedCPos.y;
     ofNoFill();
+    
+    ofSetLineWidth(controlObjectLineWidth);
+
     ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
     
     ofPopStyle();
@@ -1012,6 +1030,9 @@ void ofApp::drawControlElementIPhone(){
     } else {
         ofSetColor( 255, _alpha );
     }
+    
+    ofSetLineWidth(controlObjectLineWidth);
+
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
@@ -1749,7 +1770,7 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 160 );
+        ofSetColor( _c, 120 );
     } else {
         ofSetColor( _c, 60 );
     }
@@ -1758,17 +1779,20 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 240 );
+        ofSetColor( _c, 180 );
     } else {
         ofSetColor( _c, 180 );
     }
+    
+    ofSetLineWidth(controlObjectLineWidth);
+    
     for (int i=0; i<posLine.size()-1; i++){
         ofDrawLine( posLine[i].x, posLine[i].y, posLine[i+1].x, posLine[i+1].y );
     }
     ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size()-1].x, posLine[posLine.size()-1].y );
     
-    ofPopMatrix();
     ofPopStyle();
+    ofPopMatrix();
     
 }
 

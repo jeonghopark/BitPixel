@@ -237,9 +237,10 @@ public:
     // iPHone
     float screenPosRightY, screenPosLeftY, screenPosBottom;
     float lineScoreRightX;
-    
+    float controlObjectLineWidth;
     
     ofColor colorVar[7];
+    
     
     
     
