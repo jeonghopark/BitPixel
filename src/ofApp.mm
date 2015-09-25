@@ -651,13 +651,13 @@ void ofApp::drawIPad(){
         //        drawPlayingShapeNotes();
         //        drawPixelAllNoteShape();
         
-        drawPixelAllNoteShapes( scoreNote1, 1 );
-        drawPixelAllNoteShapes( scoreNote2, 2 );
-        drawPixelAllNoteShapes( scoreNote3, 3 );
-        drawPixelAllNoteShapes( scoreNote4, 4 );
-        drawPixelAllNoteShapes( scoreNote5, 5 );
-        drawPixelAllNoteShapes( scoreNote6, 6 );
-        drawPixelAllNoteShapes( scoreNote7, 7 );
+        drawPixelAllNoteShapesIPad( scoreNote1, 1 );
+        drawPixelAllNoteShapesIPad( scoreNote2, 2 );
+        drawPixelAllNoteShapesIPad( scoreNote3, 3 );
+        drawPixelAllNoteShapesIPad( scoreNote4, 4 );
+        drawPixelAllNoteShapesIPad( scoreNote5, 5 );
+        drawPixelAllNoteShapesIPad( scoreNote6, 6 );
+        drawPixelAllNoteShapesIPad( scoreNote7, 7 );
         
         //        drawPixelShapeColorSize();
         
@@ -715,7 +715,7 @@ void ofApp::drawIPhone(){
         ofDrawRectangle(0, 0, iPhonePreviewSize, iPhonePreviewSize);
         
         if (WHITE_VIEW) {
-            ofSetColor( 255, 80 );
+            ofSetColor( 255, 120 );
         } else {
             ofSetColor( 255, 120 );
         }
@@ -736,7 +736,7 @@ void ofApp::drawIPhone(){
     
     if (bCameraCapturePlay) {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 60 );
+            ofSetColor( 0, 120 );
         } else {
             ofSetColor( 255, 60 );
         }
@@ -757,16 +757,17 @@ void ofApp::drawIPhone(){
     if (bCameraCapturePlay) {
         
         drawPixelNumbersCircleNotes();
+        
         //        drawPlayingShapeNotes();
         //        drawPixelAllNoteShape();
         
-        drawPixelAllNoteShapes( scoreNote1, 1 );
-        drawPixelAllNoteShapes( scoreNote2, 2 );
-        drawPixelAllNoteShapes( scoreNote3, 3 );
-        drawPixelAllNoteShapes( scoreNote4, 4 );
-        drawPixelAllNoteShapes( scoreNote5, 5 );
-        drawPixelAllNoteShapes( scoreNote6, 6 );
-        drawPixelAllNoteShapes( scoreNote7, 7 );
+        drawPixelAllNoteShapesIPhone( scoreNote1, 1 );
+        drawPixelAllNoteShapesIPhone( scoreNote2, 2 );
+        drawPixelAllNoteShapesIPhone( scoreNote3, 3 );
+        drawPixelAllNoteShapesIPhone( scoreNote4, 4 );
+        drawPixelAllNoteShapesIPhone( scoreNote5, 5 );
+        drawPixelAllNoteShapesIPhone( scoreNote6, 6 );
+        drawPixelAllNoteShapesIPhone( scoreNote7, 7 );
         
         //        drawPixelShapeColorSize();
         
@@ -1146,16 +1147,51 @@ void ofApp::drawIPhoneTrianglePixel(){
 
 
 //--------------------------------------------------------------
-void ofApp::drawPixelAllNoteShape(){
+//void ofApp::drawPixelAllNoteShape(){
+//    
+//    ofPushMatrix();
+//    ofPushStyle();
+//    ofEnableAntiAliasing();
+//    
+//    if (WHITE_VIEW) {
+//        ofSetColor( 0, 80 );
+//    } else {
+//        ofSetColor( 255, 180 );
+//    }
+//    
+//    for (int i=0; i<whitePixels.size(); i++) {
+//        
+//        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+//        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+//        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+//        
+//        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+//        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+//        ofPoint _p = ofPoint( _x, _y );
+//        
+//        float _size = ofMap( _pixelNumbers, 0, 400, 5, 100 );
+//        drawShape( _p, baseSelection, _size );
+//        
+//    }
+//    
+//    ofPopStyle();
+//    ofPopMatrix();
+//
+//}
+
+
+
+//--------------------------------------------------------------
+void ofApp::drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh ){
     
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 180 );
+        ofSetColor( 0, 80 );
     } else {
-        ofSetColor( 255, 180 );
+        ofSetColor( 255, 80 );
     }
     
     for (int i=0; i<whitePixels.size(); i++) {
@@ -1168,8 +1204,23 @@ void ofApp::drawPixelAllNoteShape(){
         float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint( _x, _y );
         
-        float _size = ofMap( _pixelNumbers, 0, 400, 5, 100 );
-        drawShape( _p, baseSelection, _size );
+        
+        int _indexLoopLine = ((i) % (whitePixels.size()-1)) + 1;
+        int _indexLoopLineOld = ((i + 1) % (whitePixels.size()-1)) + 1;
+        
+        int _note = _vNote[_indexLoopLine];
+        int _noteOld = _vNote[_indexLoopLineOld];
+        
+        int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        
+        if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+            if (_note>0) {
+                float _size = _noteScaled * pixeShapeSize;
+                drawShape( _p, baseSelection, _size );
+            }
+        }
         
     }
     
@@ -1180,16 +1231,15 @@ void ofApp::drawPixelAllNoteShape(){
 }
 
 
-
 //--------------------------------------------------------------
-void ofApp::drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh ){
+void ofApp::drawPixelAllNoteShapesIPhone( vector<int> _vNote, int _scoreCh ){
     
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor( 0, 50 );
     } else {
         ofSetColor( 255, 80 );
     }

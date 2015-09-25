@@ -172,7 +172,8 @@ public:
     void drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
     void drawPixelAllNoteShape();
-    void drawPixelAllNoteShapes( vector<int> _vNote, int _scoreCh );
+    void drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh );
+    void drawPixelAllNoteShapesIPhone( vector<int> _vNote, int _scoreCh );
     void drawPixelShapeColorSize();
     
     
