@@ -40,7 +40,7 @@ void ofApp::setup(){
     
     backgroundControPanel.load("controlBackground.png");
     
-    debugLayoutImage.load("debug_layout.jpg");
+    debugLayoutImage.load("debug_layout_mini_iPad.jpg");
     
     
     if (TARGET_IPHONE_SIMULATOR) {
@@ -1087,20 +1087,24 @@ void ofApp::drawTrianglePixel(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    for (int i=0; i<whitePixels.size(); i++) {
+    if ( whitePixels.size() > 1 ) {
         
-        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
-        
-        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
-        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        
-        ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
-        ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
-        ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
-        
-        ofDrawTriangle( _1P, _2P, _3P );
+        for (int i=0; i<whitePixels.size(); i++) {
+            
+            int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+            int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+            int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+            
+            float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
+            float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            
+            ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
+            ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+            ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+            
+            ofDrawTriangle( _1P, _2P, _3P );
+            
+        }
         
     }
     
@@ -1122,21 +1126,25 @@ void ofApp::drawIPhoneTrianglePixel(){
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    for (int i=0; i<whitePixels.size(); i++) {
+    if ( whitePixels.size() > 1 ) {
         
-        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
-        
-        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
-        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        
-        ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
-        ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
-        ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
-        
-        ofDrawTriangle( _1P, _2P, _3P );
-        
+        for (int i=0; i<whitePixels.size(); i++) {
+            
+            int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
+            int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
+            int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+            
+            float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
+            float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            
+            ofPoint _1P = ofPoint( _x, _y - _pixelSize * _ellipseSizeR * 0.75 );
+            ofPoint _2P = ofPoint( _x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+            ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
+            
+            ofDrawTriangle( _1P, _2P, _3P );
+            
+        }
+
     }
     
     ofPopStyle();
