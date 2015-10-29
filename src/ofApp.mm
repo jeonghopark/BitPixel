@@ -2,13 +2,10 @@
 
 
 #include "ofApp.h"
-
 #include <AVFoundation/AVFoundation.h>
-
 
 using namespace ofxCv;
 using namespace cv;
-
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -141,7 +138,6 @@ void ofApp::setIPad(){
     thresholdValue = 80;
     
     
-    
     cameraScreenRatio = screenW / camSize;  // 4.2666666
     
     float _widthDefault = 1536.0;
@@ -180,6 +176,7 @@ void ofApp::setIPad(){
     base9Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 4 );
     baseSize = ctrlRectS * 0.55;
     
+    
 }
 
 
@@ -214,8 +211,8 @@ void ofApp::setIPhone(){
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStepSize = 96 / _widthDefault * _sizeF;
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = (screenW * 0.0710936) / _widthDefault * _sizeF;
-    lineScoreStepY = (screenW * 0.0060125) / _widthDefault * _sizeF;
+    lineScoreStepX = (screenW * 0.085) / _widthDefault * _sizeF;
+    lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;
     //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
@@ -276,7 +273,303 @@ void ofApp::update(){
             squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
         }
         
-        convertColor(squareCam, gray, CV_RGB2GRAY);
+        
+        calculatePixels(squareCam);
+
+        
+//        convertColor(squareCam, gray, CV_RGB2GRAY);
+//        threshold(gray, gray, grayThreshold);
+//        //                erode(gray);
+//        
+//        Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
+//        thin(edge);
+//        
+//        if (WHITE_VIEW) {
+//            invert(edge);
+//        }
+//        
+//        edge.update();
+//        
+//        
+//        if ( bCameraCapturePlay ) {
+//            noteIndex = index;
+//        } else {
+//            
+//            
+//            noteIndex = 0;
+//            ofImage _tImage;
+//            
+//            pixelBright.clear();
+//            whitePixels.clear();
+//            blackPixels.clear();
+//            
+//            
+//            if (!bIPhone) {
+//                
+//                unsigned char * _src = edge.getPixels().getData();
+//                
+//                for (int j=0; j<camSize; j+=pixelStepS) {
+//                    for (int i=0; i<camSize; i+=pixelStepS) {
+//                        int _index = i + j * camSize;
+//                        float _brightness = _src[_index];
+//                        pixelBright.push_back(_brightness);
+//                    }
+//                }
+//                
+//            } else {
+//                
+//                edge.rotate90(-1);
+//                unsigned char * _src = edge.getPixels().getData();
+//                
+//                for (int j=0; j<camSize; j+=pixelStepS) {
+//                    for (int i=0; i<camSize; i+=pixelStepS) {
+//                        int _index = i + j * camSize;
+//                        float _brightness = _src[_index];
+//                        pixelBright.push_back(_brightness);
+//                    }
+//                }
+//            }
+//            
+//            
+//            if (!bIPhone) {
+//                int _wCounter = 0;
+//                int _bCounter = 0;
+//                
+//                for (int i=0; i<pixelBright.size(); i++) {
+//                    
+//                    int _whitePixel;
+//                    if (WHITE_VIEW) {
+//                        _whitePixel = 255;
+//                    } else {
+//                        _whitePixel = 0;
+//                    }
+//                    
+//                    if ( pixelBright[i] == _whitePixel ) {
+//                        
+//                        if ( _bCounter==0 ) {
+//                            blackWhitePixels _bWP;
+//                            _bWP.indexPos = i;
+//                            _bWP.pixelN = _wCounter;
+//                            blackPixels.push_back(_bWP);
+//                        }
+//                        _bCounter++;
+//                        _wCounter = 0;
+//                        
+//                    } else {
+//                        
+//                        if ( _wCounter==0 ) {
+//                            blackWhitePixels _bWP;
+//                            _bWP.indexPos = i;
+//                            _bWP.pixelN = _bCounter;
+//                            whitePixels.push_back(_bWP);
+//                        }
+//                        _wCounter++;
+//                        _bCounter = 0;
+//                    }
+//                }
+//            } else {
+//                
+//                int _wCounter = 0;
+//                int _bCounter = 0;
+//                
+//                for (int i=0; i<pixelBright.size(); i++) {
+//                    
+//                    int _whitePixel;
+//                    if (WHITE_VIEW) {
+//                        _whitePixel = 255;
+//                    } else {
+//                        _whitePixel = 0;
+//                    }
+//                    
+//                    if ( pixelBright[i] == _whitePixel ) {
+//                        
+//                        if ( _bCounter==0 ) {
+//                            blackWhitePixels _bWP;
+//                            _bWP.indexPos = i;
+//                            _bWP.pixelN = _wCounter;
+//                            blackPixels.push_back(_bWP);
+//                        }
+//                        _bCounter++;
+//                        _wCounter = 0;
+//                        
+//                    } else {
+//                        
+//                        if ( _wCounter==0 ) {
+//                            blackWhitePixels _bWP;
+//                            _bWP.indexPos = i;
+//                            _bWP.pixelN = _bCounter;
+//                            whitePixels.push_back(_bWP);
+//                        }
+//                        _wCounter++;
+//                        _bCounter = 0;
+//                    }
+//                }
+//                
+//            }
+//            
+//            
+//        }
+        
+        
+    } else {
+        
+        
+        cam.update();
+        
+        if(cam.isFrameNew()) {
+            
+            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+            
+            
+            calculatePixels(squareCam);
+            
+//            convertColor(squareCam, gray, CV_RGB2GRAY);
+//            threshold(gray, gray, grayThreshold);
+//            //                erode(gray);
+//            
+//            Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
+//            thin(edge);
+//            
+//            if (WHITE_VIEW) {
+//                invert(edge);
+//            }
+//            
+//            edge.update();
+//            
+//            
+//            if ( bCameraCapturePlay ) {
+//                noteIndex = index;
+//            } else {
+//                
+//                
+//                noteIndex = 0;
+//                ofImage _tImage;
+//                
+//                pixelBright.clear();
+//                whitePixels.clear();
+//                blackPixels.clear();
+//                
+//                
+//                if (!bIPhone) {
+//                    
+//                    unsigned char * _src = edge.getPixels().getData();
+//                    
+//                    for (int j=0; j<camSize; j+=pixelStepS) {
+//                        for (int i=0; i<camSize; i+=pixelStepS) {
+//                            int _index = i + j * camSize;
+//                            float _brightness = _src[_index];
+//                            pixelBright.push_back(_brightness);
+//                        }
+//                    }
+//                    
+//                } else {
+//                    
+//                    edge.rotate90(-1);
+//                    unsigned char * _src = edge.getPixels().getData();
+//                    
+//                    for (int j=0; j<camSize; j+=pixelStepS) {
+//                        for (int i=0; i<camSize; i+=pixelStepS) {
+//                            int _index = i + j * camSize;
+//                            float _brightness = _src[_index];
+//                            pixelBright.push_back(_brightness);
+//                        }
+//                    }
+//                }
+//                
+//                
+//                if (!bIPhone) {
+//                    int _wCounter = 0;
+//                    int _bCounter = 0;
+//                    
+//                    for (int i=0; i<pixelBright.size(); i++) {
+//                        
+//                        int _whitePixel;
+//                        if (WHITE_VIEW) {
+//                            _whitePixel = 255;
+//                        } else {
+//                            _whitePixel = 0;
+//                        }
+//                        
+//                        if ( pixelBright[i] == _whitePixel ) {
+//                            
+//                            if ( _bCounter==0 ) {
+//                                blackWhitePixels _bWP;
+//                                _bWP.indexPos = i;
+//                                _bWP.pixelN = _wCounter;
+//                                blackPixels.push_back(_bWP);
+//                            }
+//                            _bCounter++;
+//                            _wCounter = 0;
+//                            
+//                        } else {
+//                            
+//                            if ( _wCounter==0 ) {
+//                                blackWhitePixels _bWP;
+//                                _bWP.indexPos = i;
+//                                _bWP.pixelN = _bCounter;
+//                                whitePixels.push_back(_bWP);
+//                            }
+//                            _wCounter++;
+//                            _bCounter = 0;
+//                        }
+//                    }
+//                } else {
+//                    
+//                    int _wCounter = 0;
+//                    int _bCounter = 0;
+//                    
+//                    for (int i=0; i<pixelBright.size(); i++) {
+//                        
+//                        int _whitePixel;
+//                        if (WHITE_VIEW) {
+//                            _whitePixel = 255;
+//                        } else {
+//                            _whitePixel = 0;
+//                        }
+//                        
+//                        if ( pixelBright[i] == _whitePixel ) {
+//                            
+//                            if ( _bCounter==0 ) {
+//                                blackWhitePixels _bWP;
+//                                _bWP.indexPos = i;
+//                                _bWP.pixelN = _wCounter;
+//                                blackPixels.push_back(_bWP);
+//                            }
+//                            _bCounter++;
+//                            _wCounter = 0;
+//                            
+//                        } else {
+//                            
+//                            if ( _wCounter==0 ) {
+//                                blackWhitePixels _bWP;
+//                                _bWP.indexPos = i;
+//                                _bWP.pixelN = _bCounter;
+//                                whitePixels.push_back(_bWP);
+//                            }
+//                            _wCounter++;
+//                            _bCounter = 0;
+//                        }
+//                    }
+//                    
+//                }
+//                
+//                
+//            }
+            
+        }
+        
+        
+        
+    }
+    
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::calculatePixels(ofImage _img){
+    
+        convertColor(_img, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
         //                erode(gray);
         
@@ -406,158 +699,12 @@ void ofApp::update(){
                 
             }
             
-            
         }
-        
-        
-    } else {
-        
-        cam.update();
-        
-        if(cam.isFrameNew()) {
-            
-            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-            
-            convertColor(squareCam, gray, CV_RGB2GRAY);
-            threshold(gray, gray, grayThreshold);
-            //                erode(gray);
-            
-            Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
-            thin(edge);
-            
-            if (WHITE_VIEW) {
-                invert(edge);
-            }
-            
-            edge.update();
-            
-            
-            if ( bCameraCapturePlay ) {
-                noteIndex = index;
-            } else {
-                
-                
-                noteIndex = 0;
-                ofImage _tImage;
-                
-                pixelBright.clear();
-                whitePixels.clear();
-                blackPixels.clear();
-                
-                
-                if (!bIPhone) {
-                    
-                    unsigned char * _src = edge.getPixels().getData();
-                    
-                    for (int j=0; j<camSize; j+=pixelStepS) {
-                        for (int i=0; i<camSize; i+=pixelStepS) {
-                            int _index = i + j * camSize;
-                            float _brightness = _src[_index];
-                            pixelBright.push_back(_brightness);
-                        }
-                    }
-                    
-                } else {
-                    
-                    edge.rotate90(-1);
-                    unsigned char * _src = edge.getPixels().getData();
-                    
-                    for (int j=0; j<camSize; j+=pixelStepS) {
-                        for (int i=0; i<camSize; i+=pixelStepS) {
-                            int _index = i + j * camSize;
-                            float _brightness = _src[_index];
-                            pixelBright.push_back(_brightness);
-                        }
-                    }
-                }
-                
-                
-                if (!bIPhone) {
-                    int _wCounter = 0;
-                    int _bCounter = 0;
-                    
-                    for (int i=0; i<pixelBright.size(); i++) {
-                        
-                        int _whitePixel;
-                        if (WHITE_VIEW) {
-                            _whitePixel = 255;
-                        } else {
-                            _whitePixel = 0;
-                        }
-                        
-                        if ( pixelBright[i] == _whitePixel ) {
-                            
-                            if ( _bCounter==0 ) {
-                                blackWhitePixels _bWP;
-                                _bWP.indexPos = i;
-                                _bWP.pixelN = _wCounter;
-                                blackPixels.push_back(_bWP);
-                            }
-                            _bCounter++;
-                            _wCounter = 0;
-                            
-                        } else {
-                            
-                            if ( _wCounter==0 ) {
-                                blackWhitePixels _bWP;
-                                _bWP.indexPos = i;
-                                _bWP.pixelN = _bCounter;
-                                whitePixels.push_back(_bWP);
-                            }
-                            _wCounter++;
-                            _bCounter = 0;
-                        }
-                    }
-                } else {
-                    
-                    int _wCounter = 0;
-                    int _bCounter = 0;
-                    
-                    for (int i=0; i<pixelBright.size(); i++) {
-                        
-                        int _whitePixel;
-                        if (WHITE_VIEW) {
-                            _whitePixel = 255;
-                        } else {
-                            _whitePixel = 0;
-                        }
-                        
-                        if ( pixelBright[i] == _whitePixel ) {
-                            
-                            if ( _bCounter==0 ) {
-                                blackWhitePixels _bWP;
-                                _bWP.indexPos = i;
-                                _bWP.pixelN = _wCounter;
-                                blackPixels.push_back(_bWP);
-                            }
-                            _bCounter++;
-                            _wCounter = 0;
-                            
-                        } else {
-                            
-                            if ( _wCounter==0 ) {
-                                blackWhitePixels _bWP;
-                                _bWP.indexPos = i;
-                                _bWP.pixelN = _bCounter;
-                                whitePixels.push_back(_bWP);
-                            }
-                            _wCounter++;
-                            _bCounter = 0;
-                        }
-                    }
-                    
-                }
-                
-                
-            }
-            
-        }
-        
-        
-        
-    }
     
+
 }
+
+
 
 
 //--------------------------------------------------------------
@@ -573,7 +720,6 @@ void ofApp::triggerReceive(float & metro){
     trigScoreNote( scoreNote5, synth5, 5 );
     trigScoreNote( scoreNote6, synth6, 6 );
     trigScoreNote( scoreNote7, synth7, 7 );
-    
     
 }
 
@@ -1536,7 +1682,6 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
     int _defaultNote = 56;
-    int _size = 3;
     int _xDefaultPos = _stepX * (_xNumber-1);
     
     vector<int> _scoreNote = _vNote;
@@ -1548,72 +1693,9 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
     
     if (_scoreNote.size()>0) {
         
-        ofPushStyle();
+        drawCircle(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _xDefaultPos, _defaultNote);
         
-        for (int i=0; i<_xNumber; i++){
-            
-            int _indexLoopLine = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _note = _scoreNote[_indexLoopLine];
-            int _noteOld = _scoreNote[_indexLoopLineOld];
-            
-            int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-            int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-            
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _noteScaled * _stepY;
-            
-            if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-                //                ofColor _c;
-                if (i==11) {
-                    _c = ofColor( _c, 255 );
-                } else {
-                    _c = ofColor( _c, 120 );
-                }
-                if (_note>0) {
-                    ofSetColor( _c );
-                    ofDrawCircle( _x1, _y1, _size );
-                }
-            }
-            
-        }
-        
-        ofPopStyle();
-        
-        ofPushStyle();
-        ofSetColor( _c, 60 );
-        
-        
-        for (int i=0; i<_xNumber-1; i++){
-            
-            int _indexLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _indexLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _noteS = _scoreNote[_indexLoopLineS];
-            int _noteE = _scoreNote[_indexLoopLineE];
-            int _noteEOld = _scoreNote[_indexLoopLineEOld];
-            
-            int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
-            int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
-            int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
-            
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _noteSScaled * _stepY;
-            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-            float _y2 = _defaultNote - _noteEScaled * _stepY;
-            
-            
-            if ( (abs(_noteEScaled-_noteSScaled) >= intervalDist) && abs(_noteEOldScaled-_noteEScaled) >= intervalDist ) {
-                if ( _noteS > 0 && _noteE > 0 ) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        ofPopStyle();
+        drawLine(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _xDefaultPos, _defaultNote);
         
     }
     
@@ -1660,13 +1742,11 @@ void ofApp::drawLineScoreIPhone(){
 //--------------------------------------------------------------
 void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
     
-    
     int _xNumber = lineScoreNumber;
     int _middle = _xNumber * 0.5;
     float _stepX = lineScoreStepX;
     float _stepY = lineScoreStepY;
     int _defaultNote = screenW * 0.0875;
-    int _size = 3;
     int _xDefaultPos = _stepX * (_xNumber-1);
     
     vector<int> _scoreNote = _vNote;
@@ -1678,76 +1758,98 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
     
     if (_scoreNote.size()>0) {
         
-        ofPushStyle();
+        drawCircle(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _xDefaultPos, _defaultNote);
         
-        for (int i=0; i<_xNumber; i++){
-            
-            int _indexLoopLine = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _note = _scoreNote[_indexLoopLine];
-            int _noteOld = _scoreNote[_indexLoopLineOld];
-            
-            int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-            int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-            
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _noteScaled * _stepY;
-            
-            if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-                //                ofColor _c;
-                if (i==11) {
-                    _c = ofColor( _c, 255 );
-                } else {
-                    _c = ofColor( _c, 120 );
-                }
-                if (_note>0) {
-                    ofSetColor( _c );
-                    ofDrawCircle( _x1, _y1, _size );
-                }
-            }
-            
-        }
-        
-        ofPopStyle();
-        
-        ofPushStyle();
-        ofSetColor( _c, 60 );
-        
-        
-        for (int i=0; i<_xNumber-1; i++){
-            
-            int _indexLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            int _indexLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _indexLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
-            
-            int _noteS = _scoreNote[_indexLoopLineS];
-            int _noteE = _scoreNote[_indexLoopLineE];
-            int _noteEOld = _scoreNote[_indexLoopLineEOld];
-            
-            int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
-            int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
-            int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
-            
-            float _x1 = _xDefaultPos - i * _stepX;
-            float _y1 = _defaultNote - _noteSScaled * _stepY;
-            float _x2 = _xDefaultPos - (i + 1) * _stepX;
-            float _y2 = _defaultNote - _noteEScaled * _stepY;
-            
-            
-            if ( (abs(_noteEScaled-_noteSScaled) >= intervalDist) && abs(_noteEOldScaled-_noteEScaled) >= intervalDist ) {
-                if ( _noteS > 0 && _noteE > 0 ) {
-                    ofDrawLine( _x1, _y1, _x2, _y2 );
-                }
-            }
-        }
-        
-        ofPopStyle();
+        drawLine(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _xDefaultPos, _defaultNote);
         
     }
     
 }
+
+
+//--------------------------------------------------------------
+void ofApp::drawCircle(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote){
+
+    int _size = 3;
+
+    ofPushStyle();
+    
+    for (int i=0; i<_xNumber; i++){
+        
+        int _indexLoopLine = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+        int _indexLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+        
+        int _note = _scoreNote[_indexLoopLine];
+        int _noteOld = _scoreNote[_indexLoopLineOld];
+        
+        int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _noteOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        float _x1 = _xDefaultPos - i * _stepX;
+        float _y1 = _defaultNote - _noteScaled * _stepY;
+        
+        if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
+            //                ofColor _c;
+            if (i==11) {
+                _c = ofColor( _c, 255 );
+                _size = 5;
+            } else {
+                _c = ofColor( _c, 120 );
+                _size = 3;
+            }
+            if (_note>0) {
+                ofSetColor( _c );
+                ofDrawCircle( _x1, _y1, _size );
+            }
+        }
+        
+    }
+    
+    ofPopStyle();
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote){
+    
+    ofPushStyle();
+    ofSetColor( _c, 60 );
+    
+    for (int i=0; i<_xNumber-1; i++){
+        
+        int _indexLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+        int _indexLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+        
+        int _indexLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size()-1)) + 1;
+        
+        int _noteS = _scoreNote[_indexLoopLineS];
+        int _noteE = _scoreNote[_indexLoopLineE];
+        int _noteEOld = _scoreNote[_indexLoopLineEOld];
+        
+        int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
+        int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
+        int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
+        
+        float _x1 = _xDefaultPos - i * _stepX;
+        float _y1 = _defaultNote - _noteSScaled * _stepY;
+        float _x2 = _xDefaultPos - (i + 1) * _stepX;
+        float _y2 = _defaultNote - _noteEScaled * _stepY;
+        
+        
+        if ( (abs(_noteEScaled-_noteSScaled) >= intervalDist) && abs(_noteEOldScaled-_noteEScaled) >= intervalDist ) {
+            if ( _noteS > 0 && _noteE > 0 ) {
+                if (_y1<0 && _y2<0) {
+                    ofDrawLine( _x1, _y1, _x2, _y2 );
+                }
+            }
+        }
+    }
+    
+    ofPopStyle();
+    
+}
+
 
 
 
@@ -2820,15 +2922,6 @@ void ofApp::scoreMake(){
         oldNoteIndex7 = _7Note;
         
     }
-    
-    cout << whitePixels.size() << endl;
-    cout << scoreNote1.size() << endl;
-    cout << scoreNote2.size() << endl;
-    cout << scoreNote3.size() << endl;
-    cout << scoreNote4.size() << endl;
-    cout << scoreNote5.size() << endl;
-    cout << scoreNote6.size() << endl;
-    cout << scoreNote7.size() << endl;
     
 }
 

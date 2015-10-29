@@ -45,6 +45,7 @@ class ofApp : public ofxiOSApp {
 
     
 public:
+
     void setup();
     void update();
     void draw();
@@ -242,8 +243,11 @@ public:
     
     ofColor colorVar[7];
     
+    void drawCircle(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
+    void drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
     
     
+    void calculatePixels(ofImage _img);
     
 };
 
