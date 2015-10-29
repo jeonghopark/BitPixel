@@ -95,7 +95,13 @@ void ofApp::setup(){
     .dryLevel(ControlDbToLinear().input(0.0))
     .wetLevel(ControlDbToLinear().input(-15.0));
     
-    synthMain.setOutputGen( (synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7) * 0.85 >> reverb );
+    BasicDelay delay = BasicDelay(0.5f, 1.0f)
+    .delayTime( 0.1f )
+    .feedback( 0.1 )
+    .dryLevel( 1.0f - 0.1 )
+    .wetLevel( 0.1 );
+    
+    synthMain.setOutputGen( (synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7) * 0.166 * 3 >> delay >> reverb );
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
@@ -332,7 +338,6 @@ void ofApp::calculatePixels(ofImage _img){
         noteIndex = index;
     } else {
         
-        
         noteIndex = 0;
         ofImage _tImage;
         
@@ -340,109 +345,59 @@ void ofApp::calculatePixels(ofImage _img){
         whitePixels.clear();
         blackPixels.clear();
         
-        
+        unsigned char * _src;
         if (!bIPhone) {
-            
-            unsigned char * _src = edge.getPixels().getData();
-            
-            for (int j=0; j<camSize; j+=pixelStepS) {
-                for (int i=0; i<camSize; i+=pixelStepS) {
-                    int _index = i + j * camSize;
-                    float _brightness = _src[_index];
-                    pixelBright.push_back(_brightness);
-                }
-            }
-            
+            _src = edge.getPixels().getData();
         } else {
-            
             edge.rotate90(-1);
-            unsigned char * _src = edge.getPixels().getData();
-            
-            for (int j=0; j<camSize; j+=pixelStepS) {
-                for (int i=0; i<camSize; i+=pixelStepS) {
-                    int _index = i + j * camSize;
-                    float _brightness = _src[_index];
-                    pixelBright.push_back(_brightness);
-                }
-            }
+            _src = edge.getPixels().getData();
         }
         
         
-        if (!bIPhone) {
-            int _wCounter = 0;
-            int _bCounter = 0;
-            
-            for (int i=0; i<pixelBright.size(); i++) {
-                
-                int _whitePixel;
-                if (WHITE_VIEW) {
-                    _whitePixel = 255;
-                } else {
-                    _whitePixel = 0;
-                }
-                
-                if ( pixelBright[i] == _whitePixel ) {
-                    
-                    if ( _bCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _wCounter;
-                        blackPixels.push_back(_bWP);
-                    }
-                    _bCounter++;
-                    _wCounter = 0;
-                    
-                } else {
-                    
-                    if ( _wCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _bCounter;
-                        whitePixels.push_back(_bWP);
-                    }
-                    _wCounter++;
-                    _bCounter = 0;
-                }
+        for (int j=0; j<camSize; j+=pixelStepS) {
+            for (int i=0; i<camSize; i+=pixelStepS) {
+                int _index = i + j * camSize;
+                float _brightness = _src[_index];
+                pixelBright.push_back(_brightness);
             }
-        } else {
-            
-            int _wCounter = 0;
-            int _bCounter = 0;
-            
-            for (int i=0; i<pixelBright.size(); i++) {
-                
-                int _whitePixel;
-                if (WHITE_VIEW) {
-                    _whitePixel = 255;
-                } else {
-                    _whitePixel = 0;
-                }
-                
-                if ( pixelBright[i] == _whitePixel ) {
-                    
-                    if ( _bCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _wCounter;
-                        blackPixels.push_back(_bWP);
-                    }
-                    _bCounter++;
-                    _wCounter = 0;
-                    
-                } else {
-                    
-                    if ( _wCounter==0 ) {
-                        blackWhitePixels _bWP;
-                        _bWP.indexPos = i;
-                        _bWP.pixelN = _bCounter;
-                        whitePixels.push_back(_bWP);
-                    }
-                    _wCounter++;
-                    _bCounter = 0;
-                }
-            }
-            
         }
+
+        int _wCounter = 0;
+        int _bCounter = 0;
+        
+        for (int i=0; i<pixelBright.size(); i++) {
+            
+            int _whitePixel;
+            if (WHITE_VIEW) {
+                _whitePixel = 255;
+            } else {
+                _whitePixel = 0;
+            }
+            
+            if ( pixelBright[i] == _whitePixel ) {
+                
+                if ( _bCounter==0 ) {
+                    blackWhitePixels _bWP;
+                    _bWP.indexPos = i;
+                    _bWP.pixelN = _wCounter;
+                    blackPixels.push_back(_bWP);
+                }
+                _bCounter++;
+                _wCounter = 0;
+                
+            } else {
+                
+                if ( _wCounter==0 ) {
+                    blackWhitePixels _bWP;
+                    _bWP.indexPos = i;
+                    _bWP.pixelN = _bCounter;
+                    whitePixels.push_back(_bWP);
+                }
+                _wCounter++;
+                _bCounter = 0;
+            }
+        }
+
         
     }
     
@@ -2404,45 +2359,28 @@ void ofApp::audioReceived(float * output, int bufferSize, int nChannels){
 void ofApp::synthSetting(){
     
     
-    // modu synth
-    //    ControlParameter modIndex = synth1.addParameter("modIndex", 0.25f);
-    //    ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
-    //    Generator rCarrierFreq = ControlMidiToFreq().input(carrierPitch1).smoothed();
-    //    Generator rModFreq     = rCarrierFreq * 18.0f;
-    //    Generator outputGen = SineWave()
-    //    .freq( rCarrierFreq
-    //          + (
-    //             SineWave().freq( rModFreq ) *
-    //             rModFreq *
-    //             (modIndex.smoothed() * (1.0f + SineWave().freq((LFNoise().setFreq(0.5f) + 1.f) * 2.f + 0.2f)))
-    //             )
-    //          ) * ControlDbToLinear().input(0).smoothed();
-    //
-    //    ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
-    //    Generator env1 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
-    //    synth1.setOutputGen(outputGen * env1 * 0.75 );
+    float _volume = 0.9;
+
     
-    
-    // bell ? synth
     ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
     float amountMod1 = 1;
     ControlGenerator rCarrierFreq1 = ControlMidiToFreq().input(carrierPitch1);
     ControlGenerator rModFreq1 = rCarrierFreq1 * 2.5;
     Generator modulationTone1 = SineWave().freq( rModFreq1 ) * rModFreq1 * amountMod1;
-    Generator tone1 = SineWave().freq(rCarrierFreq1 + modulationTone1);
+    Generator tone1 = SineWave().freq(rCarrierFreq1 * ofRandom(0.95,1.05) + modulationTone1);
     ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
-    Generator env1 = ADSR().attack(0.001).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
-    synth1.setOutputGen( tone1 * env1 * 0.75 );
+    Generator env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
+    synth1.setOutputGen( tone1 * env1 * _volume );
     
     ControlParameter carrierPitch2 = synth2.addParameter("carrierPitch2");
     float amountMod2 = 1;
-    ControlGenerator rCarrierFreq2 = ControlMidiToFreq().input(carrierPitch2);
+    ControlGenerator rCarrierFreq2 = ControlMidiToFreq().input(carrierPitch2 - 24);
     ControlGenerator rModFreq2 = rCarrierFreq2 * 3.489;
     Generator modulationTone2 = SineWave().freq( rModFreq2 ) * rModFreq2 * amountMod2;
     Generator tone2 = SineWave().freq(rCarrierFreq2 + modulationTone2);
     ControlGenerator envelopTrigger2 = synth2.addParameter("trigger2");
-    Generator env2 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger2).legato(false);
-    synth2.setOutputGen( tone2 * env2 * 0.75 );
+    Generator env2 = ADSR().attack(0.04).decay(0.1).sustain(0).release(0).trigger(envelopTrigger2).legato(false);
+    synth2.setOutputGen( tone2 * env2 * _volume );
     
     ControlParameter carrierPitch3 = synth3.addParameter("carrierPitch3");
     float amountMod3 = 12;
@@ -2451,8 +2389,8 @@ void ofApp::synthSetting(){
     Generator modulationTone3 = SineWave().freq( rModFreq3 ) * rModFreq3 * amountMod3;
     Generator tone3 = SineWave().freq(rCarrierFreq3 + modulationTone3);
     ControlGenerator envelopTrigger3 = synth3.addParameter("trigger3");
-    Generator env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger3).legato(true);
-    synth3.setOutputGen( tone3 * env3 * 0.75 );
+    Generator env3 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(envelopTrigger3).legato(true);
+    synth3.setOutputGen( tone3 * env3 * _volume );
     
     ControlParameter carrierPitch4 = synth4.addParameter("carrierPitch4");
     float amountMod4 = 18;
@@ -2462,7 +2400,7 @@ void ofApp::synthSetting(){
     Generator tone4 = SineWave().freq(rCarrierFreq4 + modulationTone4);
     ControlGenerator envelopTrigger4 = synth4.addParameter("trigger4");
     Generator env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger4).legato(false);
-    synth4.setOutputGen( tone4 * env4 * 0.75 );
+    synth4.setOutputGen( tone4 * env4 * _volume );
     
     ControlParameter carrierPitch5 = synth5.addParameter("carrierPitch5");
     float amountMod5 = 6;
@@ -2472,7 +2410,7 @@ void ofApp::synthSetting(){
     Generator tone5 = SineWave().freq(rCarrierFreq5 + modulationTone5);
     ControlGenerator envelopTrigger5 = synth5.addParameter("trigger5");
     Generator env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger5).legato(false);
-    synth5.setOutputGen( tone5 * env5 * 0.75 );
+    synth5.setOutputGen( tone5 * env5 * _volume );
     
     
     ControlParameter carrierPitch6 = synth6.addParameter("carrierPitch6");
@@ -2483,7 +2421,7 @@ void ofApp::synthSetting(){
     Generator tone6 = SineWave().freq(rCarrierFreq6 + modulationTone6);
     ControlGenerator envelopTrigger6 = synth6.addParameter("trigger6");
     Generator env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(envelopTrigger6).legato(false);
-    synth6.setOutputGen( tone6 * env6 * 0.75 );
+    synth6.setOutputGen( tone6 * env6 * _volume );
     
     ControlParameter carrierPitch7 = synth7.addParameter("carrierPitch7");
     float amountMod7 = 4;
@@ -2493,7 +2431,7 @@ void ofApp::synthSetting(){
     Generator tone7 = SineWave().freq(rCarrierFreq7 + modulationTone7);
     ControlGenerator envelopTrigger7 = synth7.addParameter("trigger7");
     Generator env7 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(envelopTrigger7).legato(false);
-    synth7.setOutputGen( tone7 * env7 * 0.75 );
+    synth7.setOutputGen( tone7 * env7 * _volume );
     
 }
 
