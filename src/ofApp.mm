@@ -28,7 +28,7 @@ void ofApp::setup(){
     baseSelection = 7;
     
     if (WHITE_VIEW) {
-        ofBackground( 40 );
+        ofBackground( 255 );
     } else {
         ofBackground( 15 );
     }
@@ -80,7 +80,22 @@ void ofApp::setup(){
     bpm = synthMain.addParameter("tempo",100).min(minSpeed).max(maxSpeed);
     metro = ControlMetro().bpm(4 * bpm);
     metroOut = synthMain.createOFEvent(metro);
-    synthMain.setOutputGen(synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7);
+
+    Reverb reverb = Reverb()
+    .preDelayTime(0.001)
+    .inputLPFCutoff(18000)
+    .inputHPFCutoff(20)
+    .decayTime(1.0)
+    .decayLPFCutoff(16000)
+    .decayHPFCutoff(20)
+    .stereoWidth(1.0)
+    .density(0.75)
+    .roomShape(0.5)
+    .roomSize(0.25)
+    .dryLevel(ControlDbToLinear().input(0.0))
+    .wetLevel(ControlDbToLinear().input(-15.0));
+    
+    synthMain.setOutputGen( (synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7) * 0.85 >> reverb );
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
@@ -277,142 +292,7 @@ void ofApp::update(){
         calculatePixels(squareCam);
         
         
-        //        convertColor(squareCam, gray, CV_RGB2GRAY);
-        //        threshold(gray, gray, grayThreshold);
-        //        //                erode(gray);
-        //
-        //        Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
-        //        thin(edge);
-        //
-        //        if (WHITE_VIEW) {
-        //            invert(edge);
-        //        }
-        //
-        //        edge.update();
-        //
-        //
-        //        if ( bCameraCapturePlay ) {
-        //            noteIndex = index;
-        //        } else {
-        //
-        //
-        //            noteIndex = 0;
-        //            ofImage _tImage;
-        //
-        //            pixelBright.clear();
-        //            whitePixels.clear();
-        //            blackPixels.clear();
-        //
-        //
-        //            if (!bIPhone) {
-        //
-        //                unsigned char * _src = edge.getPixels().getData();
-        //
-        //                for (int j=0; j<camSize; j+=pixelStepS) {
-        //                    for (int i=0; i<camSize; i+=pixelStepS) {
-        //                        int _index = i + j * camSize;
-        //                        float _brightness = _src[_index];
-        //                        pixelBright.push_back(_brightness);
-        //                    }
-        //                }
-        //
-        //            } else {
-        //
-        //                edge.rotate90(-1);
-        //                unsigned char * _src = edge.getPixels().getData();
-        //
-        //                for (int j=0; j<camSize; j+=pixelStepS) {
-        //                    for (int i=0; i<camSize; i+=pixelStepS) {
-        //                        int _index = i + j * camSize;
-        //                        float _brightness = _src[_index];
-        //                        pixelBright.push_back(_brightness);
-        //                    }
-        //                }
-        //            }
-        //
-        //
-        //            if (!bIPhone) {
-        //                int _wCounter = 0;
-        //                int _bCounter = 0;
-        //
-        //                for (int i=0; i<pixelBright.size(); i++) {
-        //
-        //                    int _whitePixel;
-        //                    if (WHITE_VIEW) {
-        //                        _whitePixel = 255;
-        //                    } else {
-        //                        _whitePixel = 0;
-        //                    }
-        //
-        //                    if ( pixelBright[i] == _whitePixel ) {
-        //
-        //                        if ( _bCounter==0 ) {
-        //                            blackWhitePixels _bWP;
-        //                            _bWP.indexPos = i;
-        //                            _bWP.pixelN = _wCounter;
-        //                            blackPixels.push_back(_bWP);
-        //                        }
-        //                        _bCounter++;
-        //                        _wCounter = 0;
-        //
-        //                    } else {
-        //
-        //                        if ( _wCounter==0 ) {
-        //                            blackWhitePixels _bWP;
-        //                            _bWP.indexPos = i;
-        //                            _bWP.pixelN = _bCounter;
-        //                            whitePixels.push_back(_bWP);
-        //                        }
-        //                        _wCounter++;
-        //                        _bCounter = 0;
-        //                    }
-        //                }
-        //            } else {
-        //
-        //                int _wCounter = 0;
-        //                int _bCounter = 0;
-        //
-        //                for (int i=0; i<pixelBright.size(); i++) {
-        //
-        //                    int _whitePixel;
-        //                    if (WHITE_VIEW) {
-        //                        _whitePixel = 255;
-        //                    } else {
-        //                        _whitePixel = 0;
-        //                    }
-        //
-        //                    if ( pixelBright[i] == _whitePixel ) {
-        //
-        //                        if ( _bCounter==0 ) {
-        //                            blackWhitePixels _bWP;
-        //                            _bWP.indexPos = i;
-        //                            _bWP.pixelN = _wCounter;
-        //                            blackPixels.push_back(_bWP);
-        //                        }
-        //                        _bCounter++;
-        //                        _wCounter = 0;
-        //
-        //                    } else {
-        //
-        //                        if ( _wCounter==0 ) {
-        //                            blackWhitePixels _bWP;
-        //                            _bWP.indexPos = i;
-        //                            _bWP.pixelN = _bCounter;
-        //                            whitePixels.push_back(_bWP);
-        //                        }
-        //                        _wCounter++;
-        //                        _bCounter = 0;
-        //                    }
-        //                }
-        //
-        //            }
-        //
-        //
-        //        }
-        
-        
     } else {
-        
         
         cam.update();
         
@@ -420,144 +300,9 @@ void ofApp::update(){
             
             squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
             
-            
             calculatePixels(squareCam);
             
-            //            convertColor(squareCam, gray, CV_RGB2GRAY);
-            //            threshold(gray, gray, grayThreshold);
-            //            //                erode(gray);
-            //
-            //            Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
-            //            thin(edge);
-            //
-            //            if (WHITE_VIEW) {
-            //                invert(edge);
-            //            }
-            //
-            //            edge.update();
-            //
-            //
-            //            if ( bCameraCapturePlay ) {
-            //                noteIndex = index;
-            //            } else {
-            //
-            //
-            //                noteIndex = 0;
-            //                ofImage _tImage;
-            //
-            //                pixelBright.clear();
-            //                whitePixels.clear();
-            //                blackPixels.clear();
-            //
-            //
-            //                if (!bIPhone) {
-            //
-            //                    unsigned char * _src = edge.getPixels().getData();
-            //
-            //                    for (int j=0; j<camSize; j+=pixelStepS) {
-            //                        for (int i=0; i<camSize; i+=pixelStepS) {
-            //                            int _index = i + j * camSize;
-            //                            float _brightness = _src[_index];
-            //                            pixelBright.push_back(_brightness);
-            //                        }
-            //                    }
-            //
-            //                } else {
-            //
-            //                    edge.rotate90(-1);
-            //                    unsigned char * _src = edge.getPixels().getData();
-            //
-            //                    for (int j=0; j<camSize; j+=pixelStepS) {
-            //                        for (int i=0; i<camSize; i+=pixelStepS) {
-            //                            int _index = i + j * camSize;
-            //                            float _brightness = _src[_index];
-            //                            pixelBright.push_back(_brightness);
-            //                        }
-            //                    }
-            //                }
-            //
-            //
-            //                if (!bIPhone) {
-            //                    int _wCounter = 0;
-            //                    int _bCounter = 0;
-            //
-            //                    for (int i=0; i<pixelBright.size(); i++) {
-            //
-            //                        int _whitePixel;
-            //                        if (WHITE_VIEW) {
-            //                            _whitePixel = 255;
-            //                        } else {
-            //                            _whitePixel = 0;
-            //                        }
-            //
-            //                        if ( pixelBright[i] == _whitePixel ) {
-            //
-            //                            if ( _bCounter==0 ) {
-            //                                blackWhitePixels _bWP;
-            //                                _bWP.indexPos = i;
-            //                                _bWP.pixelN = _wCounter;
-            //                                blackPixels.push_back(_bWP);
-            //                            }
-            //                            _bCounter++;
-            //                            _wCounter = 0;
-            //
-            //                        } else {
-            //
-            //                            if ( _wCounter==0 ) {
-            //                                blackWhitePixels _bWP;
-            //                                _bWP.indexPos = i;
-            //                                _bWP.pixelN = _bCounter;
-            //                                whitePixels.push_back(_bWP);
-            //                            }
-            //                            _wCounter++;
-            //                            _bCounter = 0;
-            //                        }
-            //                    }
-            //                } else {
-            //
-            //                    int _wCounter = 0;
-            //                    int _bCounter = 0;
-            //
-            //                    for (int i=0; i<pixelBright.size(); i++) {
-            //
-            //                        int _whitePixel;
-            //                        if (WHITE_VIEW) {
-            //                            _whitePixel = 255;
-            //                        } else {
-            //                            _whitePixel = 0;
-            //                        }
-            //
-            //                        if ( pixelBright[i] == _whitePixel ) {
-            //
-            //                            if ( _bCounter==0 ) {
-            //                                blackWhitePixels _bWP;
-            //                                _bWP.indexPos = i;
-            //                                _bWP.pixelN = _wCounter;
-            //                                blackPixels.push_back(_bWP);
-            //                            }
-            //                            _bCounter++;
-            //                            _wCounter = 0;
-            //
-            //                        } else {
-            //
-            //                            if ( _wCounter==0 ) {
-            //                                blackWhitePixels _bWP;
-            //                                _bWP.indexPos = i;
-            //                                _bWP.pixelN = _bCounter;
-            //                                whitePixels.push_back(_bWP);
-            //                            }
-            //                            _wCounter++;
-            //                            _bCounter = 0;
-            //                        }
-            //                    }
-            //
-            //                }
-            //
-            //
-            //            }
-            
         }
-        
         
         
     }
@@ -853,7 +598,7 @@ void ofApp::drawIPhone(){
         }
         
         ofPushMatrix();
-        edge.draw( 0, 0, iPhonePreviewSize, iPhonePreviewSize);
+        edge.draw( 0, 0, iPhonePreviewSize+1, iPhonePreviewSize+1);
         ofPopMatrix();
         
     }
@@ -861,15 +606,15 @@ void ofApp::drawIPhone(){
     
     ofPushStyle();
     if (bCameraCapturePlay) {
-        ofSetColor( 255, 255 );
-        ofDrawRectangle(0, 0, iPhonePreviewSize, iPhonePreviewSize);
+//        ofSetColor( 255, 255 );
+//        ofDrawRectangle(0, 0, iPhonePreviewSize, iPhonePreviewSize);
         
         if (WHITE_VIEW) {
             ofSetColor( 255, 120 );
         } else {
             ofSetColor( 255, 120 );
         }
-        bufferImg.draw( 0, 0, iPhonePreviewSize, iPhonePreviewSize);
+        bufferImg.draw( 0, 0, iPhonePreviewSize+1, iPhonePreviewSize+1);
     }
     ofPopStyle();
     
@@ -1126,11 +871,8 @@ void ofApp::drawControlElementIPhone(){
     }
     
     float _speedY = speedCPos.y;
-    float _yD = 20;
+//    float _yD = 20;
     ofDrawLine( screenW * 0.1, _speedY, screenW * 0.9, _speedY );
-    
-    //    float _thresholdX = thresholdCPos.y;
-    //    ofDrawLine( screenW * 0.1, _thresholdX, screenW * 0.9, _thresholdX );
     
     float _intervalY = intervalPos.y;
     ofDrawLine( screenW * 0.1, _intervalY, screenW * 0.9, _intervalY );
@@ -1159,19 +901,6 @@ void ofApp::drawControlElementIPhone(){
     
     ofPopStyle();
     
-    //    ofPushStyle();
-    //    ofSetColor( 255, _alpha );
-    //    ofNoFill();
-    //    float _sizeF = 1.1;
-    //    float _x1 = thresholdCPos.x;
-    //    float _y1 = thresholdCPos.y - thresholdCSize * _sizeF;
-    //    float _x2 = thresholdCPos.x - cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    //    float _y2 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    //    float _x3 = thresholdCPos.x + cos(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    //    float _y3 = thresholdCPos.y + sin(ofDegToRad(30)) * thresholdCSize * _sizeF;
-    //    ofDrawTriangle( _x1, _y1, _x2, _y2, _x3, _y3 );
-    //    ofPopStyle();
-    
     
     ofPushStyle();
     
@@ -1199,18 +928,22 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor( 0, 40 );
     } else {
-        ofSetColor( 255, 80 );
+        ofSetColor( 255, 40 );
     }
     
     ofPoint _line1S = ofPoint( 0, screenPosLeftY );
-    ofPoint _line1E = ofPoint( screenW - iPhonePreviewSize, screenPosLeftY );
+    ofPoint _line1E = ofPoint( screenW, screenPosLeftY );
     ofDrawLine( _line1S, _line1E );
 
     ofPoint _line2S = ofPoint( 0, screenPosRightY );
-    ofPoint _line2E = ofPoint( screenW - iPhonePreviewSize, screenPosRightY );
+    ofPoint _line2E = ofPoint( screenW, screenPosRightY );
     ofDrawLine( _line2S, _line2E );
+
+    ofPoint _lineUpS = ofPoint( screenW - iPhonePreviewSize, screenPosLeftY );
+    ofPoint _lineUpE = ofPoint( screenW - iPhonePreviewSize, screenPosRightY );
+    ofDrawLine( _lineUpS, _lineUpE );
 
     ofPopStyle();
 
@@ -2700,7 +2433,6 @@ void ofApp::synthSetting(){
     ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
     Generator env1 = ADSR().attack(0.001).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
     synth1.setOutputGen( tone1 * env1 * 0.75 );
-    
     
     ControlParameter carrierPitch2 = synth2.addParameter("carrierPitch2");
     float amountMod2 = 1;
