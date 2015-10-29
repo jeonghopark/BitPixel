@@ -10,8 +10,6 @@
 
 #include "ScaleSetting.h"
 
-#define TARGET_IPHONE_SIMULATOR 1
-
 struct blackWhitePixels{
     int indexPos;
     int pixelN;
