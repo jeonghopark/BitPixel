@@ -5,6 +5,7 @@
 
 #include <AVFoundation/AVFoundation.h>
 
+
 using namespace ofxCv;
 using namespace cv;
 
@@ -40,9 +41,7 @@ void ofApp::setup(){
     
     backgroundControPanel.load("controlBackground.png");
     
-    debugLayoutImage.load("debug_layout_mini_iPad.jpg");
-    
-    
+
     if (TARGET_IPHONE_SIMULATOR) {
         //        cam.setDeviceID( 0 );
         //        cam.setup( 480, 360 );
@@ -66,12 +65,14 @@ void ofApp::setup(){
         bIPhone = false;
         screenW = ofGetWidth();
         screenH = ofGetWidth() * 4.0 / 3.0;
+        debugCameraImage.load("debug_layout_cat_iPad.jpg");
         setIPad();
     } else {
         bIPhone = true;
         screenW = ofGetWidth();
         screenH = ofGetHeight();
-        iPhonePreviewSize = screenW * 4.0/5.0;
+        iPhonePreviewSize = screenW * 4.0 / 5.0;
+        debugCameraImage.load("debug_layout_cat.jpg");
         setIPhone();
     }
     
@@ -215,14 +216,14 @@ void ofApp::setIPhone(){
     guideHeightStepSize = 64 / _widthDefault * _sizeF;
     lineScoreStepX = (screenW * 0.0710936) / _widthDefault * _sizeF;
     lineScoreStepY = (screenW * 0.0060125) / _widthDefault * _sizeF;
-//    stepBasePos = 105 / _widthDefault * _sizeF;
+    //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
     controlObjectLineWidth = 2;
     
     float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85/3.0;
     float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15/3.0;
-
+    
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
@@ -238,17 +239,17 @@ void ofApp::setIPhone(){
     
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
-//    intervalPos = ofPoint( screenW * 0.5, screenH * 0.8/10.0 );
+    //    intervalPos = ofPoint( screenW * 0.5, screenH * 0.8/10.0 );
     intervalPos = ofPoint( screenW * 0.5, _firstStepPosSideControl );
     bthresholdCtrl = false;
     intervalDist = 1;
     
-//    float _posIndexLeft = screenH * 1.84/10.0;
-//    float _posIndexRight = screenH - _posIndexLeft;
-
+    //    float _posIndexLeft = screenH * 1.84/10.0;
+    //    float _posIndexRight = screenH - _posIndexLeft;
+    
     float _posIndexLeft = _secondStepPosSideControl;
     float _posIndexRight = screenPosRightY + _firstStepPosSideControl;
-
+    
     base4Pos = ofPoint( screenW * 3.0/4.0, _posIndexLeft );
     base5Pos = ofPoint( screenW * 2.0/4.0, _posIndexLeft );
     base6Pos = ofPoint( screenW * 1.0/4.0, _posIndexLeft );
@@ -269,7 +270,11 @@ void ofApp::update(){
     
     if (TARGET_IPHONE_SIMULATOR) {
         
-        squareCam.setFromPixels(debugLayoutImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        if (bIPhone) {
+            squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+        } else {
+            squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        }
         
         convertColor(squareCam, gray, CV_RGB2GRAY);
         threshold(gray, gray, grayThreshold);
@@ -403,7 +408,7 @@ void ofApp::update(){
             
             
         }
-
+        
         
     } else {
         
@@ -548,10 +553,10 @@ void ofApp::update(){
             
         }
         
-
+        
         
     }
-        
+    
 }
 
 
@@ -853,8 +858,8 @@ void ofApp::drawControlElementIPad(){
     ofPopStyle();
     ofPopMatrix();
     
-
-
+    
+    
     int _alpha = 180;
     ofPushStyle();
     
@@ -869,9 +874,9 @@ void ofApp::drawControlElementIPad(){
     ofNoFill();
     
     ofSetLineWidth(controlObjectLineWidth);
-
+    
     ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
-
+    
     ofPopStyle();
     
     //    ofPushStyle();
@@ -889,7 +894,7 @@ void ofApp::drawControlElementIPad(){
     
     
     ofPushStyle();
-
+    
     if (WHITE_VIEW) {
         ofSetColor( 0, _alpha );
     } else {
@@ -899,7 +904,7 @@ void ofApp::drawControlElementIPad(){
     float _iY = intervalPos.y;
     
     ofSetLineWidth(controlObjectLineWidth);
-
+    
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
     ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
     ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
@@ -907,7 +912,7 @@ void ofApp::drawControlElementIPad(){
     
     ofPopStyle();
     
-
+    
     ofPushMatrix();
     ofPushStyle();
     if (WHITE_VIEW) {
@@ -1004,7 +1009,7 @@ void ofApp::drawControlElementIPhone(){
     ofNoFill();
     
     ofSetLineWidth(controlObjectLineWidth);
-
+    
     ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
     
     ofPopStyle();
@@ -1032,7 +1037,7 @@ void ofApp::drawControlElementIPhone(){
     }
     
     ofSetLineWidth(controlObjectLineWidth);
-
+    
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
     ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
@@ -1144,7 +1149,7 @@ void ofApp::drawIPhoneTrianglePixel(){
             ofDrawTriangle( _1P, _2P, _3P );
             
         }
-
+        
     }
     
     ofPopStyle();
@@ -1156,32 +1161,32 @@ void ofApp::drawIPhoneTrianglePixel(){
 
 //--------------------------------------------------------------
 //void ofApp::drawPixelAllNoteShape(){
-//    
+//
 //    ofPushMatrix();
 //    ofPushStyle();
 //    ofEnableAntiAliasing();
-//    
+//
 //    if (WHITE_VIEW) {
 //        ofSetColor( 0, 80 );
 //    } else {
 //        ofSetColor( 255, 180 );
 //    }
-//    
+//
 //    for (int i=0; i<whitePixels.size(); i++) {
-//        
+//
 //        int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
 //        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
 //        int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
-//        
+//
 //        float _x = ((_indexPixes) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
 //        float _y = (int)((_indexPixes) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
 //        ofPoint _p = ofPoint( _x, _y );
-//        
+//
 //        float _size = ofMap( _pixelNumbers, 0, 400, 5, 100 );
 //        drawShape( _p, baseSelection, _size );
-//        
+//
 //    }
-//    
+//
 //    ofPopStyle();
 //    ofPopMatrix();
 //
@@ -1448,8 +1453,8 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ){
     ofPushMatrix();
     ofPushStyle();
     
-//    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-//    ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
+    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+    //    ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
     
     ofColor _c = colorVar[_scoreCh - 1];
     
@@ -1560,7 +1565,7 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ){
             float _y1 = _defaultNote - _noteScaled * _stepY;
             
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-//                ofColor _c;
+                //                ofColor _c;
                 if (i==11) {
                     _c = ofColor( _c, 255 );
                 } else {
@@ -1666,9 +1671,9 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
     
     vector<int> _scoreNote = _vNote;
     
-//    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-//    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
-
+    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+    //    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
+    
     ofColor _c = colorVar[_scoreCh - 1];
     
     if (_scoreNote.size()>0) {
@@ -1690,7 +1695,7 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ){
             float _y1 = _defaultNote - _noteScaled * _stepY;
             
             if ( abs(_noteOldScaled-_noteScaled) >= intervalDist ) {
-//                ofColor _c;
+                //                ofColor _c;
                 if (i==11) {
                     _c = ofColor( _c, 255 );
                 } else {
@@ -2744,6 +2749,8 @@ void ofApp::scoreMake(){
     scoreNote6.clear();
     scoreNote7.clear();
     
+    
+    
     int _intervalDist = 1;
     
     for (int i=0; i<whitePixels.size(); i++) {
@@ -2814,6 +2821,15 @@ void ofApp::scoreMake(){
         
     }
     
+    cout << whitePixels.size() << endl;
+    cout << scoreNote1.size() << endl;
+    cout << scoreNote2.size() << endl;
+    cout << scoreNote3.size() << endl;
+    cout << scoreNote4.size() << endl;
+    cout << scoreNote5.size() << endl;
+    cout << scoreNote6.size() << endl;
+    cout << scoreNote7.size() << endl;
+    
 }
 
 
@@ -2874,7 +2890,6 @@ void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scor
     int _indexLoop = ((noteIndex) % (whitePixels.size()-1))+1;
     int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size()-1))+1;
     
-    
     vector<int> _scoreNote = _vNote;
     ofxTonicSynth _synth = _synthIn;
     
@@ -2888,16 +2903,11 @@ void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scor
     string tName = "trigger" + ofToString(_scoreCh);
     string tPitch = "carrierPitch" + ofToString(_scoreCh);
     
-    
-    
     if ( abs(_noteOldScaled - _noteScaled) >= intervalDist ) {
         if (_note>0) {
-            
             int _noteScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-            
             _synth.setParameter( tName, 1);
             _synth.setParameter( tPitch, _noteScaled);
-            
         }
     }
     

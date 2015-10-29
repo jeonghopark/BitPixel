@@ -10,6 +10,8 @@
 
 #include "ScaleSetting.h"
 
+#define TARGET_IPHONE_SIMULATOR 1
+
 struct blackWhitePixels{
     int indexPos;
     int pixelN;
@@ -97,7 +99,7 @@ public:
     float iPhonePreviewSize;
     
     
-    ofImage debugLayoutImage;
+    ofImage debugCameraImage;
     
     //openCV
     ofVideoGrabber cam;
