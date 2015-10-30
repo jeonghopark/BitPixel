@@ -74,6 +74,7 @@ void ofApp::setup(){
     }
     
     
+    
     synthSetting();
     maxSpeed = 200;
     minSpeed = 30;
@@ -93,7 +94,7 @@ void ofApp::setup(){
     .roomShape(0.5)
     .roomSize(0.25)
     .dryLevel(ControlDbToLinear().input(0.0))
-    .wetLevel(ControlDbToLinear().input(-15.0));
+    .wetLevel(ControlDbToLinear().input(-16.0));
     
     BasicDelay delay = BasicDelay(0.5f, 1.0f)
     .delayTime( 0.1f )
@@ -102,6 +103,8 @@ void ofApp::setup(){
     .wetLevel( 0.1 );
     
     synthMain.setOutputGen( (synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7) * 0.166 * 3 >> delay >> reverb );
+    
+    
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
@@ -2358,28 +2361,27 @@ void ofApp::audioReceived(float * output, int bufferSize, int nChannels){
 //--------------------------------------------------------------
 void ofApp::synthSetting(){
     
-    
-    float _volume = 0.9;
 
+    float _volume = 0.9;
     
     ControlParameter carrierPitch1 = synth1.addParameter("carrierPitch1");
     float amountMod1 = 1;
     ControlGenerator rCarrierFreq1 = ControlMidiToFreq().input(carrierPitch1);
     ControlGenerator rModFreq1 = rCarrierFreq1 * 2.5;
     Generator modulationTone1 = SineWave().freq( rModFreq1 ) * rModFreq1 * amountMod1;
-    Generator tone1 = SineWave().freq(rCarrierFreq1 * ofRandom(0.95,1.05) + modulationTone1);
+    Generator tone1 = SineWave().freq(rCarrierFreq1 + modulationTone1);
     ControlGenerator envelopTrigger1 = synth1.addParameter("trigger1");
     Generator env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(envelopTrigger1).legato(false);
     synth1.setOutputGen( tone1 * env1 * _volume );
     
     ControlParameter carrierPitch2 = synth2.addParameter("carrierPitch2");
     float amountMod2 = 1;
-    ControlGenerator rCarrierFreq2 = ControlMidiToFreq().input(carrierPitch2 - 24);
+    ControlGenerator rCarrierFreq2 = ControlMidiToFreq().input(carrierPitch2);
     ControlGenerator rModFreq2 = rCarrierFreq2 * 3.489;
     Generator modulationTone2 = SineWave().freq( rModFreq2 ) * rModFreq2 * amountMod2;
     Generator tone2 = SineWave().freq(rCarrierFreq2 + modulationTone2);
     ControlGenerator envelopTrigger2 = synth2.addParameter("trigger2");
-    Generator env2 = ADSR().attack(0.04).decay(0.1).sustain(0).release(0).trigger(envelopTrigger2).legato(false);
+    Generator env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(envelopTrigger2).legato(false);
     synth2.setOutputGen( tone2 * env2 * _volume );
     
     ControlParameter carrierPitch3 = synth3.addParameter("carrierPitch3");
