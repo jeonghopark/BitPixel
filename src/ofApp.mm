@@ -55,7 +55,8 @@ void ofApp::setup(){
     bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR);
+    squareCam.setImageType(OF_IMAGE_COLOR_ALPHA);
+    squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
     
     if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -297,8 +298,9 @@ void ofApp::update(){
             squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
         }
         
-        
-        calculatePixels(squareCam);
+        if (squareCam.isAllocated()){
+            calculatePixels(squareCam);
+        }
         
         
     } else {

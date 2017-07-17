@@ -1,4 +1,3 @@
 ofxCv
 ofxOpenCv
-addons
 ofxTonic
