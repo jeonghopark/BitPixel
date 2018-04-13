@@ -3,6 +3,7 @@
 
 #include "ofApp.h"
 #include <AVFoundation/AVFoundation.h>
+//#include "ofxiOSSoundStream.h"
 
 using namespace ofxCv;
 using namespace cv;
@@ -140,6 +141,7 @@ void ofApp::setup(){
     
     touchPos.assign(2, ofVec2f());
     
+//    ofxiOSSoundStream::setMixWithOtherApps(true);
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
     
 }
@@ -291,31 +293,20 @@ void ofApp::setIPhone(){
 void ofApp::update(){
     
     if (TARGET_IPHONE_SIMULATOR) {
-        
         if (bIPhone) {
             squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
         } else {
             squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
         }
-        
         if (squareCam.isAllocated()){
             calculatePixels(squareCam);
         }
-        
-        
     } else {
-        
         cam.update();
-        
         if(cam.isFrameNew()) {
-            
             squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-            
             calculatePixels(squareCam);
-            
         }
-        
-        
     }
     
 }
@@ -402,10 +393,8 @@ void ofApp::calculatePixels(ofImage _img){
                 _bCounter = 0;
             }
         }
-
         
     }
-    
     
 }
 
@@ -543,7 +532,7 @@ void ofApp::drawIPhone(){
     
     ofPushMatrix();
     ofTranslate(screenW, screenPosLeftY);
-    ofRotateZ( 90 );
+    ofRotateZDeg( 90 );
     
     
     ofPushMatrix();
@@ -653,7 +642,7 @@ void ofApp::drawIPhone(){
     ofPushMatrix();
     ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
     
-    ofRotateZ( 90 );
+    ofRotateZDeg( 90 );
     
     if (bCameraCapturePlay) {
         drawLineScoreIPhone();
@@ -940,9 +929,7 @@ void ofApp::drawTrianglePixel(){
     ofEnableAntiAliasing();
     
     if ( whitePixels.size() > 1 ) {
-        
         for (int i=0; i<whitePixels.size(); i++) {
-            
             int _noteLoopIndex = ((i) % (whitePixels.size()-1))+1;
             int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
             int _indexPixes = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
@@ -955,14 +942,11 @@ void ofApp::drawTrianglePixel(){
             ofPoint _3P = ofPoint( _x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25 );
             
             ofDrawTriangle( _1P, _2P, _3P );
-            
         }
-        
     }
     
     ofPopStyle();
     ofPopMatrix();
-    
     
 }
 
@@ -1619,18 +1603,18 @@ void ofApp::drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c){
     ofTranslate( _pos );
     
     if(!bIPhone) {
-        ofRotateZ(0);
+        ofRotateZDeg(0);
     } else {
         if ( _base == 5 ) {
-            ofRotateZ(18);
+            ofRotateZDeg(18);
         } else if ( _base == 7 ) {
-            ofRotateZ(38.571429);
+            ofRotateZDeg(38.571429);
         } else if ( _base == 8 ) {
-            ofRotateZ(45);
+            ofRotateZDeg(45);
         } else if ( _base == 9 ) {
-            ofRotateZ(50);
+            ofRotateZDeg(50);
         } else {
-            ofRotateZ(0);
+            ofRotateZDeg(0);
         }
     }
     
@@ -1687,7 +1671,7 @@ void ofApp::drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofC
     
     
     ofTranslate( _pos );
-    ofRotateZ( 45 );
+    ofRotateZDeg( 45 );
     
     ofSetLineWidth( 3 );
     

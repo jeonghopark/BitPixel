@@ -60,6 +60,8 @@ public:
     void gotMemoryWarning();
     void deviceOrientationChanged(int newOrientation);
     
+//    void audioOut(float * output, int bufferSize, int nChannels);
+
     void audioRequested (float * output, int bufferSize, int nChannels);
     void audioReceived(float * input, int bufferSize, int nChannels);
 
