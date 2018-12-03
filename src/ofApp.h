@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxiOS.h"
 #include "ofxiOSExtras.h"
+//#include "ofxiOSSoundStream.h"
 
 #include "ofxCv.h"
 #include "ofxOpenCv.h"

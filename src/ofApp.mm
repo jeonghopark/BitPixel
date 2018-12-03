@@ -1,12 +1,12 @@
 // http://www.translatorscafe.com/cafe/units-converter/numbers/calculator/octal-to-decimal/
 
-
 #include "ofApp.h"
 #include <AVFoundation/AVFoundation.h>
 //#include "ofxiOSSoundStream.h"
 
 using namespace ofxCv;
 using namespace cv;
+
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -16,8 +16,7 @@ void ofApp::setup(){
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
-    
+
     colorVar[0] = ofColor(192, 25, 30);
     colorVar[1] = ofColor(79, 185, 73);
     colorVar[2] = ofColor(255, 172, 0);
@@ -29,12 +28,12 @@ void ofApp::setup(){
     baseSelection = 7;
     
     if (WHITE_VIEW) {
-        ofBackground( 255 );
+        ofBackground(255);
     } else {
-        ofBackground( 15 );
+        ofBackground(15);
     }
     
-    ofSetFrameRate( 60 );
+    ofSetFrameRate(60);
     ofEnableAlphaBlending();
     
     backgroundControPanel.load("controlBackground.png");
@@ -46,8 +45,8 @@ void ofApp::setup(){
         //        cam.setDesiredFrameRate(15);
         camSize = 360; // 360
     } else {
-        cam.setDeviceID( 0 );
-        cam.setup( 480, 360 );
+        cam.setDeviceID(0);
+        cam.setup(480, 360);
         cam.setDesiredFrameRate(15);
         camSize = cam.getWidth(); // 360
     }
@@ -60,7 +59,7 @@ void ofApp::setup(){
     squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
     
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         bIPhone = false;
         screenW = ofGetWidth();
         screenH = ofGetWidth() * 4.0 / 3.0;
@@ -75,8 +74,7 @@ void ofApp::setup(){
         setIPhone();
     }
     
-    
-    
+
     synthSetting();
     maxSpeed = 200;
     minSpeed = 30;
@@ -99,14 +97,13 @@ void ofApp::setup(){
     .wetLevel(ControlDbToLinear().input(-16.0));
     
     BasicDelay delay = BasicDelay(0.5f, 1.0f)
-    .delayTime( 0.1f )
-    .feedback( 0.1 )
-    .dryLevel( 1.0f - 0.1 )
-    .wetLevel( 0.1 );
+    .delayTime(0.1f)
+    .feedback(0.1)
+    .dryLevel(1.0f - 0.1)
+    .wetLevel(0.1);
     
     synthMain.setOutputGen( (synth1 + synth2 + synth3 + synth4 + synth5 + synth6 + synth7) * 0.166 * 3 >> delay >> reverb );
-    
-    
+
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
@@ -140,11 +137,12 @@ void ofApp::setup(){
     lineScoreNumber = 23;
     
     touchPos.assign(2, ofVec2f());
-    
+
 //    ofxiOSSoundStream::setMixWithOtherApps(true);
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
     
 }
+
 
 
 //--------------------------------------------------------------
@@ -180,27 +178,27 @@ void ofApp::setIPad(){
     controlObjectLineWidth = 2;
     
     speedCSize = ctrlRectS;
-    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    speedCPos = ofPoint(15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5);
     bSpeedCtrl = false;
     
     thresholdCSize = ctrlRectS * 0.5;
-    thresholdCPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    thresholdCPos = ofPoint(1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5);
     bthresholdCtrl = false;
     
     intervalSize = ctrlRectS * 0.5;
-    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
+    intervalPos = ofPoint(1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5);
     bthresholdCtrl = false;
     intervalDist = 1;
     
     
     float _posIndexRight = 13.5;
     float _posIndexLeft = 2.5;
-    base4Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 1 );
-    base5Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 2.5 );
-    base6Pos = ofPoint( guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 4 );
-    base7Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 1 );
-    base8Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 2.5 );
-    base9Pos = ofPoint( guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 4 );
+    base4Pos = ofPoint(guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 1);
+    base5Pos = ofPoint(guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 2.5);
+    base6Pos = ofPoint(guideWidthStepSize * _posIndexLeft, ctrlPnY + stepBasePos * 4);
+    base7Pos = ofPoint(guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 1);
+    base8Pos = ofPoint(guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 2.5);
+    base9Pos = ofPoint(guideWidthStepSize * _posIndexRight, ctrlPnY + stepBasePos * 4);
     baseSize = ctrlRectS * 0.55;
     
     
@@ -245,14 +243,14 @@ void ofApp::setIPhone(){
     
     controlObjectLineWidth = 2;
     
-    float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85/3.0;
-    float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15/3.0;
+    float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85 / 3.0;
+    float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15 / 3.0;
     
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint( 15 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
-    speedCPos = ofPoint( screenW * 0.5, screenH * 9.2/10.0 );
-    speedCPos = ofPoint( screenW * 0.5, screenPosRightY + _secondStepPosSideControl );
+    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
+    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _secondStepPosSideControl);
     bSpeedCtrl = false;
     
     
@@ -264,7 +262,7 @@ void ofApp::setIPhone(){
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint( 1 * guideWidthStepSize, ctrlPnY + ctrlPnH * 0.5 );
     //    intervalPos = ofPoint( screenW * 0.5, screenH * 0.8/10.0 );
-    intervalPos = ofPoint( screenW * 0.5, _firstStepPosSideControl );
+    intervalPos = ofPoint(screenW * 0.5, _firstStepPosSideControl);
     bthresholdCtrl = false;
     intervalDist = 1;
     
@@ -274,13 +272,12 @@ void ofApp::setIPhone(){
     float _posIndexLeft = _secondStepPosSideControl;
     float _posIndexRight = screenPosRightY + _firstStepPosSideControl;
     
-    base4Pos = ofPoint( screenW * 3.0/4.0, _posIndexLeft );
-    base5Pos = ofPoint( screenW * 2.0/4.0, _posIndexLeft );
-    base6Pos = ofPoint( screenW * 1.0/4.0, _posIndexLeft );
-    
-    base7Pos = ofPoint( screenW * 3.0/4.0, _posIndexRight );
-    base8Pos = ofPoint( screenW * 2.0/4.0, _posIndexRight );
-    base9Pos = ofPoint( screenW * 1.0/4.0, _posIndexRight );
+    base4Pos = ofPoint(screenW * 3.0 / 4.0, _posIndexLeft);
+    base5Pos = ofPoint(screenW * 2.0 / 4.0, _posIndexLeft);
+    base6Pos = ofPoint(screenW * 1.0 / 4.0, _posIndexLeft);
+    base7Pos = ofPoint(screenW * 3.0 / 4.0, _posIndexRight);
+    base8Pos = ofPoint(screenW * 2.0 / 4.0, _posIndexRight);
+    base9Pos = ofPoint(screenW * 1.0 / 4.0, _posIndexRight);
     baseSize = ctrlRectS * 0.85;
     
     
@@ -407,13 +404,13 @@ void ofApp::triggerReceive(float & metro){
     index++;
     noteIndex = index;
     
-    trigScoreNote( scoreNote1, synth1, 1 );
-    trigScoreNote( scoreNote2, synth2, 2 );
-    trigScoreNote( scoreNote3, synth3, 3 );
-    trigScoreNote( scoreNote4, synth4, 4 );
-    trigScoreNote( scoreNote5, synth5, 5 );
-    trigScoreNote( scoreNote6, synth6, 6 );
-    trigScoreNote( scoreNote7, synth7, 7 );
+    trigScoreNote(scoreNote1, synth1, 1);
+    trigScoreNote(scoreNote2, synth2, 2);
+    trigScoreNote(scoreNote3, synth3, 3);
+    trigScoreNote(scoreNote4, synth4, 4);
+    trigScoreNote(scoreNote5, synth5, 5);
+    trigScoreNote(scoreNote6, synth6, 6);
+    trigScoreNote(scoreNote7, synth7, 7);
     
 }
 
@@ -440,27 +437,27 @@ void ofApp::drawIPad(){
     if (!bCameraCapturePlay) {
         
         if (WHITE_VIEW) {
-            ofSetColor( 255, 255 );
+            ofSetColor(255, 255);
         } else {
-            ofSetColor( 255, 150 );
+            ofSetColor(255, 150);
         }
         
-        edge.draw( 0, 0, screenW, screenW);
+        edge.draw(0, 0, screenW, screenW);
     }
     ofPopStyle();
     
     
     ofPushStyle();
     if (bCameraCapturePlay) {
-        ofSetColor( 255, 255 );
+        ofSetColor(255, 255);
         ofDrawRectangle(0, 0, screenW, screenW);
         
         if (WHITE_VIEW) {
-            ofSetColor( 255, 80 );
+            ofSetColor(255, 80);
         } else {
-            ofSetColor( 255, 120 );
+            ofSetColor(255, 120);
         }
-        bufferImg.draw( 0, 0, screenW, screenW);
+        bufferImg.draw(0, 0, screenW, screenW);
     }
     ofPopStyle();
     ofPopMatrix();
@@ -474,15 +471,15 @@ void ofApp::drawIPad(){
     ofPushStyle();
     if (bCameraCapturePlay) {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 60 );
+            ofSetColor(0, 60);
         } else {
-            ofSetColor( 255, 60 );
+            ofSetColor(255, 60);
         }
     } else {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 220 );
+            ofSetColor(0, 220);
         } else {
-            ofSetColor( 255, 160 );
+            ofSetColor(255, 160);
         }
     }
     drawTrianglePixel();
@@ -495,23 +492,23 @@ void ofApp::drawIPad(){
         //        drawPlayingShapeNotes();
         //        drawPixelAllNoteShape();
         
-        drawPixelAllNoteShapesIPad( scoreNote1, 1 );
-        drawPixelAllNoteShapesIPad( scoreNote2, 2 );
-        drawPixelAllNoteShapesIPad( scoreNote3, 3 );
-        drawPixelAllNoteShapesIPad( scoreNote4, 4 );
-        drawPixelAllNoteShapesIPad( scoreNote5, 5 );
-        drawPixelAllNoteShapesIPad( scoreNote6, 6 );
-        drawPixelAllNoteShapesIPad( scoreNote7, 7 );
+        drawPixelAllNoteShapesIPad(scoreNote1, 1);
+        drawPixelAllNoteShapesIPad(scoreNote2, 2);
+        drawPixelAllNoteShapesIPad(scoreNote3, 3);
+        drawPixelAllNoteShapesIPad(scoreNote4, 4);
+        drawPixelAllNoteShapesIPad(scoreNote5, 5);
+        drawPixelAllNoteShapesIPad(scoreNote6, 6);
+        drawPixelAllNoteShapesIPad(scoreNote7, 7);
         
         //        drawPixelShapeColorSize();
         
-        drawPlayingShapeNote( scoreNote1, 1 );
-        drawPlayingShapeNote( scoreNote2, 2 );
-        drawPlayingShapeNote( scoreNote3, 3 );
-        drawPlayingShapeNote( scoreNote4, 4 );
-        drawPlayingShapeNote( scoreNote5, 5 );
-        drawPlayingShapeNote( scoreNote6, 6 );
-        drawPlayingShapeNote( scoreNote7, 7 );
+        drawPlayingShapeNote(scoreNote1, 1);
+        drawPlayingShapeNote(scoreNote2, 2);
+        drawPlayingShapeNote(scoreNote3, 3);
+        drawPlayingShapeNote(scoreNote4, 4);
+        drawPlayingShapeNote(scoreNote5, 5);
+        drawPlayingShapeNote(scoreNote6, 6);
+        drawPlayingShapeNote(scoreNote7, 7);
         
     }
     
@@ -532,7 +529,7 @@ void ofApp::drawIPhone(){
     
     ofPushMatrix();
     ofTranslate(screenW, screenPosLeftY);
-    ofRotateZDeg( 90 );
+    ofRotateZDeg(90);
     
     
     ofPushMatrix();
@@ -541,13 +538,13 @@ void ofApp::drawIPhone(){
     if (!bCameraCapturePlay) {
         
         if (WHITE_VIEW) {
-            ofSetColor( 255, 255 );
+            ofSetColor(255, 255);
         } else {
-            ofSetColor( 255, 150 );
+            ofSetColor(255, 150);
         }
         
         ofPushMatrix();
-        edge.draw( 0, 0, iPhonePreviewSize+1, iPhonePreviewSize+1);
+        edge.draw(0, 0, iPhonePreviewSize+1, iPhonePreviewSize+1);
         ofPopMatrix();
         
     }
@@ -559,9 +556,9 @@ void ofApp::drawIPhone(){
 //        ofDrawRectangle(0, 0, iPhonePreviewSize, iPhonePreviewSize);
         
         if (WHITE_VIEW) {
-            ofSetColor( 255, 120 );
+            ofSetColor(255, 120);
         } else {
-            ofSetColor( 255, 120 );
+            ofSetColor(255, 120);
         }
         bufferImg.draw( 0, 0, iPhonePreviewSize+1, iPhonePreviewSize+1);
     }
@@ -580,15 +577,15 @@ void ofApp::drawIPhone(){
     
     if (bCameraCapturePlay) {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 120 );
+            ofSetColor(0, 120);
         } else {
-            ofSetColor( 255, 60 );
+            ofSetColor(255, 60);
         }
     } else {
         if (WHITE_VIEW) {
-            ofSetColor( 0, 220 );
+            ofSetColor(0, 220);
         } else {
-            ofSetColor( 255, 160 );
+            ofSetColor(255, 160);
         }
     }
     
@@ -605,23 +602,23 @@ void ofApp::drawIPhone(){
         //        drawPlayingShapeNotes();
         //        drawPixelAllNoteShape();
         
-        drawPixelAllNoteShapesIPhone( scoreNote1, 1 );
-        drawPixelAllNoteShapesIPhone( scoreNote2, 2 );
-        drawPixelAllNoteShapesIPhone( scoreNote3, 3 );
-        drawPixelAllNoteShapesIPhone( scoreNote4, 4 );
-        drawPixelAllNoteShapesIPhone( scoreNote5, 5 );
-        drawPixelAllNoteShapesIPhone( scoreNote6, 6 );
-        drawPixelAllNoteShapesIPhone( scoreNote7, 7 );
+        drawPixelAllNoteShapesIPhone(scoreNote1, 1);
+        drawPixelAllNoteShapesIPhone(scoreNote2, 2);
+        drawPixelAllNoteShapesIPhone(scoreNote3, 3);
+        drawPixelAllNoteShapesIPhone(scoreNote4, 4);
+        drawPixelAllNoteShapesIPhone(scoreNote5, 5);
+        drawPixelAllNoteShapesIPhone(scoreNote6, 6);
+        drawPixelAllNoteShapesIPhone(scoreNote7, 7);
         
         //        drawPixelShapeColorSize();
         
-        drawPlayingShapeNote( scoreNote1, 1 );
-        drawPlayingShapeNote( scoreNote2, 2 );
-        drawPlayingShapeNote( scoreNote3, 3 );
-        drawPlayingShapeNote( scoreNote4, 4 );
-        drawPlayingShapeNote( scoreNote5, 5 );
-        drawPlayingShapeNote( scoreNote6, 6 );
-        drawPlayingShapeNote( scoreNote7, 7 );
+        drawPlayingShapeNote(scoreNote1, 1);
+        drawPlayingShapeNote(scoreNote2, 2);
+        drawPlayingShapeNote(scoreNote3, 3);
+        drawPlayingShapeNote(scoreNote4, 4);
+        drawPlayingShapeNote(scoreNote5, 5);
+        drawPlayingShapeNote(scoreNote6, 6);
+        drawPlayingShapeNote(scoreNote7, 7);
         
     }
     
@@ -630,8 +627,8 @@ void ofApp::drawIPhone(){
     
     ofPushMatrix();
     ofPushStyle();
-    ofSetColor( 255, 255 );
-    ofDrawRectangle( 0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize );
+    ofSetColor(255, 255);
+    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
     ofPopStyle();
     ofPopMatrix();
     
@@ -642,7 +639,7 @@ void ofApp::drawIPhone(){
     ofPushMatrix();
     ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
     
-    ofRotateZDeg( 90 );
+    ofRotateZDeg(90);
     
     if (bCameraCapturePlay) {
         drawLineScoreIPhone();
@@ -662,34 +659,34 @@ void ofApp::drawControlElementIPad(){
     
     ofPushStyle();
     if (WHITE_VIEW) {
-        ofSetColor( 255 );
+        ofSetColor(255);
     } else {
-        ofSetColor( 0 );
+        ofSetColor(0);
     }
-    ofDrawRectangle( 0, ctrlPnY, ctrlPnW, ctrlPnH );
+    ofDrawRectangle(0, ctrlPnY, ctrlPnW, ctrlPnH);
     if (WHITE_VIEW) {
-        ofSetColor( 0, 10 );
+        ofSetColor(0, 10);
     } else {
-        ofSetColor( 255, 20 );
+        ofSetColor(255, 20);
     }
-    backgroundControPanel.draw( 0, ctrlPnY, ctrlPnW, 140 );
+    backgroundControPanel.draw(0, ctrlPnY, ctrlPnW, 140);
     ofPopStyle();
     
     ofPushMatrix();
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor(0, 80);
     } else {
-        ofSetColor( 255, 80 );
+        ofSetColor(255, 80);
     }
     
     float _speedX = guideWidthStepSize;
     float _yD = 20;
-    ofDrawLine( _speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
+    ofDrawLine(_speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
     
     float _thresholdX = guideWidthStepSize * 15;
-    ofDrawLine( _thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
+    ofDrawLine(_thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
     
     //    float _intervalX = guideWidthStepSize * 2.5;
     //    ofDrawLine( _intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
@@ -703,9 +700,9 @@ void ofApp::drawControlElementIPad(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, _alpha );
+        ofSetColor(0, _alpha);
     } else {
-        ofSetColor( 255, _alpha );
+        ofSetColor(255, _alpha);
     }
     ofSetCircleResolution(48);
     float _sX = speedCPos.x;
@@ -714,7 +711,7 @@ void ofApp::drawControlElementIPad(){
     
     ofSetLineWidth(controlObjectLineWidth);
     
-    ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
+    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
     
     ofPopStyle();
     
@@ -735,19 +732,19 @@ void ofApp::drawControlElementIPad(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, _alpha );
+        ofSetColor(0, _alpha);
     } else {
-        ofSetColor( 255, _alpha );
+        ofSetColor(255, _alpha);
     }
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
     
     ofSetLineWidth(controlObjectLineWidth);
     
-    ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
-    ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
-    ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
-    ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
+    ofDrawLine(_iX - intervalSize, _iY, _iX, _iY + intervalSize);
+    ofDrawLine(_iX, _iY - intervalSize, _iX + intervalSize, _iY);
+    ofDrawLine(_iX + intervalSize, _iY, _iX, _iY + intervalSize);
+    ofDrawLine(_iX, _iY - intervalSize, _iX - intervalSize, _iY);
     
     ofPopStyle();
     
@@ -755,26 +752,26 @@ void ofApp::drawControlElementIPad(){
     ofPushMatrix();
     ofPushStyle();
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor(0, 80);
     } else {
-        ofSetColor( 255, 80 );
+        ofSetColor(255, 80);
     }
     
     int _xDefaultPos = lineScoreStepX * (lineScoreNumber-1);
     
     float _xL1 = ctrlPnW * 0.5 - _xDefaultPos * 0.5;
-    ofDrawLine( _xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
+    ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
     
     float _xL2 = ctrlPnW * 0.5 + _xDefaultPos * 0.5;
-    ofDrawLine( _xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
+    ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
     
     float _xM = ctrlPnW * 0.5;
     if (WHITE_VIEW) {
-        ofSetColor( 0, 40 );
+        ofSetColor(0, 40);
     } else {
-        ofSetColor( 255, 40 );
+        ofSetColor(255, 40);
     }
-    ofDrawLine( _xM, ctrlPnY + _yD, _xM, screenH - _yD);
+    ofDrawLine(_xM, ctrlPnY + _yD, _xM, screenH - _yD);
     
     ofPopStyle();
     ofPopMatrix();
@@ -789,22 +786,22 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 255 );
+        ofSetColor(255);
     } else {
-        ofSetColor( 0 );
+        ofSetColor(0);
     }
     
-    ofDrawRectangle( 0, 0, screenW, screenPosLeftY );
-    ofDrawRectangle( 0, screenPosRightY, screenW, (screenH - screenPosRightY) );
+    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
+    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 10 );
+        ofSetColor(0, 10);
     } else {
-        ofSetColor( 255, 20 );
+        ofSetColor(255, 20);
     }
     
-    backgroundControPanel.draw( 0, screenPosLeftY, screenW, -screenPosLeftY );
-    backgroundControPanel.draw( 0, screenPosRightY, screenW, (screenH - screenPosRightY) );
+    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
+    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
     
     ofPopStyle();
     
@@ -814,17 +811,17 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 180 );
+        ofSetColor(0, 180);
     } else {
-        ofSetColor( 255, 80 );
+        ofSetColor(255, 80);
     }
     
     float _speedY = speedCPos.y;
 //    float _yD = 20;
-    ofDrawLine( screenW * 0.1, _speedY, screenW * 0.9, _speedY );
+    ofDrawLine(screenW * 0.1, _speedY, screenW * 0.9, _speedY);
     
     float _intervalY = intervalPos.y;
-    ofDrawLine( screenW * 0.1, _intervalY, screenW * 0.9, _intervalY );
+    ofDrawLine(screenW * 0.1, _intervalY, screenW * 0.9, _intervalY);
     
     ofPopStyle();
     ofPopMatrix();
@@ -835,9 +832,9 @@ void ofApp::drawControlElementIPhone(){
     
     int _alpha = 180;
     if (WHITE_VIEW) {
-        ofSetColor( 0, _alpha );
+        ofSetColor(0, _alpha);
     } else {
-        ofSetColor( 255, _alpha );
+        ofSetColor(255, _alpha);
     }
     ofSetCircleResolution(48);
     float _sX = speedCPos.x;
@@ -846,7 +843,7 @@ void ofApp::drawControlElementIPhone(){
     
     ofSetLineWidth(controlObjectLineWidth);
     
-    ofDrawCircle( _sX, _sY, speedCSize * 0.5 );
+    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
     
     ofPopStyle();
     
@@ -854,19 +851,19 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, _alpha );
+        ofSetColor(0, _alpha);
     } else {
-        ofSetColor( 255, _alpha );
+        ofSetColor(255, _alpha);
     }
     
     ofSetLineWidth(controlObjectLineWidth);
     
     float _iX = intervalPos.x;
     float _iY = intervalPos.y;
-    ofDrawLine( _iX - intervalSize, _iY, _iX, _iY + intervalSize );
-    ofDrawLine( _iX, _iY - intervalSize, _iX + intervalSize, _iY );
-    ofDrawLine( _iX + intervalSize, _iY, _iX, _iY + intervalSize );
-    ofDrawLine( _iX, _iY - intervalSize, _iX - intervalSize, _iY );
+    ofDrawLine(_iX - intervalSize, _iY, _iX, _iY + intervalSize);
+    ofDrawLine(_iX, _iY - intervalSize, _iX + intervalSize, _iY);
+    ofDrawLine(_iX + intervalSize, _iY, _iX, _iY + intervalSize);
+    ofDrawLine(_iX, _iY - intervalSize, _iX - intervalSize, _iY);
     
     ofPopStyle();
     
@@ -877,36 +874,36 @@ void ofApp::drawControlElementIPhone(){
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 40 );
+        ofSetColor(0, 40);
     } else {
-        ofSetColor( 255, 40 );
+        ofSetColor(255, 40);
     }
     
-    ofPoint _line1S = ofPoint( 0, screenPosLeftY );
-    ofPoint _line1E = ofPoint( screenW, screenPosLeftY );
-    ofDrawLine( _line1S, _line1E );
+    ofPoint _line1S = ofPoint(0, screenPosLeftY);
+    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
+    ofDrawLine(_line1S, _line1E);
 
-    ofPoint _line2S = ofPoint( 0, screenPosRightY );
-    ofPoint _line2E = ofPoint( screenW, screenPosRightY );
-    ofDrawLine( _line2S, _line2E );
+    ofPoint _line2S = ofPoint(0, screenPosRightY);
+    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
+    ofDrawLine(_line2S, _line2E);
 
-    ofPoint _lineUpS = ofPoint( screenW - iPhonePreviewSize, screenPosLeftY );
-    ofPoint _lineUpE = ofPoint( screenW - iPhonePreviewSize, screenPosRightY );
-    ofDrawLine( _lineUpS, _lineUpE );
+    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
+    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
+    ofDrawLine(_lineUpS, _lineUpE);
 
     ofPopStyle();
 
     
     ofPushStyle();
     if (WHITE_VIEW) {
-        ofSetColor( 0, 40 );
+        ofSetColor(0, 40);
     } else {
-        ofSetColor( 255, 40 );
+        ofSetColor(255, 40);
     }
     
-    ofPoint _lineMS = ofPoint( 0, (screenPosRightY + screenPosLeftY) * 0.5  );
-    ofPoint _lineME = ofPoint( screenW - iPhonePreviewSize, (screenPosRightY + screenPosLeftY) * 0.5 );
-    ofDrawLine( _lineMS, _lineME );
+    ofPoint _lineMS = ofPoint(0, (screenPosRightY + screenPosLeftY) * 0.5);
+    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize, (screenPosRightY + screenPosLeftY) * 0.5);
+    ofDrawLine(_lineMS, _lineME);
     
     ofPopStyle();
     
