@@ -3,13 +3,14 @@
 #include "ofMain.h"
 #include "ofxiOS.h"
 #include "ofxiOSExtras.h"
-//#include "ofxiOSSoundStream.h"
 
 #include "ofxCv.h"
 #include "ofxOpenCv.h"
 #include "ofxTonic.h"
 
 #include "ScaleSetting.h"
+
+#define NUM_SYNTH_LINE 7
 
 struct blackWhitePixels{
     int indexPos;
@@ -31,20 +32,14 @@ using namespace Tonic;
 
 class ofApp : public ofxiOSApp {
     
-    ofxTonicSynth synth1;
-    ofxTonicSynth synth2;
-    ofxTonicSynth synth3;
-    ofxTonicSynth synth4;
-    ofxTonicSynth synth5;
-    ofxTonicSynth synth6;
-    ofxTonicSynth synth7;
+    ofxTonicSynth synth[NUM_SYNTH_LINE];
     ofxTonicSynth synthMain;
     
-    const bool WHITE_VIEW = true;
-
+    const bool WHITE_VIEW = false;
+    
     
 public:
-
+    
     void setup();
     void update();
     void draw();
@@ -61,15 +56,13 @@ public:
     void gotMemoryWarning();
     void deviceOrientationChanged(int newOrientation);
     
-//    void audioOut(float * output, int bufferSize, int nChannels);
-
     void audioRequested (float * output, int bufferSize, int nChannels);
     void audioReceived(float * input, int bufferSize, int nChannels);
-
+    
     
     bool bPlayNote;
     bool bCameraCapturePlay;
-
+    
     
     // ofxTonic
     ofxTonicSynth createSynthVoiceIn();
@@ -81,15 +74,8 @@ public:
     void triggerReceive(float & metro);
     int index;
     int noteIndex;
-    int oldNoteIndex1;
-    int oldNoteIndex2;
-    int oldNoteIndex3;
-    int oldNoteIndex4;
-    int oldNoteIndex5;
-    int oldNoteIndex6;
-    int oldNoteIndex7;
-    void noteTrigger();
-
+    int oldNoteIndex[NUM_SYNTH_LINE];
+    
     
     // Main
     void setIPad();
@@ -130,7 +116,7 @@ public:
     //Video
     float videoGrabberW, videoGrabberH, camSize, changedCamSize;
     float cameraScreenRatio;
-
+    
     
     // Graphics
     void drawPixelNumbersCircleNotes();
@@ -143,14 +129,13 @@ public:
     void drawControlElementIPhone();
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
-    int guideWidthStepSize, guideHeightStepSize;
+    int guideWidthStep, guideHeightStep;
     int maxSpeed, minSpeed;
-    void controlGuide();
-
+    
     float stepBasePos;
     
     float ctrlRectS;
-
+    
     ofPoint speedCPos;
     float speedCSize;
     bool bSpeedCtrl;
@@ -171,15 +156,20 @@ public:
     ofPoint base7Pos;
     ofPoint base8Pos;
     ofPoint base9Pos;
+    
     float baseSize;
-    void drawShapeCeterLine(ofPoint pos, int base, int size, ofColor _c);
-    void drawShapeCeterLineColorRotation(ofPoint pos, int base, int size, ofColor color);
+    
+    void drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c);
+    void drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c);
+    
+    void drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
     void drawPixelAllNoteShape();
     void drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh );
     void drawPixelAllNoteShapesIPhone( vector<int> _vNote, int _scoreCh );
-    void drawPixelShapeColorSize();
     
+    void drawElemIntervalShape();
+    void drawElemSpeedShape();
     
     int baseSelection;
     
@@ -189,17 +179,15 @@ public:
     
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);
-
+    
     // Line Score
     void drawLineScoreIPad();
     void drawLineScoreIPhone();
-    float oldScoreNote1, oldScoreNote2, oldScoreNote3, oldScoreNote4, oldScoreNote5, oldScoreNote6, oldScoreNote7;
+    float oldScoreNote[NUM_SYNTH_LINE];
     
-    vector<int> scoreNote1, scoreNote2, scoreNote3, scoreNote4, scoreNote5, scoreNote6, scoreNote7;
+    vector<int> scoreNote[NUM_SYNTH_LINE];
     float lineScoreStepX, lineScoreStepY;
     void scoreMake();
-    void noteTrig();
-    
     
     int intervalDist;
     
@@ -226,8 +214,7 @@ public:
     bool bIPhone;
     float shiftValueIphoneY;
     
-//    ofSoundStream soundStream;
-    
+    //    ofSoundStream soundStream;
     
     float touchDownDefault;
     
@@ -236,13 +223,12 @@ public:
     float distS[2];
     float distI[2];
     
-    
-    // iPHone
+    // iPhone
     float screenPosRightY, screenPosLeftY, screenPosBottom;
     float lineScoreRightX;
     float controlObjectLineWidth;
     
-    ofColor colorVar[7];
+    ofColor colorVar[NUM_SYNTH_LINE];
     
     void drawCircle(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
     void drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
