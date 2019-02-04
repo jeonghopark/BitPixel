@@ -27,26 +27,26 @@ void ofApp::setup() {
     colorVar[6] = ofColor(142, 82, 137);
     
     backgroundColor = ofColor(13, 13, 15);
-
+    
     contourLineColor = ofColor(230, 221, 193);
     eventColor = ofColor(230, 221, 193);
     uiLineColor = ofColor(230, 221, 193);
-
+    
     
     //    colorVar[0] = ofColor(255, 199, 43);
-//    colorVar[1] = ofColor(255, 209, 53);
-//    colorVar[2] = ofColor(255, 219, 63);
-//    colorVar[3] = ofColor(255, 229, 73);
-//    colorVar[4] = ofColor(255, 239, 83);
-//    colorVar[5] = ofColor(255, 249, 93);
-//    colorVar[6] = ofColor(142, 82, 137);
-
-//    contourLineColor = ofColor(250, 231, 193);
-//    eventColor = ofColor(129, 0, 21);
-//    backgroundColor = ofColor(13, 13, 15);
-//    uiLineColor = ofColor(131, 100, 75);
-
-
+    //    colorVar[1] = ofColor(255, 209, 53);
+    //    colorVar[2] = ofColor(255, 219, 63);
+    //    colorVar[3] = ofColor(255, 229, 73);
+    //    colorVar[4] = ofColor(255, 239, 83);
+    //    colorVar[5] = ofColor(255, 249, 93);
+    //    colorVar[6] = ofColor(142, 82, 137);
+    
+    //    contourLineColor = ofColor(250, 231, 193);
+    //    eventColor = ofColor(129, 0, 21);
+    //    backgroundColor = ofColor(13, 13, 15);
+    //    uiLineColor = ofColor(131, 100, 75);
+    
+    
     
     baseSelection = 7;
     
@@ -597,7 +597,7 @@ void ofApp::drawIPhone() {
             ofSetColor(contourLineColor, 255);
         }
     }
-
+    
     drawIPhoneTrianglePixel();
     
     ofPopStyle();
@@ -845,7 +845,7 @@ void ofApp::drawElemSpeedShape() {
     //    ofNoFill();
     ofSetLineWidth(controlObjectLineWidth);
     ofDrawCircle(_sX, _sY, speedCSize * 0.5);
-
+    
     ofNoFill();
     ofSetColor(uiLineColor);
     ofDrawCircle(_sX, _sY, speedCSize * 0.5);
@@ -895,7 +895,7 @@ void ofApp::drawElemIntervalShape() {
     _meshLine.addVertex(ofPoint(_iX, _iY + intervalSize));
     _meshLine.addVertex(ofPoint(_iX - intervalSize, _iY));
     _meshLine.draw();
-
+    
     ofPopStyle();
     
 }
@@ -1454,7 +1454,7 @@ void ofApp::drawBaseInterface() {
             case 9:
                 activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
                 break;
-
+                
             default:
                 break;
         }
@@ -1621,44 +1621,44 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     ofSetLineWidth(controlObjectLineWidth);
     
-//    ofMesh _shapeM;
-//    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-//    _shapeM.addVertex( ofPoint(0, 0) );
-//    for (int i = 0; i < posLine.size(); i++) {
-//        _shapeM.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
-//    }
-//    _shapeM.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
-//    _shapeM.draw();
+    //    ofMesh _shapeM;
+    //    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+    //    _shapeM.addVertex( ofPoint(0, 0) );
+    //    for (int i = 0; i < posLine.size(); i++) {
+    //        _shapeM.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
+    //    }
+    //    _shapeM.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
+    //    _shapeM.draw();
     
     
     float _scaleMoving = floor(activeFactor) * 0.05 + 1.2;
-
+    
     if (WHITE_VIEW) {
         ofSetColor(255, 180);
     } else {
         ofSetColor(uiLineColor);
     }
     
-//    float _scale = 0;
-//    for (int j=0; j<int(activeFactor); j+=10) {
-//        _scale = j * 0.1 + 1.2;
-//
-//        ofMesh _shapeOutLine;
-//        _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-//        for (int i = 0; i < posLine.size(); i++) {
-//            _shapeOutLine.addVertex( ofPoint(posLine[i].x * _scale, posLine[i].y * _scale) );
-//        }
-//        _shapeOutLine.addVertex( ofPoint(posLine[0].x * _scale, posLine[0].y * _scale) );
-//        ofPushStyle();
-//        ofSetColor(255, j * 20);
-//        _shapeOutLine.draw();
-//        ofPopStyle();
-//    }
-
+    //    float _scale = 0;
+    //    for (int j=0; j<int(activeFactor); j+=10) {
+    //        _scale = j * 0.1 + 1.2;
+    //
+    //        ofMesh _shapeOutLine;
+    //        _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+    //        for (int i = 0; i < posLine.size(); i++) {
+    //            _shapeOutLine.addVertex( ofPoint(posLine[i].x * _scale, posLine[i].y * _scale) );
+    //        }
+    //        _shapeOutLine.addVertex( ofPoint(posLine[0].x * _scale, posLine[0].y * _scale) );
+    //        ofPushStyle();
+    //        ofSetColor(255, j * 20);
+    //        _shapeOutLine.draw();
+    //        ofPopStyle();
+    //    }
+    
     
     ofPushStyle();
     ofSetColor(_c, 220);
-
+    
     ofMesh _shapeOutMovingLine;
     _shapeOutMovingLine.setMode(OF_PRIMITIVE_LINE_STRIP);
     for (int i = 0; i < posLine.size(); i++) {
@@ -1770,13 +1770,13 @@ void ofApp::drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int siz
     
     
     ofTranslate( _pos );
-//    ofRotateZDeg( 45 );
+    //    ofRotateZDeg( 45 );
     
     ofSetLineWidth(20);
     
     ofSetColor( _color.r, _color.g, _color.b, _color.a * 0.8 );
     for (int i = 0; i < posLine.size(); i++) {
-//        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+        //        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
     }
     
     ofSetColor( _color );
