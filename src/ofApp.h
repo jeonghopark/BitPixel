@@ -161,6 +161,11 @@ public:
     
     void drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c);
     void drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c);
+
+    
+    void activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c);
+    float activeSpeed;
+    float activeFactor;
     
     void drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);

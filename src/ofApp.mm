@@ -23,18 +23,18 @@ void ofApp::setup() {
     colorVar[2] = ofColor(255, 172, 0);
     colorVar[3] = ofColor(68, 128, 173);
     colorVar[4] = ofColor(58, 193, 197);
-    colorVar[5] = ofColor(249, 154, 30);
+    colorVar[5] = ofColor(249, 154, 249);
     colorVar[6] = ofColor(142, 82, 137);
     
     baseSelection = 7;
     
     if (WHITE_VIEW) {
-        ofBackground( 255 );
+        ofBackground(255);
     } else {
-        ofBackground( 10 );
+        ofBackground(10);
     }
     
-    ofSetFrameRate( 60 );
+    ofSetFrameRate(60);
     ofEnableAlphaBlending();
     
     //    backgroundControPanel.load("controlBackground.png");
@@ -46,8 +46,8 @@ void ofApp::setup() {
         //        cam.setDesiredFrameRate(15);
         camSize = 360; // 360
     } else {
-        cam.setDeviceID( 0 );
-        cam.setup( 480, 360 );
+        cam.setDeviceID(0);
+        cam.setup(480, 360);
         cam.setDesiredFrameRate(15);
         camSize = cam.getWidth(); // 360
     }
@@ -130,6 +130,10 @@ void ofApp::setup() {
     touchPos.assign(2, ofVec2f());
     
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+    
+    
+    activeFactor = 0;
+    activeSpeed = 0.1;
     
 }
 
@@ -323,6 +327,11 @@ void ofApp::calculatePixels(ofImage _img) {
     
     if (bCameraCapturePlay) {
         noteIndex = index;
+        activeFactor += activeSpeed;
+        
+        if (activeFactor > 4) {
+            activeFactor = 0;
+        }
     } else {
         
         noteIndex = 0;
@@ -1390,6 +1399,33 @@ void ofApp::drawBaseInterface() {
     drawShapeFillColor( base8Pos, 8, baseSize, _c[4] );
     drawShapeFillColor( base9Pos, 9, baseSize, _c[5] );
     
+    if (bCameraCapturePlay) {
+        switch (baseSelection) {
+            case 4:
+                activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+                break;
+            case 5:
+                activeShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+                break;
+            case 6:
+                activeShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+                break;
+            case 7:
+                activeShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+                break;
+            case 8:
+                activeShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+                break;
+            case 9:
+                activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
+                break;
+
+            default:
+                break;
+        }
+        
+    }
+    
     ofPopMatrix();
     ofPopStyle();
     
@@ -1481,6 +1517,120 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     }
     _shapeOutLine.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
     _shapeOutLine.draw();
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+}
+
+
+
+//--------------------------------------------------------------
+void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
+    
+    ofPoint _pos = pos;
+    
+    vector<ofPoint> posLine;
+    
+    int _base = base;
+    int _size = size;
+    
+    for (int i = 0; i < _base; i++) {
+        float _sizeDegree = i * 360 / _base + 180.0;
+        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
+        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        
+        ofPoint _p = ofPoint( _x, _y );
+        posLine.push_back( _p );
+    }
+    
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate( _pos );
+    
+    if (!bIPhone) {
+        ofRotateZDeg(0);
+    } else {
+        if ( _base == 5 ) {
+            ofRotateZDeg(18);
+        } else if ( _base == 7 ) {
+            ofRotateZDeg(38.571429);
+        } else if ( _base == 8 ) {
+            ofRotateZDeg(45);
+        } else if ( _base == 9 ) {
+            ofRotateZDeg(50);
+        } else {
+            ofRotateZDeg(0);
+        }
+    }
+    
+    
+    if (WHITE_VIEW) {
+        ofSetColor( _c, 120 );
+    } else {
+        ofSetColor( _c, 120 );
+    }
+    for (int i = 0; i < posLine.size(); i++) {
+        //        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+    }
+    
+    
+    
+    if (WHITE_VIEW) {
+        ofSetColor( _c, 180 );
+    } else {
+        ofSetColor( _c, 180 );
+    }
+    
+    ofSetLineWidth(controlObjectLineWidth);
+    
+//    ofMesh _shapeM;
+//    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+//    _shapeM.addVertex( ofPoint(0, 0) );
+//    for (int i = 0; i < posLine.size(); i++) {
+//        _shapeM.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
+//    }
+//    _shapeM.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
+//    _shapeM.draw();
+    
+    
+    
+    
+    if (WHITE_VIEW) {
+        ofSetColor(255, 180);
+    } else {
+        ofSetColor(255, 60);
+    }
+    
+    float _scale = 0;
+    for (int j=0; j<4; j++) {
+        _scale = j * 0.2 + 1.2;
+
+        ofMesh _shapeOutLine;
+        _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+        for (int i = 0; i < posLine.size(); i++) {
+            _shapeOutLine.addVertex( ofPoint(posLine[i].x * _scale, posLine[i].y * _scale) );
+        }
+        _shapeOutLine.addVertex( ofPoint(posLine[0].x * _scale, posLine[0].y * _scale) );
+        _shapeOutLine.draw();
+    }
+
+    
+    ofPushStyle();
+    float _scaleMoving = floor(activeFactor) * 0.2 + 1.2;
+    ofSetColor(_c, 220);
+
+    ofMesh _shapeOutMovingLine;
+    _shapeOutMovingLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+    for (int i = 0; i < posLine.size(); i++) {
+        _shapeOutMovingLine.addVertex( ofPoint(posLine[i].x * _scaleMoving, posLine[i].y * _scaleMoving) );
+    }
+    _shapeOutMovingLine.addVertex( ofPoint(posLine[0].x * _scaleMoving, posLine[0].y * _scaleMoving) );
+    _shapeOutMovingLine.draw();
+    ofPopStyle();
+    
     
     ofPopStyle();
     ofPopMatrix();

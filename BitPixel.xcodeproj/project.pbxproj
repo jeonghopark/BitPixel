@@ -63,7 +63,6 @@
 		A080206DDA89F3B42CC45CD4 /* StereoDelay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BCDDB9FF49AEED30B3484C9F /* StereoDelay.cpp */; };
 		A5A1C66C69F171040E6BC04E /* ControlComparison.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 335B172B0B88819777FE07DD /* ControlComparison.cpp */; };
 		A73EDFAC6CB643433FB88056 /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F4F827B230E9791F94B8B16 /* Calibration.cpp */; };
-		A8D3D5632207687000834F86 /* libofxiOS_iphonesimulator_Debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8D3D5622207687000834F86 /* libofxiOS_iphonesimulator_Debug.a */; };
 		A90BD1857986C638E780E425 /* ofxCvGrayscaleImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07853DBFC70478F3562A1472 /* ofxCvGrayscaleImage.cpp */; };
 		A9D85B9BF0FB5A1B65DD3E34 /* ofxCvShortImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57BFA2AD0192A7419C5AB226 /* ofxCvShortImage.cpp */; };
 		B02424F31695B26B06225FD6 /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F05514E5F6E1647A4B797112 /* fdog.cpp */; };
@@ -460,7 +459,6 @@
 		A72E5144CF52F7371D8E070A /* cxcore.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cxcore.hpp; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv/cxcore.hpp; sourceTree = SOURCE_ROOT; };
 		A74D77E09C4E2FCC66569157 /* ControlPrinter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ControlPrinter.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/ControlPrinter.cpp; sourceTree = SOURCE_ROOT; };
 		A7D6593668F3DD12B12BFCBF /* widget_accessor.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = widget_accessor.hpp; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/viz/widget_accessor.hpp; sourceTree = SOURCE_ROOT; };
-		A8D3D5622207687000834F86 /* libofxiOS_iphonesimulator_Debug.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libofxiOS_iphonesimulator_Debug.a; path = ../../../../openFrameworks/libs/openFrameworksCompiled/lib/ios/libofxiOS_iphonesimulator_Debug.a; sourceTree = "<group>"; };
 		A8E71CC38693A0296FD270FF /* outlier_rejection.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = outlier_rejection.hpp; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/videostab/outlier_rejection.hpp; sourceTree = SOURCE_ROOT; };
 		A92E26880D0F6375798CA7FF /* objdetect_c.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = objdetect_c.h; path = ../../../../openFrameworks/addons/ofxOpenCv/libs/opencv/include/opencv2/objdetect/objdetect_c.h; sourceTree = SOURCE_ROOT; };
 		AA4F813F8FC93CFD10E41855 /* ControlCallback.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ControlCallback.cpp; path = ../../../../openFrameworks/addons/ofxTonic/src/Tonic/ControlCallback.cpp; sourceTree = SOURCE_ROOT; };
@@ -662,7 +660,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8D3D5632207687000834F86 /* libofxiOS_iphonesimulator_Debug.a in Frameworks */,
 				9969E7561C782C4500DEF0F6 /* CoreMotion.framework in Frameworks */,
 				E41D421413B3A95300A75A5D /* libofxiOS_iphoneos_Debug.a in Frameworks */,
 				901808C12053638E004A7774 /* GLKit.framework in Frameworks */,
@@ -1369,7 +1366,6 @@
 		901808C02053638E004A7774 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A8D3D5622207687000834F86 /* libofxiOS_iphonesimulator_Debug.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2026,9 +2022,9 @@
 				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
 				INFOPLIST_FILE = "ofxiOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LIBRARY_SEARCH_PATHS = ../../../../openFrameworks/libs/openFrameworksCompiled/lib/ios/;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Debug;
@@ -2048,9 +2044,9 @@
 				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
 				INFOPLIST_FILE = "ofxiOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LIBRARY_SEARCH_PATHS = ../../../../openFrameworks/libs/openFrameworksCompiled/lib/ios/;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "${TARGET_NAME}";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "$(ARCHS_STANDARD)";
 			};
 			name = Release;
