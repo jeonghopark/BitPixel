@@ -234,6 +234,11 @@ public:
     float controlObjectLineWidth;
     
     ofColor colorVar[NUM_SYNTH_LINE];
+    ofColor contourLineColor;
+    ofColor eventColor;
+    ofColor backgroundColor;
+    ofColor uiLineColor;
+    
     
     void drawCircle(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
     void drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
