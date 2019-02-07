@@ -327,6 +327,15 @@ void ofApp::update() {
         
     }
     
+    if (bCameraCapturePlay) {
+        activeSpeed = 0.6;
+        activeFactor += activeSpeed;
+        if (activeFactor > 10) {
+            activeFactor = 0;
+        }
+    } else {
+        activeSpeed = 0.0;
+    }
 }
 
 
@@ -350,11 +359,6 @@ void ofApp::calculatePixels(ofImage _img) {
     
     if (bCameraCapturePlay) {
         noteIndex = index;
-        activeFactor += 0.4;
-        
-        if (activeFactor > 10) {
-            activeFactor = 0;
-        }
     } else {
         
         noteIndex = 0;
