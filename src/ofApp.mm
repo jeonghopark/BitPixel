@@ -92,7 +92,7 @@ void ofApp::setup() {
         bIPhone = true;
         screenW = ofGetWidth();
         screenH = ofGetHeight();
-        iPhonePreviewSize = screenW * 4.0 / 5.0;
+        iPhonePreviewSize = screenW;
         debugCameraImage.load("debug_layout_cat.jpg");
         setIPhone();
     }
@@ -538,14 +538,9 @@ void ofApp::drawIPad() {
 
 
 
+
 //--------------------------------------------------------------
-void ofApp::drawIPhone() {
-    
-    ofPushMatrix();
-    ofTranslate(ofGetWidth() * 0.5 * 2, screenPosLeftY);
-    //    ofTranslate(screenW, screenPosLeftY);
-    ofRotateZDeg(90);
-    
+void ofApp::mainCameraCaptureView() {
     
     ofPushMatrix();
     
@@ -584,6 +579,7 @@ void ofApp::drawIPhone() {
     //    ofSetColor(255,230);
     //    ofDrawRectangle(0, 0, screenW, screenH);
     //    ofPopStyle();
+    
     
     
     ofPushStyle();
@@ -626,32 +622,46 @@ void ofApp::drawIPhone() {
     
     ofPopMatrix();
     
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawIPhone() {
     
     ofPushMatrix();
-    ofPushStyle();
-    if (WHITE_VIEW) {
-        ofSetColor(255, 255);
-    } else {
-        ofSetColor(backgroundColor);
-    }
-    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
-    ofPopStyle();
-    ofPopMatrix();
+    //    ofTranslate(ofGetWidth() * 0.5 * 2, screenPosLeftY);
+    //    ofTranslate(screenW, screenPosLeftY);
+    //    ofRotateZDeg(90);
     
-    
-    drawControlElementIPhone();
-    
-    
-    ofPushMatrix();
-    ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
-    ofRotateZDeg(90);
-    if (bCameraCapturePlay) {
-        drawLineScoreIPhone();
-    }
-    ofPopMatrix();
-    
-    
-    drawBaseInterface();
+    mainCameraCaptureView();
+
+//
+//
+//    ofPushMatrix();
+//    ofPushStyle();
+//    if (WHITE_VIEW) {
+//        ofSetColor(255, 255);
+//    } else {
+//        ofSetColor(backgroundColor);
+//    }
+//    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
+//    ofPopStyle();
+//    ofPopMatrix();
+//
+//
+//    drawControlElementIPhone();
+//
+//
+//    ofPushMatrix();
+//    ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
+//    ofRotateZDeg(90);
+//    if (bCameraCapturePlay) {
+//        drawLineScoreIPhone();
+//    }
+//    ofPopMatrix();
+//
+//
+//    drawBaseInterface();
     
     
 }

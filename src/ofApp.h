@@ -86,6 +86,7 @@ public:
     
     float iPhonePreviewSize;
     
+    void mainCameraCaptureView();
     
     ofImage debugCameraImage;
     
