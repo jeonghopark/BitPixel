@@ -251,7 +251,7 @@ void ofApp::setIPhone() {
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStep = 96 / _widthDefault * _sizeF;
     guideHeightStep = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = (screenW * 0.085) / _widthDefault * _sizeF;
+    lineScoreStepX = screenW / 21.0;
     lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;
     //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
@@ -540,7 +540,7 @@ void ofApp::drawIPad() {
 
 
 //--------------------------------------------------------------
-void ofApp::mainCameraCaptureView() {
+void ofApp::mainCameraCaptureViewiPhone() {
     
     ofPushMatrix();
     
@@ -625,6 +625,7 @@ void ofApp::mainCameraCaptureView() {
 }
 
 
+
 //--------------------------------------------------------------
 void ofApp::drawIPhone() {
     
@@ -633,7 +634,7 @@ void ofApp::drawIPhone() {
     //    ofTranslate(screenW, screenPosLeftY);
     //    ofRotateZDeg(90);
     
-    mainCameraCaptureView();
+    mainCameraCaptureViewiPhone();
 
 //
 //
@@ -652,14 +653,17 @@ void ofApp::drawIPhone() {
 //    drawControlElementIPhone();
 //
 //
+
+    
 //    ofPushMatrix();
 //    ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
 //    ofRotateZDeg(90);
-//    if (bCameraCapturePlay) {
-//        drawLineScoreIPhone();
-//    }
+    if (bCameraCapturePlay) {
+        drawLineScoreIPhone();
+    }
 //    ofPopMatrix();
-//
+
+    //
 //
 //    drawBaseInterface();
     
@@ -1275,9 +1279,9 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
     
     if (_scoreNote.size() > 0) {
         
-        drawCircle(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawCircle(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
         
-        drawLine(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawLine(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
         
     }
     
@@ -1288,17 +1292,9 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
 //--------------------------------------------------------------
 void ofApp::drawLineScoreIPhone() {
     
-    int _xNumber = lineScoreNumber;
-    float _stepX = lineScoreStepX;
-    float _stepY = lineScoreStepY;
-    int _offsetNote = screenW * 0.0875;
-    int _offsetXPos = _stepX * (_xNumber - 1);
-    
-    
     ofPushMatrix();
     
-    ofTranslate( screenH * 0.5 - _offsetXPos * 0.5, ctrlPnY + (127 * _stepY) - _offsetNote );
-    
+    ofTranslate(0, iPhonePreviewSize);
     
     ofPushStyle();
     if (WHITE_VIEW) {
@@ -1324,7 +1320,7 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ) {
     int _middle = _xNumber * 0.5;
     float _stepX = lineScoreStepX;
     float _stepY = lineScoreStepY;
-    int _offsetNote = screenW * 0.0875;
+    int _offsetNote = 0;
     int _offsetXPos = _stepX * (_xNumber - 1);
     
     vector<int> _scoreNote = _vNote;
@@ -1335,17 +1331,19 @@ void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ) {
     ofColor _c = colorVar[_scoreCh - 1];
     
     if (_scoreNote.size() > 0) {
-        drawCircle(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
-        drawLine(_c, _xNumber, _middle, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawCircle(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawLine(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
     }
     
 }
 
 
 //--------------------------------------------------------------
-void ofApp::drawCircle(ofColor _cIn, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
+void ofApp::drawCircle(ofColor _cIn, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
     
     int _size = 3;
+    
+    int _middle = _xNumber * 0.5;
     
     ofPushStyle();
     
@@ -1361,7 +1359,7 @@ void ofApp::drawCircle(ofColor _cIn, int _xNumber, int _middle,  vector<int> _sc
         int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
         
         float _x1 = _offsetXPos - i * _stepX;
-        float _y1 = _offsetNote - _scaledNote * _stepY;
+        float _y1 = _scaledNote * _stepY;
         
         ofColor _c = _cIn;
         if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
@@ -1386,8 +1384,10 @@ void ofApp::drawCircle(ofColor _cIn, int _xNumber, int _middle,  vector<int> _sc
 
 
 //--------------------------------------------------------------
-void ofApp::drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
+void ofApp::drawLine(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
     
+    int _middle = _xNumber * 0.5;
+
     ofPushStyle();
     ofSetColor( _c, 160 );
     
@@ -1406,13 +1406,13 @@ void ofApp::drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreN
         int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
         
         float _x1 = _offsetXPos - i * _stepX;
-        float _y1 = _offsetNote - _noteSScaled * _stepY;
+        float _y1 = _noteSScaled * _stepY;
         float _x2 = _offsetXPos - (i + 1) * _stepX;
-        float _y2 = _offsetNote - _noteEScaled * _stepY;
+        float _y2 = _noteEScaled * _stepY;
         
         if ((abs(_noteEScaled - _noteSScaled) >= intervalDist) && abs(_noteEOldScaled - _noteEScaled) >= intervalDist) {
             if (_noteS > 0 && _noteE > 0) {
-                if (_y1 < 0 && _y2 < 0) {
+                if (_y1 > 0 && _y2 > 0) {
                     ofDrawLine(_x1, _y1, _x2, _y2);
                 }
             }

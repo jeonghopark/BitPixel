@@ -86,7 +86,7 @@ public:
     
     float iPhonePreviewSize;
     
-    void mainCameraCaptureView();
+    void mainCameraCaptureViewiPhone();
     
     ofImage debugCameraImage;
     
@@ -241,8 +241,8 @@ public:
     ofColor uiLineColor;
     
     
-    void drawCircle(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
-    void drawLine(ofColor _c, int _xNumber, int _middle,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
+    void drawCircle(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
+    void drawLine(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
     
     
     void calculatePixels(ofImage _img);
