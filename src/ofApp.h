@@ -241,8 +241,8 @@ public:
     ofColor uiLineColor;
     
     
-    void drawCircle(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
-    void drawLine(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _xDefaultPos, int _defaultNote);
+    void drawCircle(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int xDefaultPos);
+    void drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int xDefaultPos);
     
     
     void calculatePixels(ofImage _img);

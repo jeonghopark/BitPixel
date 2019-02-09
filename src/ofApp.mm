@@ -1264,10 +1264,10 @@ void ofApp::drawLineScoreIPad() {
 void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
     
     int _xNumber = lineScoreNumber;
-    int _middle = _xNumber * 0.5;
+//    int _middle = _xNumber * 0.5;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
-    int _offsetNote = 56;
+//    int _offsetNote = 56;
     int _offsetXPos = _stepX * (_xNumber - 1);
     
     vector<int> _scoreNote = _vNote;
@@ -1279,9 +1279,9 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
     
     if (_scoreNote.size() > 0) {
         
-        drawCircle(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawCircle(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos);
         
-        drawLine(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+        drawLine(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos);
         
     }
     
@@ -1314,60 +1314,59 @@ void ofApp::drawLineScoreIPhone() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawScoreCircleLineIPhone( vector<int> _vNote, int _scoreCh ) {
+void ofApp::drawScoreCircleLineIPhone(vector<int> vNote, int scoreCh) {
     
-    int _xNumber = lineScoreNumber;
-    int _middle = _xNumber * 0.5;
-    float _stepX = lineScoreStepX;
-    float _stepY = lineScoreStepY;
-    int _offsetNote = 0;
-    int _offsetXPos = _stepX * (_xNumber - 1);
+//    int _xNumber = lineScoreNumber;
+//    int _middle = _xNumber * 0.5;
+//    float _stepX = lineScoreStepX;
+//    float _stepY = lineScoreStepY;
+//    int _offsetNote = 0;
+    int _offsetXPos = lineScoreStepX * (lineScoreNumber - 1);
     
-    vector<int> _scoreNote = _vNote;
+//    vector<int> _scoreNote = vNote;
     
-    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
+    //    float _h = ofMap( scoreCh, 1, 7, 0, 255 );
     //    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
     
-    ofColor _c = colorVar[_scoreCh - 1];
+    ofColor _c = colorVar[scoreCh - 1];
     
-    if (_scoreNote.size() > 0) {
-        drawCircle(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
-        drawLine(_c, _xNumber, _scoreNote, _stepX, _stepY, _scoreCh, _offsetXPos, _offsetNote);
+    if (vNote.size() > 0) {
+        drawCircle(_c, lineScoreNumber, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
+        drawLine(_c, lineScoreNumber, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
     }
     
 }
 
 
 //--------------------------------------------------------------
-void ofApp::drawCircle(ofColor _cIn, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
+void ofApp::drawCircle(ofColor cIn, int xNumber, vector<int> scoreNote, float stepX, float stepY, int scoreCh, int offsetXPos) {
     
-    int _size = 3;
-    
-    int _middle = _xNumber * 0.5;
+    int _middle = xNumber * 0.5;
     
     ofPushStyle();
     
-    for (int i = 0; i < _xNumber; i++) {
+    for (int i = 0; i < xNumber; i++) {
         
         int _idLoopLine = ((i + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
-        int _idLoopLineOld = ((i + 1 + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
+        int _idLoopLinePrev = ((i + 1 + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
         
-        int _note = _scoreNote[_idLoopLine];
-        int _noteOld = _scoreNote[_idLoopLineOld];
+        int _note = scoreNote[_idLoopLine];
+        int _notePrev = scoreNote[_idLoopLinePrev];
         
-        int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-        int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        int _scaledNote = scaleSetting.noteSelector(baseSelection, scoreCh, _note);
+        int _scaledNotePrev = scaleSetting.noteSelector(baseSelection, scoreCh, _notePrev);
         
-        float _x1 = _offsetXPos - i * _stepX;
-        float _y1 = _scaledNote * _stepY;
+        float _x1 = offsetXPos - i * stepX;
+        float _y1 = _scaledNote * stepY;
         
-        ofColor _c = _cIn;
-        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
+        ofColor _c = cIn;
+        int _size = 3;
+        if (abs(_scaledNotePrev - _scaledNote) >= intervalDist) {
             if (i == 11) {
-                _c = ofColor(_c);
+                _c = ofColor(cIn);
                 _size = 5;
             } else {
-                _c = ofColor(_c, 120);
+                _c = ofColor(cIn, 120);
                 _size = 3;
             }
             if (_note > 0) {
@@ -1383,32 +1382,33 @@ void ofApp::drawCircle(ofColor _cIn, int _xNumber,  vector<int> _scoreNote, floa
 }
 
 
+
 //--------------------------------------------------------------
-void ofApp::drawLine(ofColor _c, int _xNumber,  vector<int> _scoreNote, float _stepX, float _stepY, int _scoreCh, int _offsetXPos, int _offsetNote) {
+void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int offsetXPos) {
     
-    int _middle = _xNumber * 0.5;
+    int _middle = xNumber * 0.5;
 
     ofPushStyle();
-    ofSetColor( _c, 160 );
+    ofSetColor( c, 160 );
     
-    for (int i = 0; i < _xNumber - 1; i++) {
+    for (int i = 0; i < xNumber - 1; i++) {
         
         int _idLoopLineS = ((i + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
         int _idLoopLineE = ((i + 1 + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
         int _idLoopLineEOld = ((i + 2 + noteIndex - _middle) % (whitePixels.size() - 1)) + 1;
         
-        int _noteS = _scoreNote[_idLoopLineS];
-        int _noteE = _scoreNote[_idLoopLineE];
-        int _noteEOld = _scoreNote[_idLoopLineEOld];
+        int _noteS = scoreNote[_idLoopLineS];
+        int _noteE = scoreNote[_idLoopLineE];
+        int _noteEOld = scoreNote[_idLoopLineEOld];
         
-        int _noteSScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteS);
-        int _noteEScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteE);
-        int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteEOld);
+        int _noteSScaled = scaleSetting.noteSelector(baseSelection, scoreCh, _noteS);
+        int _noteEScaled = scaleSetting.noteSelector(baseSelection, scoreCh, _noteE);
+        int _noteEOldScaled = scaleSetting.noteSelector(baseSelection, scoreCh, _noteEOld);
         
-        float _x1 = _offsetXPos - i * _stepX;
-        float _y1 = _noteSScaled * _stepY;
-        float _x2 = _offsetXPos - (i + 1) * _stepX;
-        float _y2 = _noteEScaled * _stepY;
+        float _x1 = offsetXPos - i * stepX;
+        float _y1 = _noteSScaled * stepY;
+        float _x2 = offsetXPos - (i + 1) * stepX;
+        float _y2 = _noteEScaled * stepY;
         
         if ((abs(_noteEScaled - _noteSScaled) >= intervalDist) && abs(_noteEOldScaled - _noteEScaled) >= intervalDist) {
             if (_noteS > 0 && _noteE > 0) {
