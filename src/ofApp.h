@@ -251,6 +251,12 @@ public:
     void iPhoneTouchDown(ofTouchEventArgs & touch);
     void iPadTouchDown(ofTouchEventArgs & touch);
 
+    void iPhoneTouchMoved(ofTouchEventArgs & touch);
+    void iPadTouchMoved(ofTouchEventArgs & touch);
+
+    void iPhoneTouchUp(ofTouchEventArgs & touch);
+    void iPadTouchUp(ofTouchEventArgs & touch);
+
 };
 
 
