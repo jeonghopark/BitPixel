@@ -257,6 +257,20 @@ public:
     void iPhoneTouchUp(ofTouchEventArgs & touch);
     void iPadTouchUp(ofTouchEventArgs & touch);
 
+    
+    void menuImgSetup();
+    void menuImgDraw();
+    
+    ofRectangle composingMode;
+    ofImage capture;
+    
+    ofRectangle libaryImport;
+    ofImage importImg;
+    
+    ofRectangle cameraChange;
+    ofImage changeCamera;
+
+
 };
 
 

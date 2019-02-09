@@ -157,7 +157,35 @@ void ofApp::setup() {
     activeFactor = 0;
     activeSpeed = 0.1;
     
+    
+
+    menuImgSetup();
+    
+    
 }
+
+
+
+
+//--------------------------------------------------------------
+void ofApp::menuImgSetup() {
+    
+    capture.load("capture.png");
+    float _scaleCapture = 0.05;
+    composingMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
+    
+    importImg.load("photoLibrary.png");
+    float _scaleImport = 0.05;
+    libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
+    
+    
+    changeCamera.load("cameraChange.png");
+    float _scaleChange = 0.05;
+    cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.9, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
+    
+}
+
+
 
 
 
@@ -629,7 +657,7 @@ void ofApp::mainCameraCaptureViewiPhone() {
 //--------------------------------------------------------------
 void ofApp::drawIPhone() {
     
-    ofPushMatrix();
+//    ofPushMatrix();
     //    ofTranslate(ofGetWidth() * 0.5 * 2, screenPosLeftY);
     //    ofTranslate(screenW, screenPosLeftY);
     //    ofRotateZDeg(90);
@@ -667,10 +695,20 @@ void ofApp::drawIPhone() {
 //
 //    drawBaseInterface();
     
-    
+    menuImgDraw();
+
 }
 
 
+
+//--------------------------------------------------------------
+void ofApp::menuImgDraw() {
+    
+    capture.draw(composingMode);
+    importImg.draw(libaryImport);
+    changeCamera.draw(cameraChange);
+    
+}
 
 
 //--------------------------------------------------------------
@@ -2198,9 +2236,10 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
 //--------------------------------------------------------------
 void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
-    ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
     touchPos[touch.id] = _chgdTouch;
+    
     if (bSpeedCtrl) {
         float _minX = screenW * 0.1;
         float _maxX = screenW * 0.9;
@@ -2210,18 +2249,6 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             synthMain.setParameter("tempo", _tempo);
         }
     }
-    
-    //        if (bthresholdCtrl) {
-    //            float _minY = ctrlPnY + speedCSize * 0.75;
-    //            float _maxY = screenH - speedCSize * 0.75;
-    //
-    //            if ((_chgdTouch.y>_minY)&&(_chgdTouch.y<_maxY)) {
-    //                thresholdCPos.y = _chgdTouch.y;
-    //                float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
-    //                grayThreshold = _threshold;
-    //            }
-    //        }
-    
     
     if (bInterval) {
         float _minX = screenW * 0.1;
@@ -2233,50 +2260,11 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
         }
     }
     
-    
-    
     if ( touch.id == 0 ) {
-        
-        //        if (bSpeedCtrl) {
-        //            float _minY = ctrlPnY + speedCSize * 0.75;
-        //            float _maxY = screenH - speedCSize * 0.75;
-        //
-        //            if ((_chgdTouch.y>_minY)&&(_chgdTouch.y<_maxY)) {
-        //                speedCPos.y = _chgdTouch.y;
-        //                float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
-        //                synthMain.setParameter("tempo", _tempo);
-        //            }
-        //
-        //        }
-        //
-        ////        if (bthresholdCtrl) {
-        ////            float _minY = ctrlPnY + speedCSize * 0.75;
-        ////            float _maxY = screenH - speedCSize * 0.75;
-        ////
-        ////            if ((_chgdTouch.y>_minY)&&(_chgdTouch.y<_maxY)) {
-        ////                thresholdCPos.y = _chgdTouch.y;
-        ////                float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 255, 0);
-        ////                grayThreshold = _threshold;
-        ////            }
-        ////        }
-        //
-        //
-        //        if (bInterval) {
-        //            float _minY = ctrlPnY + speedCSize * 0.75;
-        //            float _maxY = screenH - speedCSize * 0.75;
-        //            if ((_chgdTouch.y>_minY)&&(_chgdTouch.y<_maxY)) {
-        //                intervalPos.y = _chgdTouch.y;
-        //                float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
-        //                intervalDist = _interval;
-        //            }
-        //        }
-        
         float _xL = screenPosLeftY;
         float _xR = screenPosLeftY + iPhonePreviewSize;
         if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
-            
             grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
-            
         }
         
     }
@@ -2364,11 +2352,10 @@ void ofApp::iPadTouchUp(ofTouchEventArgs & touch) {
 //--------------------------------------------------------------
 void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
  
-    ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
-    float _xL = screenPosLeftY;
-    float _xR = screenPosLeftY + iPhonePreviewSize;
-    if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
+    if ( (_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0) ) {
+    
         if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
             bCameraCapturePlay = !bCameraCapturePlay;
             //            blur(edge, 3);
@@ -2402,6 +2389,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
         }
         
     }
+    
     
     float _tolerance = 2;
     
