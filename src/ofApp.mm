@@ -1316,17 +1316,7 @@ void ofApp::drawLineScoreIPhone() {
 //--------------------------------------------------------------
 void ofApp::drawScoreCircleLineIPhone(vector<int> vNote, int scoreCh) {
     
-//    int _xNumber = lineScoreNumber;
-//    int _middle = _xNumber * 0.5;
-//    float _stepX = lineScoreStepX;
-//    float _stepY = lineScoreStepY;
-//    int _offsetNote = 0;
     int _offsetXPos = lineScoreStepX * (lineScoreNumber - 1);
-    
-//    vector<int> _scoreNote = vNote;
-    
-    //    float _h = ofMap( scoreCh, 1, 7, 0, 255 );
-    //    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
     
     ofColor _c = colorVar[scoreCh - 1];
     
@@ -1889,215 +1879,231 @@ void ofApp::exit() {
 
 
 //--------------------------------------------------------------
-void ofApp::touchDown(ofTouchEventArgs & touch) {
+void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
-    if (!bIPhone) {
+    float _tolerance = 2;
+    
+    ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    
+    touchPos[touch.id] = _chgdTouch;
+    
+    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    
+    for (int i = 0; i < 2; i++) {
         
-        float _tolerance = 2;
+        float _distS = ofDist( speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y );
+        if ( (_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
+            bSpeedCtrl = true;
+        }
         
-        ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    }
+    
+    
+    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    
+    for (int i = 0; i < 2; i++) {
+        float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
+        if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
+            bInterval = true;
+        }
         
-        touchPos[touch.id] = _chgdTouch;
+    }
+    
+    
+    if ( touch.id == 0 ) {
         
-        distS[touch.id] = ofDist( speedCPos.x, speedCPos.y, touchPos[touch.id].x, touchPos[touch.id].y );
+        //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //
+        //        if (_distS < thresholdCSize * _tolerance) {
+        //            bSpeedCtrl = true;
+        //        } else {
+        //            bSpeedCtrl = false;
+        //        }
         
-        for (int i = 0; i < 2; i++) {
+        //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
+        
+        //        if (_distT < thresholdCSize * _tolerance) {
+        //            bthresholdCtrl = true;
+        //        } else {
+        //            bthresholdCtrl = false;
+        //        }
+        
+        //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
+        //
+        //        if (_distI < intervalSize * _tolerance) {
+        //            bInterval = true;
+        //        } else {
+        //            bInterval = false;
+        //        }
+        
+        float _xL = screenPosLeftY;
+        float _xR = screenPosLeftY + iPhonePreviewSize;
+        if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
             
-            float _distS = ofDist( speedCPos.x, speedCPos.y, touchPos[i].x, touchPos[i].y );
-            if ( (_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
-                bSpeedCtrl = true;
-            }
+            grayThreshold = 120;
+            touchDownDefault = _chgdTouch.x;
             
         }
         
         
-        distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
         
-        for (int i = 0; i < 2; i++) {
-            float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
-            if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
-                bInterval = true;
-            }
-            
+    }
+    
+    float _torelanceTouchDownIPhone = 2;
+    float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
+    if ( _4BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 4;
+    }
+    
+    float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
+    if ( _5BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 5;
+    }
+    
+    float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
+    if ( _6BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 6;
+    }
+    
+    float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
+    if ( _7BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 7;
+    }
+    
+    float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
+    if ( _8BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 8;
+    }
+    
+    float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
+    if ( _9BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+        baseSelection = 9;
+    }
+    
+}
+
+
+
+
+//--------------------------------------------------------------
+void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
+
+    float _tolerance = 2;
+    
+    ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    
+    touchPos[touch.id] = _chgdTouch;
+    
+    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y, touchPos[touch.id].x, touchPos[touch.id].y );
+    
+    for (int i = 0; i < 2; i++) {
+        
+        float _distS = ofDist( speedCPos.x, speedCPos.y, touchPos[i].x, touchPos[i].y );
+        if ( (_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
+            bSpeedCtrl = true;
         }
         
-        
-        
-        
-        if ( touch.id == 0 ) {
-            
-            //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
-            //
-            //        if (_distS < thresholdCSize * _tolerance) {
-            //            bSpeedCtrl = true;
-            //        } else {
-            //            bSpeedCtrl = false;
-            //        }
-            
-            //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
-            
-            //        if (_distT < thresholdCSize * _tolerance) {
-            //            bthresholdCtrl = true;
-            //        } else {
-            //            bthresholdCtrl = false;
-            //        }
-            
-            //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
-            //
-            //        if (_distI < intervalSize * _tolerance) {
-            //            bInterval = true;
-            //        } else {
-            //            bInterval = false;
-            //        }
-            
-            if ( (_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0) ) {
-                
-                grayThreshold = 120;
-                touchDownDefault = _chgdTouch.y;
-                
-            }
-            
-            
+    }
+    
+    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    
+    for (int i = 0; i < 2; i++) {
+        float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
+        if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
+            bInterval = true;
         }
-        
-        float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
-        if ( _4BaseDist < baseSize ) {
-            baseSelection = 4;
-        }
-        
-        float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
-        if ( _5BaseDist < baseSize ) {
-            baseSelection = 5;
-        }
-        
-        float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
-        if ( _6BaseDist < baseSize ) {
-            baseSelection = 6;
-        }
-        
-        float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
-        if ( _7BaseDist < baseSize ) {
-            baseSelection = 7;
-        }
-        
-        float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
-        if ( _8BaseDist < baseSize ) {
-            baseSelection = 8;
-        }
-        
-        float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
-        if ( _9BaseDist < baseSize ) {
-            baseSelection = 9;
-        }
-        
-        
-    } else {
-        
-        float _tolerance = 2;
-        
-        ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
-        
-        touchPos[touch.id] = _chgdTouch;
-        
-        distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
-        
-        for (int i = 0; i < 2; i++) {
-            
-            float _distS = ofDist( speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y );
-            if ( (_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
-                bSpeedCtrl = true;
-            }
-            
-        }
-        
-        
-        distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
-        
-        for (int i = 0; i < 2; i++) {
-            float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
-            if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
-                bInterval = true;
-            }
-            
-        }
-        
-        
-        if ( touch.id == 0 ) {
-            
-            //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
-            //
-            //        if (_distS < thresholdCSize * _tolerance) {
-            //            bSpeedCtrl = true;
-            //        } else {
-            //            bSpeedCtrl = false;
-            //        }
-            
-            //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
-            
-            //        if (_distT < thresholdCSize * _tolerance) {
-            //            bthresholdCtrl = true;
-            //        } else {
-            //            bthresholdCtrl = false;
-            //        }
-            
-            //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
-            //
-            //        if (_distI < intervalSize * _tolerance) {
-            //            bInterval = true;
-            //        } else {
-            //            bInterval = false;
-            //        }
-            
-            float _xL = screenPosLeftY;
-            float _xR = screenPosLeftY + iPhonePreviewSize;
-            if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
-                
-                grayThreshold = 120;
-                touchDownDefault = _chgdTouch.x;
-                
-            }
-            
-            
-            
-        }
-        
-        float _torelanceTouchDownIPhone = 2;
-        float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
-        if ( _4BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 4;
-        }
-        
-        float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
-        if ( _5BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 5;
-        }
-        
-        float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
-        if ( _6BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 6;
-        }
-        
-        float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
-        if ( _7BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 7;
-        }
-        
-        float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
-        if ( _8BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 8;
-        }
-        
-        float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
-        if ( _9BaseDist < baseSize * _torelanceTouchDownIPhone ) {
-            baseSelection = 9;
-        }
-        
         
     }
     
     
     
+    
+    if ( touch.id == 0 ) {
+        
+        //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //
+        //        if (_distS < thresholdCSize * _tolerance) {
+        //            bSpeedCtrl = true;
+        //        } else {
+        //            bSpeedCtrl = false;
+        //        }
+        
+        //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
+        
+        //        if (_distT < thresholdCSize * _tolerance) {
+        //            bthresholdCtrl = true;
+        //        } else {
+        //            bthresholdCtrl = false;
+        //        }
+        
+        //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
+        //
+        //        if (_distI < intervalSize * _tolerance) {
+        //            bInterval = true;
+        //        } else {
+        //            bInterval = false;
+        //        }
+        
+        if ( (_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0) ) {
+            
+            grayThreshold = 120;
+            touchDownDefault = _chgdTouch.y;
+            
+        }
+        
+        
+    }
+
+    float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
+    if ( _4BaseDist < baseSize ) {
+        baseSelection = 4;
+    }
+    
+    float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
+    if ( _5BaseDist < baseSize ) {
+        baseSelection = 5;
+    }
+    
+    float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
+    if ( _6BaseDist < baseSize ) {
+        baseSelection = 6;
+    }
+    
+    float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
+    if ( _7BaseDist < baseSize ) {
+        baseSelection = 7;
+    }
+    
+    float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
+    if ( _8BaseDist < baseSize ) {
+        baseSelection = 8;
+    }
+    
+    float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
+    if ( _9BaseDist < baseSize ) {
+        baseSelection = 9;
+    }
 }
+
+
+
+//--------------------------------------------------------------
+void ofApp::touchDown(ofTouchEventArgs & touch) {
+    
+    if (!bIPhone) {
+        
+        iPadTouchDown(touch);
+        
+    } else {
+        
+        iPhoneTouchDown(touch);
+        
+    }
+    
+}
+
+
+
 
 //--------------------------------------------------------------
 void ofApp::touchMoved(ofTouchEventArgs & touch) {

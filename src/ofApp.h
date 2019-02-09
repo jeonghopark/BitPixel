@@ -247,6 +247,10 @@ public:
     
     void calculatePixels(ofImage _img);
     
+    
+    void iPhoneTouchDown(ofTouchEventArgs & touch);
+    void iPadTouchDown(ofTouchEventArgs & touch);
+
 };
 
 
