@@ -178,11 +178,14 @@ void ofApp::menuImgSetup() {
     float _scaleImport = 0.05;
     libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
     
-    
     changeCamera.load("cameraChange.png");
     float _scaleChange = 0.05;
     cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.9, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
-    
+
+    returnCaptureMode.load("returnCameraMode.png");
+    float _scaleReturn = 0.05;
+    returnCapture.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
+
 }
 
 
@@ -609,7 +612,8 @@ void ofApp::mainCameraCaptureViewiPhone() {
     //    ofPopStyle();
     
     
-    
+    ofPushMatrix();
+
     ofPushStyle();
     
     if (bCameraCapturePlay) {
@@ -630,7 +634,6 @@ void ofApp::mainCameraCaptureViewiPhone() {
     
     ofPopStyle();
     
-    
     if (bCameraCapturePlay) {
         
         drawPixelNumbersCircleNotes();
@@ -646,7 +649,6 @@ void ofApp::mainCameraCaptureViewiPhone() {
         //        drawPixelShapeColorSize();
         
     }
-    
     
     ofPopMatrix();
     
@@ -695,18 +697,26 @@ void ofApp::drawIPhone() {
 //
 //    drawBaseInterface();
     
-    menuImgDraw();
+    menuImgDraw(bCameraCapturePlay);
 
 }
 
 
 
 //--------------------------------------------------------------
-void ofApp::menuImgDraw() {
+void ofApp::menuImgDraw(bool playOn) {
     
-    capture.draw(composingMode);
-    importImg.draw(libaryImport);
-    changeCamera.draw(cameraChange);
+    ofPushStyle();
+    
+    if (playOn) {
+        returnCaptureMode.draw(returnCapture);
+    } else {
+        capture.draw(composingMode);
+        importImg.draw(libaryImport);
+        changeCamera.draw(cameraChange);
+    }
+    
+    ofPopStyle();
     
 }
 
@@ -1346,6 +1356,7 @@ void ofApp::drawLineScoreIPhone() {
     }
     
     ofPopStyle();
+    
     ofPopMatrix();
     
 }
@@ -2354,11 +2365,32 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
  
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
-    if ( (_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0) ) {
+//    if ( (_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0) ) {
+//
+//        if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
+//            bCameraCapturePlay = !bCameraCapturePlay;
+//            //            blur(edge, 3);
+//            bufferImg = edge;
+//
+//            if ( !bCameraCapturePlay ) {
+//                index = 0;
+//                ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
+//            } else {
+//                scoreMake();
+//                //                noteIndex = index;
+//                ofAddListener(*metroOut, this, &ofApp::triggerReceive);
+//                bPlayNote = true;
+//            }
+//
+//            grayThreshold = 120;
+//            touchDownDefault = 0;
+//        }
+//
+//    }
     
+    if (composingMode.inside(_chgdTouch)) {
         if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
             bCameraCapturePlay = !bCameraCapturePlay;
-            //            blur(edge, 3);
             bufferImg = edge;
             
             if ( !bCameraCapturePlay ) {
@@ -2374,7 +2406,6 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             grayThreshold = 120;
             touchDownDefault = 0;
         }
-        
     }
     
     

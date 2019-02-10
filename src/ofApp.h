@@ -259,7 +259,7 @@ public:
 
     
     void menuImgSetup();
-    void menuImgDraw();
+    void menuImgDraw(bool playOn);
     
     ofRectangle composingMode;
     ofImage capture;
@@ -270,6 +270,8 @@ public:
     ofRectangle cameraChange;
     ofImage changeCamera;
 
+    ofRectangle returnCapture;
+    ofImage returnCaptureMode;
 
 };
 
