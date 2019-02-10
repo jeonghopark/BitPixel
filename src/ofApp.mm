@@ -696,13 +696,6 @@ void ofApp::drawIPhone() {
     
     mainCameraCaptureViewiPhone();
 
-//    drawControlElementIPhone(bCameraCapturePlay);
-//    drawBaseInterface(bCameraCapturePlay);
-
-    drawControlElementIPhone(true);
-    drawBaseInterface(true);
-
-    menuImgDraw(bCameraCapturePlay);
     
     
     // FIXME: Translate (???)
@@ -710,13 +703,23 @@ void ofApp::drawIPhone() {
     ofTranslate(0, menuAreaY);
     
     ofPushStyle();
-    ofSetColor(uiLineColor);
+    ofSetColor(uiLineColor, 180);
     ofDrawLine(0, 40 - 30 * 7, ofGetWidth(), 40 - 30 * 7);
+    ofSetColor(uiLineColor, 120);
     ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, 40 - 30 * 7);
+    ofSetColor(uiLineColor, 120);
     ofDrawLine(0, 0, ofGetWidth(), 0);
     ofPopStyle();
     
     ofPopMatrix();
+    
+    
+    //    drawControlElementIPhone(bCameraCapturePlay);
+    //    drawBaseInterface(bCameraCapturePlay);
+    drawControlElementIPhone(true);
+    drawBaseInterface(true);
+    
+    menuImgDraw(bCameraCapturePlay);
     
 }
 
