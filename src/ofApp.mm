@@ -63,8 +63,8 @@ void ofApp::setup() {
     
     
     if (TARGET_IPHONE_SIMULATOR) {
-        //        cam.setDeviceID( 0 );
-        //        cam.setup( 480, 360 );
+        //        cam.setDeviceID(0);
+        //        cam.setup(480, 360);
         //        cam.setDesiredFrameRate(15);
         camSize = 360; // 360
     } else {
@@ -294,7 +294,7 @@ void ofApp::setIPhone() {
     
     
     speedCSize = ctrlRectS * 1.4;
-    //    speedCPos = ofPoint( 15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5 );
+    //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
     speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _secondStepPosSideControl);
     bSpeedCtrl = false;
@@ -684,18 +684,9 @@ void ofApp::drawIPhone() {
 //
 //
 
-    
-//    ofPushMatrix();
-//    ofTranslate(ctrlPnH + screenW - iPhonePreviewSize + screenW * 0.234375, 0);
-//    ofRotateZDeg(90);
-    if (bCameraCapturePlay) {
-        drawLineScoreIPhone();
-    }
-//    ofPopMatrix();
+    drawLineScoreIPhone(bCameraCapturePlay);
 
-    //
-//
-//    drawBaseInterface();
+    //    drawBaseInterface();
     
     menuImgDraw(bCameraCapturePlay);
 
@@ -882,7 +873,7 @@ void ofApp::drawControlElementIPhone() {
         ofSetColor(uiLineColor);
     }
     
-    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5 );
+    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
     ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
     ofDrawLine(_lineMS, _lineME);
     
@@ -984,8 +975,8 @@ void ofApp::drawTrianglePixel() {
         for (int i = 0; i < whitePixels.size(); i++) {
             
             int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-            int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-            int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+            int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
             
             float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
             float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -994,7 +985,7 @@ void ofApp::drawTrianglePixel() {
             ofPoint _2P = ofPoint(_x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
             ofPoint _3P = ofPoint(_x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
             
-            ofDrawTriangle(_1P, _2P, _3P );
+            ofDrawTriangle(_1P, _2P, _3P);
             
         }
         
@@ -1023,8 +1014,8 @@ void ofApp::drawIPhoneTrianglePixel() {
         for (int i = 0; i < whitePixels.size(); i++) {
             
             int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-            int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-            int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+            int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
             
             float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
             float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
@@ -1033,7 +1024,7 @@ void ofApp::drawIPhoneTrianglePixel() {
             ofPoint _2P = ofPoint(_x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
             ofPoint _3P = ofPoint(_x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
             
-            ofDrawTriangle( _1P, _2P, _3P );
+            ofDrawTriangle(_1P, _2P, _3P);
             
         }
         
@@ -1048,27 +1039,27 @@ void ofApp::drawIPhoneTrianglePixel() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh ) {
+void ofApp::drawPixelAllNoteShapesIPad(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 80 );
+        ofSetColor(0, 80);
     } else {
-        ofSetColor( 255, 80 );
+        ofSetColor(255, 80);
     }
     
     for (int i = 0; i < whitePixels.size(); i++) {
         
         int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
         
         float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint( _x, _y );
+        ofPoint _p = ofPoint(_x, _y);
         
         
         int _idLoopLine = ((i) % (whitePixels.size() - 1)) + 1;
@@ -1081,10 +1072,10 @@ void ofApp::drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh ) {
         int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
         
         
-        if ( abs(_scaledNoteOld - _scaledNote) >= intervalDist ) {
+        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
             if (_note > 0) {
                 float _size = _scaledNote * pixeShapeSize;
-                drawShape( _p, baseSelection, _size );
+                drawShape(_p, baseSelection, _size);
             }
         }
         
@@ -1098,27 +1089,27 @@ void ofApp::drawPixelAllNoteShapesIPad( vector<int> _vNote, int _scoreCh ) {
 
 
 //--------------------------------------------------------------
-void ofApp::drawPixelAllNoteShapesIPhone( vector<int> _vNote, int _scoreCh ) {
+void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
     ofEnableAntiAliasing();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 50 );
+        ofSetColor(0, 50);
     } else {
-        ofSetColor( 255, 60 );
+        ofSetColor(255, 60);
     }
     
     for (int i = 0; i < whitePixels.size(); i++) {
         
         int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
         
         float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint( _x, _y );
+        ofPoint _p = ofPoint(_x, _y);
         
         
         int _idLoopLine = ((i) % (whitePixels.size() - 1)) + 1;
@@ -1131,10 +1122,10 @@ void ofApp::drawPixelAllNoteShapesIPhone( vector<int> _vNote, int _scoreCh ) {
         int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
         
         
-        if ( abs(_scaledNoteOld - _scaledNote) >= intervalDist ) {
+        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
             if (_note > 0) {
                 float _size = _scaledNote * pixeShapeSize;
-                drawShape( _p, baseSelection, _size );
+                drawShape(_p, baseSelection, _size);
             }
         }
         
@@ -1160,9 +1151,9 @@ void ofApp::drawPixelNumbersCircleNotes() {
     ofEnableAntiAliasing();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0, 120 );
+        ofSetColor(0, 120);
     } else {
-        ofSetColor( 255, 120 );
+        ofSetColor(255, 120);
     }
     
     if (whitePixels.size() > 0) {
@@ -1177,16 +1168,16 @@ void ofApp::drawPixelNumbersCircleNotes() {
             float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
             
             //            ofFill();
-            //            ofSetColor( 255, 20 );
-            //            ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
+            //            ofSetColor(255, 20);
+            //            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
             
             ofNoFill();
             if (WHITE_VIEW) {
-                ofSetColor( 0, 120 );
+                ofSetColor(0, 120);
             } else {
-                ofSetColor( eventColor, 80 );
+                ofSetColor(eventColor, 80);
             }
-            ofDrawCircle( _xS, _yS, _pixelSize * _ellipseSizeR );
+            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
             
         }
         
@@ -1206,22 +1197,22 @@ void ofApp::drawPlayingShapeNotes() {
     ofPushStyle();
     ofEnableAntiAliasing();
     if (WHITE_VIEW) {
-        ofSetColor( 0, 120 );
+        ofSetColor(0, 120);
     } else {
-        ofSetColor( 255, 120 );
+        ofSetColor(255, 120);
     }
     
     if (whitePixels.size() > 0) {
         
         int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
         
         float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint( _x, _y );
+        ofPoint _p = ofPoint(_x, _y);
         
-        drawShape( _p, baseSelection, _pixelNumbers);
+        drawShape(_p, baseSelection, _pixelNumbers);
         
     }
     
@@ -1233,25 +1224,25 @@ void ofApp::drawPlayingShapeNotes() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ) {
+void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
     
-    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-    //    ofColor _c = ofColor::fromHsb( _h, 180, 255, 180 );
+    //    float _h = ofMap(_scoreCh, 1, 7, 0, 255);
+    //    ofColor _c = ofColor::fromHsb(_h, 180, 255, 180);
     
     ofColor _c = colorVar[_scoreCh - 1];
     
     if (whitePixels.size() > 0) {
         
         int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[ _noteLoopIndex ].pixelN;
-        int _idPixels = whitePixels[ _noteLoopIndex ].indexPos - _pixelNumbers;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
         
         float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint( _x, _y );
+        ofPoint _p = ofPoint(_x, _y);
         
         int _idLoopLineOld = ((1 + noteIndex) % (whitePixels.size() - 1)) + 1;
         
@@ -1261,9 +1252,9 @@ void ofApp::drawPlayingShapeNote( vector<int> _vNote, int _scoreCh ) {
         int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
         int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
         
-        if ( abs(_scaledNoteOld - _scaledNote) >= intervalDist ) {
+        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
             if (_note > 0) {
-                //                drawShapeWithCenterlines( _p, baseSelection, _pixelNumbers);
+                //                drawShapeWithCenterlines(_p, baseSelection, _pixelNumbers);
                 
                 float _size = _scaledNote * pixeShapeSize;
                 drawShapeWithCenterlinesColorRotation(_p, baseSelection, _size, _c);
@@ -1289,13 +1280,13 @@ void ofApp::drawLineScoreIPad() {
     
     
     ofPushMatrix();
-    ofTranslate( ctrlPnW * 0.5 - _offsetXPos * 0.5, ctrlPnY + 127 * _stepY - _offsetNote );
+    ofTranslate(ctrlPnW * 0.5 - _offsetXPos * 0.5, ctrlPnY + 127 * _stepY - _offsetNote);
     
     ofPushStyle();
     if (WHITE_VIEW) {
-        ofSetColor( 0, 120 );
+        ofSetColor(0, 120);
     } else {
-        ofSetColor( 255, 120 );
+        ofSetColor(255, 120);
     }
     
     for (int i = 0; i < NUM_SYNTH_LINE; i++) {
@@ -1309,7 +1300,7 @@ void ofApp::drawLineScoreIPad() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
+void ofApp::drawScoreCircleLineIPad(vector<int> _vNote, int _scoreCh) {
     
     int _xNumber = lineScoreNumber;
 //    int _middle = _xNumber * 0.5;
@@ -1320,8 +1311,8 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
     
     vector<int> _scoreNote = _vNote;
     
-    //    float _h = ofMap( _scoreCh, 1, 7, 0, 255 );
-    //    ofColor _c = ofColor::fromHsb( _h, 255, 180, 180 );
+    //    float _h = ofMap(_scoreCh, 1, 7, 0, 255);
+    //    ofColor _c = ofColor::fromHsb(_h, 255, 180, 180);
     
     ofColor _c = colorVar[_scoreCh - 1];
     
@@ -1338,26 +1329,28 @@ void ofApp::drawScoreCircleLineIPad( vector<int> _vNote, int _scoreCh ) {
 
 
 //--------------------------------------------------------------
-void ofApp::drawLineScoreIPhone() {
+void ofApp::drawLineScoreIPhone(bool playOn) {
     
-    ofPushMatrix();
-    
-    ofTranslate(0, iPhonePreviewSize);
-    
-    ofPushStyle();
-    if (WHITE_VIEW) {
-        ofSetColor( 0, 120 );
-    } else {
-        ofSetColor( 255, 120 );
+    if (playOn) {
+        ofPushMatrix();
+        
+        ofTranslate(0, iPhonePreviewSize);
+        
+        ofPushStyle();
+        if (WHITE_VIEW) {
+            ofSetColor(0, 120);
+        } else {
+            ofSetColor(255, 120);
+        }
+        
+        for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+            drawScoreCircleLineIPhone(scoreNote[i], i + 1);
+        }
+        
+        ofPopStyle();
+        
+        ofPopMatrix();
     }
-    
-    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-        drawScoreCircleLineIPhone(scoreNote[i], i + 1);
-    }
-    
-    ofPopStyle();
-    
-    ofPopMatrix();
     
 }
 
@@ -1428,7 +1421,7 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
     int _middle = xNumber * 0.5;
 
     ofPushStyle();
-    ofSetColor( c, 160 );
+    ofSetColor(c, 160);
     
     for (int i = 0; i < xNumber - 1; i++) {
         
@@ -1473,19 +1466,19 @@ void ofApp::drawBaseInterface() {
     ofColor _c[6];
     
     for (int i = 0; i < 6; i++) {
-        if ( baseSelection == (4 + i) ) {
+        if (baseSelection == (4 + i)) {
             _c[i] = uiLineColor;
         } else {
             _c[i] = ofColor(30);
         }
     }
     
-    drawShapeFillColor( base4Pos, 4, baseSize, _c[0] );
-    drawShapeFillColor( base5Pos, 5, baseSize, _c[1] );
-    drawShapeFillColor( base6Pos, 6, baseSize, _c[2] );
-    drawShapeFillColor( base7Pos, 7, baseSize, _c[3] );
-    drawShapeFillColor( base8Pos, 8, baseSize, _c[4] );
-    drawShapeFillColor( base9Pos, 9, baseSize, _c[5] );
+    drawShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+    drawShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+    drawShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+    drawShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+    drawShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+    drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
     
     if (bCameraCapturePlay) {
         switch (baseSelection) {
@@ -1507,7 +1500,6 @@ void ofApp::drawBaseInterface() {
             case 9:
                 activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
                 break;
-                
             default:
                 break;
         }
@@ -1533,29 +1525,29 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     for (int i = 0; i < _base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
-        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
         
-        ofPoint _p = ofPoint( _x, _y );
-        posLine.push_back( _p );
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
     }
     
     
     ofPushMatrix();
     ofPushStyle();
     
-    ofTranslate( _pos );
+    ofTranslate(_pos);
     
     if (!bIPhone) {
         ofRotateZDeg(0);
     } else {
-        if ( _base == 5 ) {
+        if (_base == 5) {
             ofRotateZDeg(18);
-        } else if ( _base == 7 ) {
+        } else if (_base == 7) {
             ofRotateZDeg(38.571429);
-        } else if ( _base == 8 ) {
+        } else if (_base == 8) {
             ofRotateZDeg(45);
-        } else if ( _base == 9 ) {
+        } else if (_base == 9) {
             ofRotateZDeg(50);
         } else {
             ofRotateZDeg(0);
@@ -1563,32 +1555,32 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     }
     
     
-    if (WHITE_VIEW) {
-        ofSetColor( _c, 120 );
-    } else {
-        ofSetColor( _c, 120 );
-    }
-    for (int i = 0; i < posLine.size(); i++) {
-        //        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
-    }
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(_c, 120);
+    //    } else {
+    //        ofSetColor(_c, 120);
+    //    }
+    //    for (int i = 0; i < posLine.size(); i++) {
+    //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
+    //    }
     
     
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 180 );
+        ofSetColor(_c, 180);
     } else {
-        ofSetColor( _c, 40 );
+        ofSetColor(_c, 40);
     }
     
     ofSetLineWidth(controlObjectLineWidth);
     
     ofMesh _shapeM;
     _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    _shapeM.addVertex( ofPoint(0, 0) );
+    _shapeM.addVertex(ofPoint(0, 0));
     for (int i = 0; i < posLine.size(); i++) {
-        _shapeM.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
+        _shapeM.addVertex(ofPoint(posLine[i].x, posLine[i].y));
     }
-    _shapeM.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
+    _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
     _shapeM.draw();
     
     
@@ -1601,9 +1593,9 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     ofMesh _shapeOutLine;
     _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
     for (int i = 0; i < posLine.size(); i++) {
-        _shapeOutLine.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
+        _shapeOutLine.addVertex(ofPoint(posLine[i].x, posLine[i].y));
     }
-    _shapeOutLine.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
+    _shapeOutLine.addVertex(ofPoint(posLine[0].x, posLine[0].y));
     _shapeOutLine.draw();
     
     ofPopStyle();
@@ -1625,29 +1617,29 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     for (int i = 0; i < _base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
-        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
         
-        ofPoint _p = ofPoint( _x, _y );
-        posLine.push_back( _p );
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
     }
     
     
     ofPushMatrix();
     ofPushStyle();
     
-    ofTranslate( _pos );
+    ofTranslate(_pos);
     
     if (!bIPhone) {
         ofRotateZDeg(0);
     } else {
-        if ( _base == 5 ) {
+        if (_base == 5) {
             ofRotateZDeg(18);
-        } else if ( _base == 7 ) {
+        } else if (_base == 7) {
             ofRotateZDeg(38.571429);
-        } else if ( _base == 8 ) {
+        } else if (_base == 8) {
             ofRotateZDeg(45);
-        } else if ( _base == 9 ) {
+        } else if (_base == 9) {
             ofRotateZDeg(50);
         } else {
             ofRotateZDeg(0);
@@ -1656,31 +1648,31 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 120 );
+        ofSetColor(_c, 120);
     } else {
-        ofSetColor( _c, 120 );
+        ofSetColor(_c, 120);
     }
     for (int i = 0; i < posLine.size(); i++) {
-        //        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+        //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     }
     
     
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 180 );
+        ofSetColor(_c, 180);
     } else {
-        ofSetColor( _c, 180 );
+        ofSetColor(_c, 180);
     }
     
     ofSetLineWidth(controlObjectLineWidth);
     
     //    ofMesh _shapeM;
     //    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    //    _shapeM.addVertex( ofPoint(0, 0) );
+    //    _shapeM.addVertex(ofPoint(0, 0));
     //    for (int i = 0; i < posLine.size(); i++) {
-    //        _shapeM.addVertex( ofPoint(posLine[i].x, posLine[i].y) );
+    //        _shapeM.addVertex(ofPoint(posLine[i].x, posLine[i].y));
     //    }
-    //    _shapeM.addVertex( ofPoint(posLine[0].x, posLine[0].y) );
+    //    _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
     //    _shapeM.draw();
     
     
@@ -1699,9 +1691,9 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     //        ofMesh _shapeOutLine;
     //        _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
     //        for (int i = 0; i < posLine.size(); i++) {
-    //            _shapeOutLine.addVertex( ofPoint(posLine[i].x * _scale, posLine[i].y * _scale) );
+    //            _shapeOutLine.addVertex(ofPoint(posLine[i].x * _scale, posLine[i].y * _scale));
     //        }
-    //        _shapeOutLine.addVertex( ofPoint(posLine[0].x * _scale, posLine[0].y * _scale) );
+    //        _shapeOutLine.addVertex(ofPoint(posLine[0].x * _scale, posLine[0].y * _scale));
     //        ofPushStyle();
     //        ofSetColor(255, j * 20);
     //        _shapeOutLine.draw();
@@ -1715,9 +1707,9 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     ofMesh _shapeOutMovingLine;
     _shapeOutMovingLine.setMode(OF_PRIMITIVE_LINE_STRIP);
     for (int i = 0; i < posLine.size(); i++) {
-        _shapeOutMovingLine.addVertex( ofPoint(posLine[i].x * _scaleMoving, posLine[i].y * _scaleMoving) );
+        _shapeOutMovingLine.addVertex(ofPoint(posLine[i].x * _scaleMoving, posLine[i].y * _scaleMoving));
     }
-    _shapeOutMovingLine.addVertex( ofPoint(posLine[0].x * _scaleMoving, posLine[0].y * _scaleMoving) );
+    _shapeOutMovingLine.addVertex(ofPoint(posLine[0].x * _scaleMoving, posLine[0].y * _scaleMoving));
     _shapeOutMovingLine.draw();
     ofPopStyle();
     
@@ -1741,29 +1733,29 @@ void ofApp::drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c
     
     for (int i = 0; i < _base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
-        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
         
-        ofPoint _p = ofPoint( _x, _y );
-        posLine.push_back( _p );
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
     }
     
     
     ofPushMatrix();
     ofPushStyle();
     
-    ofTranslate( _pos );
+    ofTranslate(_pos);
     
     if (!bIPhone) {
         ofRotateZDeg(0);
     } else {
-        if ( _base == 5 ) {
+        if (_base == 5) {
             ofRotateZDeg(18);
-        } else if ( _base == 7 ) {
+        } else if (_base == 7) {
             ofRotateZDeg(38.571429);
-        } else if ( _base == 8 ) {
+        } else if (_base == 8) {
             ofRotateZDeg(45);
-        } else if ( _base == 9 ) {
+        } else if (_base == 9) {
             ofRotateZDeg(50);
         } else {
             ofRotateZDeg(0);
@@ -1771,26 +1763,26 @@ void ofApp::drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 120 );
+        ofSetColor(_c, 120);
     } else {
-        ofSetColor( _c, 60 );
+        ofSetColor(_c, 60);
     }
     for (int i = 0; i < posLine.size(); i++) {
-        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     }
     
     if (WHITE_VIEW) {
-        ofSetColor( _c, 180 );
+        ofSetColor(_c, 180);
     } else {
-        ofSetColor( _c, 180 );
+        ofSetColor(_c, 180);
     }
     
     ofSetLineWidth(controlObjectLineWidth);
     
     for (int i = 0; i < posLine.size() - 1; i++) {
-        ofDrawLine( posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y );
+        ofDrawLine(posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y);
     }
-    ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y );
+    ofDrawLine(posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y);
     
     ofPopStyle();
     ofPopMatrix();
@@ -1810,11 +1802,11 @@ void ofApp::drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int siz
     
     for (int i = 0; i < _base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
-        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
         
-        ofPoint _p = ofPoint( _x, _y );
-        posLine.push_back( _p );
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
     }
     
     
@@ -1822,21 +1814,21 @@ void ofApp::drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int siz
     ofPushStyle();
     
     
-    ofTranslate( _pos );
-    //    ofRotateZDeg( 45 );
+    ofTranslate(_pos);
+    //    ofRotateZDeg(45);
     
     ofSetLineWidth(20);
     
-    ofSetColor( _color.r, _color.g, _color.b, _color.a * 0.8 );
+    ofSetColor(_color.r, _color.g, _color.b, _color.a * 0.8);
     for (int i = 0; i < posLine.size(); i++) {
-        //        ofDrawLine( 0, 0, posLine[i].x, posLine[i].y );
+        //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     }
     
-    ofSetColor( _color );
+    ofSetColor(_color);
     for (int i = 0; i < posLine.size() - 1; i++) {
-        ofDrawLine( posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y );
+        ofDrawLine(posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y);
     }
-    ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y );
+    ofDrawLine(posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y);
     
     ofPopMatrix();
     ofPopStyle();
@@ -1858,22 +1850,21 @@ void ofApp::drawShape(ofPoint pos, int base, int size) {
     
     for (int i = 0; i < _base; i++) {
         float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad( _sizeDegree )) * _size;
-        float _y = cos(ofDegToRad( _sizeDegree )) * _size;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
         
-        ofPoint _p = ofPoint( _x, _y );
-        posLine.push_back( _p );
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
     }
-    
     
     ofPushMatrix();
     
-    ofTranslate( _pos );
+    ofTranslate(_pos);
     
     for (int i = 0; i < posLine.size() - 1; i++) {
-        ofDrawLine( posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y );
+        ofDrawLine(posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y);
     }
-    ofDrawLine( posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y );
+    ofDrawLine(posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y);
     
     ofPopMatrix();
     
@@ -1888,19 +1879,19 @@ void ofApp::debugControlPDraw() {
     ofPushStyle();
     
     if (WHITE_VIEW) {
-        ofSetColor( 0 );
+        ofSetColor(0);
     } else {
-        ofSetColor( 255 );
+        ofSetColor(255);
     }
     
     for (int i = 0; i < 15; i++) {
         float _x1 = i * guideWidthStep + guideWidthStep;
-        ofDrawLine( _x1, ctrlPnY, _x1, screenH );
+        ofDrawLine(_x1, ctrlPnY, _x1, screenH);
     }
     
     for (int j = 0; j < 7; j++) {
         float _y1 = j * guideHeightStep + guideHeightStep;
-        ofDrawLine( 0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY );
+        ofDrawLine(0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY);
     }
     
     ofPopStyle();
@@ -1909,7 +1900,7 @@ void ofApp::debugControlPDraw() {
     
     ofPushStyle();
     ofSetColor(0);
-    ofDrawBitmapString( ofToString(ofGetFrameRate(), 2), 10, screenH - 10 );
+    ofDrawBitmapString(ofToString(ofGetFrameRate(), 2), 10, screenH - 10);
     ofPopStyle();
     
 }
@@ -1936,32 +1927,32 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
-    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
         
-        float _distS = ofDist( speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y );
-        if ( (_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
+        float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
+        if ((_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
             bSpeedCtrl = true;
         }
         
     }
     
     
-    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
-        float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
-        if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
+        float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
+        if ((_distI < intervalSize * _tolerance) && bInterval == false) {
             bInterval = true;
         }
         
     }
     
     
-    if ( touch.id == 0 ) {
+    if (touch.id == 0) {
         
-        //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distS = ofDist(speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y);
         //
         //        if (_distS < thresholdCSize * _tolerance) {
         //            bSpeedCtrl = true;
@@ -1969,7 +1960,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bSpeedCtrl = false;
         //        }
         
-        //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distT = ofDist(thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y);
         
         //        if (_distT < thresholdCSize * _tolerance) {
         //            bthresholdCtrl = true;
@@ -1977,7 +1968,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bthresholdCtrl = false;
         //        }
         
-        //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distI = ofDist(intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y);
         //
         //        if (_distI < intervalSize * _tolerance) {
         //            bInterval = true;
@@ -1987,7 +1978,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         
         float _xL = screenPosLeftY;
         float _xR = screenPosLeftY + iPhonePreviewSize;
-        if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
+        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
             
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.x;
@@ -1999,33 +1990,33 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     }
     
     float _torelanceTouchDownIPhone = 2;
-    float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
-    if ( _4BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _4BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y);
+    if (_4BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 4;
     }
     
-    float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
-    if ( _5BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _5BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y);
+    if (_5BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 5;
     }
     
-    float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
-    if ( _6BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _6BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y);
+    if (_6BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 6;
     }
     
-    float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
-    if ( _7BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _7BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y);
+    if (_7BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 7;
     }
     
-    float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
-    if ( _8BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _8BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y);
+    if (_8BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 8;
     }
     
-    float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
-    if ( _9BaseDist < baseSize * _torelanceTouchDownIPhone ) {
+    float _9BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y);
+    if (_9BaseDist < baseSize * _torelanceTouchDownIPhone) {
         baseSelection = 9;
     }
     
@@ -2043,22 +2034,22 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
-    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y, touchPos[touch.id].x, touchPos[touch.id].y );
+    distS[touch.id] = ofDist(speedCPos.x, speedCPos.y, touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
         
-        float _distS = ofDist( speedCPos.x, speedCPos.y, touchPos[i].x, touchPos[i].y );
-        if ( (_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
+        float _distS = ofDist(speedCPos.x, speedCPos.y, touchPos[i].x, touchPos[i].y);
+        if ((_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
             bSpeedCtrl = true;
         }
         
     }
     
-    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
-        float _distI = ofDist( intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y );
-        if ( (_distI < intervalSize * _tolerance) && bInterval == false) {
+        float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
+        if ((_distI < intervalSize * _tolerance) && bInterval == false) {
             bInterval = true;
         }
         
@@ -2067,9 +2058,9 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
     
     
     
-    if ( touch.id == 0 ) {
+    if (touch.id == 0) {
         
-        //        float _distS = ofDist( speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distS = ofDist(speedCPos.x, speedCPos.y , _chgdTouch.x, _chgdTouch.y);
         //
         //        if (_distS < thresholdCSize * _tolerance) {
         //            bSpeedCtrl = true;
@@ -2077,7 +2068,7 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         //            bSpeedCtrl = false;
         //        }
         
-        //        float _distT = ofDist( thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distT = ofDist(thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y);
         
         //        if (_distT < thresholdCSize * _tolerance) {
         //            bthresholdCtrl = true;
@@ -2085,7 +2076,7 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         //            bthresholdCtrl = false;
         //        }
         
-        //        float _distI = ofDist( intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y );
+        //        float _distI = ofDist(intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y);
         //
         //        if (_distI < intervalSize * _tolerance) {
         //            bInterval = true;
@@ -2093,7 +2084,7 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         //            bInterval = false;
         //        }
         
-        if ( (_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0) ) {
+        if ((_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0)) {
             
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.y;
@@ -2103,33 +2094,33 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         
     }
 
-    float _4BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y );
-    if ( _4BaseDist < baseSize ) {
+    float _4BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y);
+    if (_4BaseDist < baseSize) {
         baseSelection = 4;
     }
     
-    float _5BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y );
-    if ( _5BaseDist < baseSize ) {
+    float _5BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y);
+    if (_5BaseDist < baseSize) {
         baseSelection = 5;
     }
     
-    float _6BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y );
-    if ( _6BaseDist < baseSize ) {
+    float _6BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y);
+    if (_6BaseDist < baseSize) {
         baseSelection = 6;
     }
     
-    float _7BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y );
-    if ( _7BaseDist < baseSize ) {
+    float _7BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y);
+    if (_7BaseDist < baseSize) {
         baseSelection = 7;
     }
     
-    float _8BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y );
-    if ( _8BaseDist < baseSize ) {
+    float _8BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y);
+    if (_8BaseDist < baseSize) {
         baseSelection = 8;
     }
     
-    float _9BaseDist = ofDist( _chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y );
-    if ( _9BaseDist < baseSize ) {
+    float _9BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y);
+    if (_9BaseDist < baseSize) {
         baseSelection = 9;
     }
 }
@@ -2164,9 +2155,9 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
         float _minY = ctrlPnY + speedCSize * 0.75;
         float _maxY = screenH - speedCSize * 0.75;
         
-        if ( (touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x > speedCPos.x - (ctrlPnW - speedCPos.x) ) {
+        if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x > speedCPos.x - (ctrlPnW - speedCPos.x)) {
             speedCPos.y = touchPos[touch.id].y;
-            float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
+            float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
             synthMain.setParameter("tempo", _tempo);
         }
         
@@ -2187,7 +2178,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
     if (bInterval) {
         float _minY = ctrlPnY + speedCSize * 0.75;
         float _maxY = screenH - speedCSize * 0.75;
-        if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x < intervalPos.x * 2 ) {
+        if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x < intervalPos.x * 2) {
             intervalPos.y = touchPos[touch.id].y;
             float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
             intervalDist = _interval;
@@ -2196,7 +2187,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
     
     
     
-    if ( touch.id == 0 ) {
+    if (touch.id == 0) {
         
         //        if (bSpeedCtrl) {
         //            float _minY = ctrlPnY + speedCSize * 0.75;
@@ -2204,7 +2195,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
         //
         //            if ((_chgdTouch.y>_minY)&&(_chgdTouch.y<_maxY)) {
         //                speedCPos.y = _chgdTouch.y;
-        //                float _tempo = ofMap( speedCPos.y, _minY, _maxY, maxSpeed, minSpeed );
+        //                float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
         //                synthMain.setParameter("tempo", _tempo);
         //            }
         //
@@ -2232,7 +2223,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
         //            }
         //        }
         
-        if ( (_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0) ) {
+        if ((_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0)) {
             
             grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
             
@@ -2254,9 +2245,9 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     if (bSpeedCtrl) {
         float _minX = screenW * 0.1;
         float _maxX = screenW * 0.9;
-        if ( (touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY ) {
+        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
             speedCPos.x = touchPos[touch.id].x;
-            float _tempo = ofMap( speedCPos.x, _minX, _maxX, minSpeed, maxSpeed );
+            float _tempo = ofMap(speedCPos.x, _minX, _maxX, minSpeed, maxSpeed);
             synthMain.setParameter("tempo", _tempo);
         }
     }
@@ -2264,17 +2255,17 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     if (bInterval) {
         float _minX = screenW * 0.1;
         float _maxX = screenW * 0.9;
-        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2 ) {
+        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
             intervalPos.x = touchPos[touch.id].x;
             float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
             intervalDist = _interval;
         }
     }
     
-    if ( touch.id == 0 ) {
+    if (touch.id == 0) {
         float _xL = screenPosLeftY;
         float _xR = screenPosLeftY + iPhonePreviewSize;
-        if ( (_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL) ) {
+        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
             grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
         }
         
@@ -2288,13 +2279,9 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
 void ofApp::touchMoved(ofTouchEventArgs & touch) {
     
     if (!bIPhone) {
-        
         iPadTouchMoved(touch);
-        
     } else {
-        
         iPhoneTouchMoved(touch);
-        
     }
     
 }
@@ -2307,14 +2294,13 @@ void ofApp::iPadTouchUp(ofTouchEventArgs & touch) {
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
     
-    
-    if ( (_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0) ) {
-        if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
+    if ((_chgdTouch.x > 0) && (_chgdTouch.x < ctrlPnW) && (_chgdTouch.y < ctrlPnY) && (_chgdTouch.y > 0)) {
+        if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
             //            blur(edge, 3);
             bufferImg = edge;
             
-            if ( !bCameraCapturePlay ) {
+            if (!bCameraCapturePlay) {
                 index = 0;
                 ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
             } else {
@@ -2331,11 +2317,11 @@ void ofApp::iPadTouchUp(ofTouchEventArgs & touch) {
     }
     
     
-    if ( (_chgdTouch.x < guideWidthStep * 11) && (_chgdTouch.x > guideWidthStep * 4) && (_chgdTouch.y > ctrlPnY) && (_chgdTouch.y < screenH) && bCameraCapturePlay ) {
+    if ((_chgdTouch.x < guideWidthStep * 11) && (_chgdTouch.x > guideWidthStep * 4) && (_chgdTouch.y > ctrlPnY) && (_chgdTouch.y < screenH) && bCameraCapturePlay) {
         
         bPlayNote = !bPlayNote;
         
-        if ( !bPlayNote ) {
+        if (!bPlayNote) {
             ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
         } else {
             ofAddListener(*metroOut, this, &ofApp::triggerReceive);
@@ -2347,12 +2333,12 @@ void ofApp::iPadTouchUp(ofTouchEventArgs & touch) {
     
     float _tolerance = 2;
     
-    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     if ((distS[touch.id] < thresholdCSize * _tolerance) && bSpeedCtrl == true) {
         bSpeedCtrl = false;
     }
     
-    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     if ((distI[touch.id] < intervalSize * _tolerance) && bInterval == true) {
         bInterval = false;
     }
@@ -2365,14 +2351,14 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
  
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
-//    if ( (_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0) ) {
+//    if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
 //
-//        if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
+//        if ((whitePixels.size() > 2) && (touch.id == 0)) {
 //            bCameraCapturePlay = !bCameraCapturePlay;
 //            //            blur(edge, 3);
 //            bufferImg = edge;
 //
-//            if ( !bCameraCapturePlay ) {
+//            if (!bCameraCapturePlay) {
 //                index = 0;
 //                ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
 //            } else {
@@ -2389,11 +2375,11 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
 //    }
     
     if (composingMode.inside(_chgdTouch)) {
-        if ((whitePixels.size() > 2) && ( touch.id == 0 )) {
+        if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
             bufferImg = edge;
             
-            if ( !bCameraCapturePlay ) {
+            if (!bCameraCapturePlay) {
                 index = 0;
                 ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
             } else {
@@ -2409,11 +2395,11 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     }
     
     
-    if ( (_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
+    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
         
         bPlayNote = !bPlayNote;
         
-        if ( !bPlayNote ) {
+        if (!bPlayNote) {
             ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
         } else {
             ofAddListener(*metroOut, this, &ofApp::triggerReceive);
@@ -2424,12 +2410,12 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     
     float _tolerance = 2;
     
-    distS[touch.id] = ofDist( speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     if ((distS[touch.id] < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == true) {
         bSpeedCtrl = false;
     }
     
-    distI[touch.id] = ofDist( intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y );
+    distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     if ((distI[touch.id] < intervalSize * _tolerance) && bInterval == true) {
         bInterval = false;
     }
@@ -2512,71 +2498,71 @@ void ofApp::synthSetting() {
     float _amountMod1 = 1;
     ControlGenerator _rCarrierFreq1 = ControlMidiToFreq().input(_carrierPitch1);
     ControlGenerator _rModFreq1 = _rCarrierFreq1 * 2.5;
-    Generator _modulationTone1 = SineWave().freq( _rModFreq1 ) * _rModFreq1 * _amountMod1;
+    Generator _modulationTone1 = SineWave().freq(_rModFreq1) * _rModFreq1 * _amountMod1;
     Generator _tone1 = SineWave().freq(_rCarrierFreq1 + _modulationTone1);
     ControlGenerator _envelopTrigger1 = synth[0].addParameter("trigger1");
     Generator _env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(_envelopTrigger1).legato(false);
-    synth[0].setOutputGen( _tone1 * _env1 * _volume );
+    synth[0].setOutputGen(_tone1 * _env1 * _volume);
     
     ControlParameter _carrierPitch2 = synth[1].addParameter("carrierPitch2");
     float _amountMod2 = 1;
     ControlGenerator _rCarrierFreq2 = ControlMidiToFreq().input(_carrierPitch2);
     ControlGenerator _rModFreq2 = _rCarrierFreq2 * 3.489;
-    Generator _modulationTone2 = SineWave().freq( _rModFreq2 ) * _rModFreq2 * _amountMod2;
+    Generator _modulationTone2 = SineWave().freq(_rModFreq2) * _rModFreq2 * _amountMod2;
     Generator _tone2 = SineWave().freq(_rCarrierFreq2 + _modulationTone2);
     ControlGenerator _envelopTrigger2 = synth[1].addParameter("trigger2");
     Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger2).legato(false);
-    synth[1].setOutputGen( _tone2 * _env2 * _volume );
+    synth[1].setOutputGen(_tone2 * _env2 * _volume);
     
     ControlParameter _carrierPitch3 = synth[2].addParameter("carrierPitch3");
     float _amountMod3 = 12;
     ControlGenerator _rCarrierFreq3 = ControlMidiToFreq().input(_carrierPitch3);
     ControlGenerator _rModFreq3 = _rCarrierFreq3 * 14.489;
-    Generator _modulationTone3 = SineWave().freq( _rModFreq3 ) * _rModFreq3 * _amountMod3;
+    Generator _modulationTone3 = SineWave().freq(_rModFreq3) * _rModFreq3 * _amountMod3;
     Generator _tone3 = SineWave().freq(_rCarrierFreq3 + _modulationTone3);
     ControlGenerator _envelopTrigger3 = synth[2].addParameter("trigger3");
     Generator _env3 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger3).legato(true);
-    synth[2].setOutputGen( _tone3 * _env3 * _volume );
+    synth[2].setOutputGen(_tone3 * _env3 * _volume);
     
     ControlParameter _carrierPitch4 = synth[3].addParameter("carrierPitch4");
     float _amountMod4 = 18;
     ControlGenerator _rCarrierFreq4 = ControlMidiToFreq().input(_carrierPitch4);
     ControlGenerator _rModFreq4 = _rCarrierFreq4 * 1.1;
-    Generator _modulationTone4 = SineWave().freq( _rModFreq4 ) * _rModFreq4 * _amountMod4;
+    Generator _modulationTone4 = SineWave().freq(_rModFreq4) * _rModFreq4 * _amountMod4;
     Generator _tone4 = SineWave().freq(_rCarrierFreq4 + _modulationTone4);
     ControlGenerator _envelopTrigger4 = synth[3].addParameter("trigger4");
     Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger4).legato(false);
-    synth[3].setOutputGen( _tone4 * _env4 * _volume );
+    synth[3].setOutputGen(_tone4 * _env4 * _volume);
     
     ControlParameter _carrierPitch5 = synth[4].addParameter("carrierPitch5");
     float _amountMod5 = 6;
     ControlGenerator _rCarrierFreq5 = ControlMidiToFreq().input(_carrierPitch5);
     ControlGenerator _rModFreq5 = _rCarrierFreq5 * 1.489;
-    Generator _modulationTone5 = SineWave().freq( _rModFreq5 ) * _rModFreq5 * _amountMod5;
+    Generator _modulationTone5 = SineWave().freq(_rModFreq5) * _rModFreq5 * _amountMod5;
     Generator _tone5 = SineWave().freq(_rCarrierFreq5 + _modulationTone5);
     ControlGenerator _envelopTrigger5 = synth[4].addParameter("trigger5");
     Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger5).legato(false);
-    synth[4].setOutputGen( _tone5 * _env5 * _volume );
+    synth[4].setOutputGen(_tone5 * _env5 * _volume);
     
     ControlParameter _carrierPitch6 = synth[5].addParameter("carrierPitch6");
     float _amountMod6 = 2;
     ControlGenerator _rCarrierFreq6 = ControlMidiToFreq().input(_carrierPitch6);
     ControlGenerator _rModFreq6 = _rCarrierFreq6 * 1.109;
-    Generator _modulationTone6 = SineWave().freq( _rModFreq6 ) * _rModFreq6 * _amountMod6;
+    Generator _modulationTone6 = SineWave().freq(_rModFreq6) * _rModFreq6 * _amountMod6;
     Generator _tone6 = SineWave().freq(_rCarrierFreq6 + _modulationTone6);
     ControlGenerator _envelopTrigger6 = synth[5].addParameter("trigger6");
     Generator _env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger6).legato(false);
-    synth[5].setOutputGen( _tone6 * _env6 * _volume );
+    synth[5].setOutputGen(_tone6 * _env6 * _volume);
     
     ControlParameter _carrierPitch7 = synth[6].addParameter("carrierPitch7");
     float _amountMod7 = 4;
     ControlGenerator _rCarrierFreq7 = ControlMidiToFreq().input(_carrierPitch7);
     ControlGenerator _rModFreq7 = _rCarrierFreq7 * 3.109;
-    Generator _modulationTone7 = SineWave().freq( _rModFreq7 ) * _rModFreq7 * _amountMod7;
+    Generator _modulationTone7 = SineWave().freq(_rModFreq7) * _rModFreq7 * _amountMod7;
     Generator _tone7 = SineWave().freq(_rCarrierFreq7 + _modulationTone7);
     ControlGenerator _envelopTrigger7 = synth[6].addParameter("trigger7");
     Generator _env7 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(_envelopTrigger7).legato(false);
-    synth[6].setOutputGen( _tone7 * _env7 * _volume );
+    synth[6].setOutputGen(_tone7 * _env7 * _volume);
     
 }
 
@@ -2601,8 +2587,8 @@ void ofApp::scoreMake() {
         _bitNumber.resize(NUM_SYNTH_LINE);
         
         int _indexLoop = ((i) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[ _indexLoop ].pixelN;
-        _bitNumber = convertDecimalToNBase( _pixelNumbers, baseSelection, (int)_bitNumber.size() );
+        int _pixelNumbers = whitePixels[_indexLoop].pixelN;
+        _bitNumber = convertDecimalToNBase(_pixelNumbers, baseSelection, (int)_bitNumber.size());
         
         for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             _Note[i] = _bitNumber[i];;
@@ -2625,7 +2611,7 @@ void ofApp::scoreMake() {
 
 
 //--------------------------------------------------------------
-void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh ) {
+void ofApp::trigScoreNote(vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh) {
     
     int _indexLoop = ((noteIndex) % (whitePixels.size() - 1)) + 1;
     int _indexLoopOld = ((noteIndex + 1) % (whitePixels.size() - 1)) + 1;
@@ -2643,11 +2629,11 @@ void ofApp::trigScoreNote( vector<int> _vNote, ofxTonicSynth _synthIn, int _scor
     string tName = "trigger" + ofToString(_scoreCh);
     string tPitch = "carrierPitch" + ofToString(_scoreCh);
     
-    if ( abs(_scaledNoteOld - _scaledNote) >= intervalDist ) {
+    if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
         if (_note > 0) {
             int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-            _synth.setParameter( tName, 1);
-            _synth.setParameter( tPitch, _scaledNote);
+            _synth.setParameter(tName, 1);
+            _synth.setParameter(tPitch, _scaledNote);
         }
     }
     

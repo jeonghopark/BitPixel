@@ -188,7 +188,7 @@ public:
     
     // Line Score
     void drawLineScoreIPad();
-    void drawLineScoreIPhone();
+    void drawLineScoreIPhone(bool playOn);
     float oldScoreNote[NUM_SYNTH_LINE];
     
     vector<int> scoreNote[NUM_SYNTH_LINE];
