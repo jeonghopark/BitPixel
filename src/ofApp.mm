@@ -158,7 +158,7 @@ void ofApp::setup() {
     activeSpeed = 0.1;
     
     
-
+    
     menuImgSetup();
     
     
@@ -181,11 +181,11 @@ void ofApp::menuImgSetup() {
     changeCamera.load("cameraChange.png");
     float _scaleChange = 0.05;
     cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.9, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
-
+    
     returnCaptureMode.load("returnCameraMode.png");
     float _scaleReturn = 0.05;
     returnCapture.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
-
+    
 }
 
 
@@ -266,7 +266,7 @@ void ofApp::setIPhone() {
     
     screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
     screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
-
+    
     
     lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
     
@@ -283,8 +283,8 @@ void ofApp::setIPhone() {
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStep = 96 / _widthDefault * _sizeF;
     guideHeightStep = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = screenW / 21.0;
-    lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;
+    lineScoreStepX = screenW / 21.0;  // 30.3764
+    lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;  // 1.6
     //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
     
@@ -292,14 +292,14 @@ void ofApp::setIPhone() {
     
     
     
-    float _thredSlideControlPos = ofGetWidth() * 0.15;
-    float __speedSlideControlPos = ofGetWidth() * 0.85;
-    
+    float _thredSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 1;
+    float __speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5;
+    float _controlAreaSize = ofGetHeight() - screenW;
+
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
-//    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
-//    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + __speedSlideControlPos);
-    float _controlAreaSize = ofGetHeight() - screenW;
+    //    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
+    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + __speedSlideControlPos);
     speedCPos = ofPoint(__speedSlideControlPos, screenW + _controlAreaSize * 0.5);
     speedLineLength = ofPoint(speedCPos.y - 100, speedCPos.y + 100);
     bSpeedCtrl = false;
@@ -312,7 +312,7 @@ void ofApp::setIPhone() {
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    intervalPos = ofPoint(screenW * 0.5, screenH * 0.8/10.0);
-//    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPos);
+    //    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPos);
     intervalPos = ofPoint(_thredSlideControlPos, screenW + _controlAreaSize * 0.5);
     ctrlLineLength = ofPoint(intervalPos.y - 100, intervalPos.y + 100);
     bthresholdCtrl = false;
@@ -324,8 +324,8 @@ void ofApp::setIPhone() {
     //    float _posIndexLeft = screenH * 1.84/10.0;
     //    float _posIndexRight = screenH - _posIndexLeft;
     
-    float _posIndexLeft = ofGetWidth() * 0.3;
-    float _posIndexRight = ofGetWidth() * 0.7;
+    float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 2;
+    float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4;
     
     base4Pos = ofPoint(_posIndexLeft, ofGetHeight() * 11.0 / 12.0);
     base5Pos = ofPoint(_posIndexLeft, ofGetHeight() * 10.0 / 12.0);
@@ -572,7 +572,7 @@ void ofApp::drawIPad() {
         drawLineScoreIPad();
     }
     
-    drawBaseInterface();
+    drawBaseInterface(bCameraCapturePlay);
     
 }
 
@@ -622,7 +622,7 @@ void ofApp::mainCameraCaptureViewiPhone() {
     
     
     ofPushMatrix();
-
+    
     ofPushStyle();
     
     if (bCameraCapturePlay) {
@@ -668,35 +668,54 @@ void ofApp::mainCameraCaptureViewiPhone() {
 //--------------------------------------------------------------
 void ofApp::drawIPhone() {
     
-//    ofPushMatrix();
+    //    ofPushMatrix();
     //    ofTranslate(ofGetWidth() * 0.5 * 2, screenPosLeftY);
     //    ofTranslate(screenW, screenPosLeftY);
     //    ofRotateZDeg(90);
     
+    
+    //
+    //
+    //    ofPushMatrix();
+    //    ofPushStyle();
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(255, 255);
+    //    } else {
+    //        ofSetColor(backgroundColor);
+    //    }
+    //    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
+    //    ofPopStyle();
+    //    ofPopMatrix();
+
+    
+    //FIXME: Translate (???)
+    ofPushMatrix();
+    ofTranslate(0, -40);
+
+    ofPushMatrix();
+    ofPushStyle();
+    ofSetColor(uiLineColor);
+    ofTranslate(0, screenW + 30 * 7);
+    ofDrawLine(0, 0, ofGetWidth(), 0);
+    ofPopStyle();
+    ofPopMatrix();
+    
+    drawLineScoreIPhone(bCameraCapturePlay);
+    ofPopMatrix();
+    
     mainCameraCaptureViewiPhone();
 
-//
-//
-//    ofPushMatrix();
-//    ofPushStyle();
-//    if (WHITE_VIEW) {
-//        ofSetColor(255, 255);
-//    } else {
-//        ofSetColor(backgroundColor);
-//    }
-//    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
-//    ofPopStyle();
-//    ofPopMatrix();
-
     
-    drawControlElementIPhone();
+//    drawControlElementIPhone(bCameraCapturePlay);
+//    drawBaseInterface(bCameraCapturePlay);
 
-    drawLineScoreIPhone(bCameraCapturePlay);
+    drawControlElementIPhone(true);
+    drawBaseInterface(true);
 
-    drawBaseInterface();
-    
     menuImgDraw(bCameraCapturePlay);
-
+    
+    
+    
 }
 
 
@@ -801,99 +820,102 @@ void ofApp::drawControlElementIPad() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawControlElementIPhone() {
+void ofApp::drawControlElementIPhone(bool playOn) {
     
-//    ofPushStyle();
-    
-//    if (WHITE_VIEW) {
-//        ofSetColor(255);
-//    } else {
-//        ofSetColor(backgroundColor);
-//    }
-//
-//    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
-//    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-    
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 10);
-//    } else {
-//        ofSetColor(backgroundColor);
-//    }
-//
-//    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
-//    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-//
-//    ofPopStyle();
-    
-    
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 180);
-    } else {
-        ofSetColor(uiLineColor);
+    if (playOn) {
+        
+        //    ofPushStyle();
+        
+        //    if (WHITE_VIEW) {
+        //        ofSetColor(255);
+        //    } else {
+        //        ofSetColor(backgroundColor);
+        //    }
+        //
+        //    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
+        //    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
+        
+        //    if (WHITE_VIEW) {
+        //        ofSetColor(0, 10);
+        //    } else {
+        //        ofSetColor(backgroundColor);
+        //    }
+        //
+        //    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
+        //    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
+        //
+        //    ofPopStyle();
+        
+        
+        
+        ofPushMatrix();
+        ofPushStyle();
+        
+        if (WHITE_VIEW) {
+            ofSetColor(0, 180);
+        } else {
+            ofSetColor(uiLineColor);
+        }
+        
+        //    ofDrawLine(intervalPos.x, _intervalY, intervalPos.x, _intervalY);
+        //    ofDrawLine(intervalPos.x, 0, intervalPos.x, ofGetHeight());
+        
+        //    float _intervalY = intervalPos.y;
+        ofDrawLine(intervalPos.x, ctrlLineLength.x, intervalPos.x, ctrlLineLength.y);
+        
+        //    float _speedY = speedCPos.y;
+        ofDrawLine(speedCPos.x, speedLineLength.x, speedCPos.x, speedLineLength.y);
+        
+        ofPopStyle();
+        ofPopMatrix();
+        
+        
+        
+        drawElemSpeedShape();
+        drawElemIntervalShape();
+        
+        
+        
+        //    ofPushMatrix();
+        //    ofPushStyle();
+        //
+        //    if (WHITE_VIEW) {
+        //        ofSetColor(0, 40);
+        //    } else {
+        //        ofSetColor(uiLineColor);
+        //    }
+        //
+        //    ofPoint _line1S = ofPoint(0, screenPosLeftY);
+        //    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
+        //    ofDrawLine(_line1S, _line1E);
+        //
+        //    ofPoint _line2S = ofPoint(0, screenPosRightY);
+        //    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
+        //    ofDrawLine(_line2S, _line2E);
+        //
+        //    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
+        //    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
+        //    ofDrawLine(_lineUpS, _lineUpE);
+        //
+        //    ofPopStyle();
+        
+        
+        //    ofPushStyle();
+        //    if (WHITE_VIEW) {
+        //        ofSetColor(0, 40);
+        //    } else {
+        //        ofSetColor(uiLineColor);
+        //    }
+        //
+        //    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
+        //    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
+        //    ofDrawLine(_lineMS, _lineME);
+        //
+        //    ofPopStyle();
+        
+        //    ofPopMatrix();
+        
     }
-    
-//    ofDrawLine(intervalPos.x, _intervalY, intervalPos.x, _intervalY);
-//    ofDrawLine(intervalPos.x, 0, intervalPos.x, ofGetHeight());
-
-    float _intervalY = intervalPos.y;
-    ofDrawLine(intervalPos.x, ctrlLineLength.x, intervalPos.x, ctrlLineLength.y);
-    
-    float _speedY = speedCPos.y;
-    ofDrawLine(speedCPos.x, speedLineLength.x, speedCPos.x, speedLineLength.y);
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-    
-    
-    drawElemSpeedShape();
-    drawElemIntervalShape();
-    
-    
-    
-//    ofPushMatrix();
-//    ofPushStyle();
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 40);
-//    } else {
-//        ofSetColor(uiLineColor);
-//    }
-//
-//    ofPoint _line1S = ofPoint(0, screenPosLeftY);
-//    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
-//    ofDrawLine(_line1S, _line1E);
-//
-//    ofPoint _line2S = ofPoint(0, screenPosRightY);
-//    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
-//    ofDrawLine(_line2S, _line2E);
-//
-//    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
-//    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
-//    ofDrawLine(_lineUpS, _lineUpE);
-//
-//    ofPopStyle();
-    
-    
-//    ofPushStyle();
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 40);
-//    } else {
-//        ofSetColor(uiLineColor);
-//    }
-//
-//    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
-//    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
-//    ofDrawLine(_lineMS, _lineME);
-//
-//    ofPopStyle();
-    
-//    ofPopMatrix();
-    
     
 }
 
@@ -1316,10 +1338,10 @@ void ofApp::drawLineScoreIPad() {
 void ofApp::drawScoreCircleLineIPad(vector<int> _vNote, int _scoreCh) {
     
     int _xNumber = lineScoreNumber;
-//    int _middle = _xNumber * 0.5;
+    //    int _middle = _xNumber * 0.5;
     int _stepX = lineScoreStepX;
     int _stepY = lineScoreStepY;
-//    int _offsetNote = 56;
+    //    int _offsetNote = 56;
     int _offsetXPos = _stepX * (_xNumber - 1);
     
     vector<int> _scoreNote = _vNote;
@@ -1432,7 +1454,7 @@ void ofApp::drawCircle(ofColor cIn, int xNumber, vector<int> scoreNote, float st
 void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int offsetXPos) {
     
     int _middle = xNumber * 0.5;
-
+    
     ofPushStyle();
     ofSetColor(c, 160);
     
@@ -1471,56 +1493,60 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
 
 
 //--------------------------------------------------------------
-void ofApp::drawBaseInterface() {
+void ofApp::drawBaseInterface(bool playOn) {
     
-    ofPushMatrix();
-    ofPushStyle();
-    
-    ofColor _c[6];
-    
-    for (int i = 0; i < 6; i++) {
-        if (baseSelection == (4 + i)) {
-            _c[i] = uiLineColor;
-        } else {
-            _c[i] = ofColor(30);
-        }
-    }
-    
-    drawShapeFillColor(base4Pos, 4, baseSize, _c[0]);
-    drawShapeFillColor(base5Pos, 5, baseSize, _c[1]);
-    drawShapeFillColor(base6Pos, 6, baseSize, _c[2]);
-    drawShapeFillColor(base7Pos, 7, baseSize, _c[3]);
-    drawShapeFillColor(base8Pos, 8, baseSize, _c[4]);
-    drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
-    
-    if (bCameraCapturePlay) {
-        switch (baseSelection) {
-            case 4:
-                activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
-                break;
-            case 5:
-                activeShapeFillColor(base5Pos, 5, baseSize, _c[1]);
-                break;
-            case 6:
-                activeShapeFillColor(base6Pos, 6, baseSize, _c[2]);
-                break;
-            case 7:
-                activeShapeFillColor(base7Pos, 7, baseSize, _c[3]);
-                break;
-            case 8:
-                activeShapeFillColor(base8Pos, 8, baseSize, _c[4]);
-                break;
-            case 9:
-                activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
-                break;
-            default:
-                break;
+    if (playOn) {
+        
+        ofPushMatrix();
+        ofPushStyle();
+        
+        ofColor _c[6];
+        
+        for (int i = 0; i < 6; i++) {
+            if (baseSelection == (4 + i)) {
+                _c[i] = uiLineColor;
+            } else {
+                _c[i] = ofColor(30);
+            }
         }
         
+        drawShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+        drawShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+        drawShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+        drawShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+        drawShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+        drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
+        
+        if (bCameraCapturePlay) {
+            switch (baseSelection) {
+                case 4:
+                    activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+                    break;
+                case 5:
+                    activeShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+                    break;
+                case 6:
+                    activeShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+                    break;
+                case 7:
+                    activeShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+                    break;
+                case 8:
+                    activeShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+                    break;
+                case 9:
+                    activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        
+        ofPopMatrix();
+        ofPopStyle();
+        
     }
-    
-    ofPopMatrix();
-    ofPopStyle();
     
 }
 
@@ -1551,21 +1577,21 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     ofTranslate(_pos);
     
-//    if (!bIPhone) {
-//        ofRotateZDeg(0);
-//    } else {
-//        if (_base == 5) {
-//            ofRotateZDeg(18);
-//        } else if (_base == 7) {
-//            ofRotateZDeg(38.571429);
-//        } else if (_base == 8) {
-//            ofRotateZDeg(45);
-//        } else if (_base == 9) {
-//            ofRotateZDeg(50);
-//        } else {
-//            ofRotateZDeg(0);
-//        }
-//    }
+    //    if (!bIPhone) {
+    //        ofRotateZDeg(0);
+    //    } else {
+    //        if (_base == 5) {
+    //            ofRotateZDeg(18);
+    //        } else if (_base == 7) {
+    //            ofRotateZDeg(38.571429);
+    //        } else if (_base == 8) {
+    //            ofRotateZDeg(45);
+    //        } else if (_base == 9) {
+    //            ofRotateZDeg(50);
+    //        } else {
+    //            ofRotateZDeg(0);
+    //        }
+    //    }
     
     
     //    if (WHITE_VIEW) {
@@ -2037,7 +2063,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
 
 //--------------------------------------------------------------
 void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
-
+    
     float _tolerance = 2;
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
@@ -2098,7 +2124,7 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         
         
     }
-
+    
     float _4BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y);
     if (_4BaseDist < baseSize) {
         baseSelection = 4;
@@ -2148,7 +2174,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch) {
 
 //--------------------------------------------------------------
 void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
- 
+    
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
     
     touchPos[touch.id] = _chgdTouch;
@@ -2186,7 +2212,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
         }
     }
     
-
+    
     if (touch.id == 0) {
         
         //        if (bSpeedCtrl) {
@@ -2242,15 +2268,15 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
-//    if (bSpeedCtrl) {
-//        float _minX = ofGetWidth() * 0.15;
-//        float _maxX = screenW * 0.9;
-//        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
-//            speedCPos.x = touchPos[touch.id].x;
-//            float _tempo = ofMap(speedCPos.x, _minX, _maxX, minSpeed, maxSpeed);
-//            synthMain.setParameter("tempo", _tempo);
-//        }
-//    }
+    //    if (bSpeedCtrl) {
+    //        float _minX = ofGetWidth() * 0.15;
+    //        float _maxX = screenW * 0.9;
+    //        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
+    //            speedCPos.x = touchPos[touch.id].x;
+    //            float _tempo = ofMap(speedCPos.x, _minX, _maxX, minSpeed, maxSpeed);
+    //            synthMain.setParameter("tempo", _tempo);
+    //        }
+    //    }
     
     if (bSpeedCtrl) {
         float _minY = speedLineLength.x;
@@ -2262,16 +2288,16 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
         }
     }
     
-//    if (bInterval) {
-//        float _minX = ofGetWidth() * 0.15;
-//        float _maxX = screenW * 0.9;
-//        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
-//            intervalPos.x = touchPos[touch.id].x;
-//            float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
-//            intervalDist = _interval;
-//        }
-//    }
-
+    //    if (bInterval) {
+    //        float _minX = ofGetWidth() * 0.15;
+    //        float _maxX = screenW * 0.9;
+    //        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
+    //            intervalPos.x = touchPos[touch.id].x;
+    //            float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
+    //            intervalDist = _interval;
+    //        }
+    //    }
+    
     if (bInterval) {
         float _minY = ctrlLineLength.x;
         float _maxY = ctrlLineLength.y;
@@ -2281,16 +2307,16 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             intervalDist = _interval;
         }
     }
-
     
     
-//    if (touch.id == 0) {
-//        float _xL = screenPosLeftY;
-//        float _xR = screenPosLeftY + iPhonePreviewSize;
-//        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-//            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
-//        }
-//    }
+    
+    //    if (touch.id == 0) {
+    //        float _xL = screenPosLeftY;
+    //        float _xR = screenPosLeftY + iPhonePreviewSize;
+    //        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+    //            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
+    //        }
+    //    }
     
     
 }
@@ -2371,31 +2397,31 @@ void ofApp::iPadTouchUp(ofTouchEventArgs & touch) {
 
 //--------------------------------------------------------------
 void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
- 
+    
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
-//    if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
-//
-//        if ((whitePixels.size() > 2) && (touch.id == 0)) {
-//            bCameraCapturePlay = !bCameraCapturePlay;
-//            //            blur(edge, 3);
-//            bufferImg = edge;
-//
-//            if (!bCameraCapturePlay) {
-//                index = 0;
-//                ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
-//            } else {
-//                scoreMake();
-//                //                noteIndex = index;
-//                ofAddListener(*metroOut, this, &ofApp::triggerReceive);
-//                bPlayNote = true;
-//            }
-//
-//            grayThreshold = 120;
-//            touchDownDefault = 0;
-//        }
-//
-//    }
+    //    if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
+    //
+    //        if ((whitePixels.size() > 2) && (touch.id == 0)) {
+    //            bCameraCapturePlay = !bCameraCapturePlay;
+    //            //            blur(edge, 3);
+    //            bufferImg = edge;
+    //
+    //            if (!bCameraCapturePlay) {
+    //                index = 0;
+    //                ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
+    //            } else {
+    //                scoreMake();
+    //                //                noteIndex = index;
+    //                ofAddListener(*metroOut, this, &ofApp::triggerReceive);
+    //                bPlayNote = true;
+    //            }
+    //
+    //            grayThreshold = 120;
+    //            touchDownDefault = 0;
+    //        }
+    //
+    //    }
     
     if (composingMode.inside(_chgdTouch)) {
         if ((whitePixels.size() > 2) && (touch.id == 0)) {
@@ -2456,7 +2482,7 @@ void ofApp::touchUp(ofTouchEventArgs & touch) {
     } else {
         
         iPhoneTouchUp(touch);
-
+        
     }
     
 }

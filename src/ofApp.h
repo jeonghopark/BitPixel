@@ -127,7 +127,7 @@ public:
     
     // control Panel
     void drawControlElementIPad();
-    void drawControlElementIPhone();
+    void drawControlElementIPhone(bool playOn);
     void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStep, guideHeightStep;
@@ -152,7 +152,7 @@ public:
     bool bInterval;
     
     // base Interface
-    void drawBaseInterface();
+    void drawBaseInterface(bool playOn);
     ofPoint base4Pos;
     ofPoint base5Pos;
     ofPoint base6Pos;
