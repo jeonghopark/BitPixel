@@ -261,6 +261,7 @@ public:
     void iPadTouchUp(ofTouchEventArgs & touch);
 
     
+    float menuAreaY;
     void menuImgSetup();
     void menuImgDraw(bool playOn);
     

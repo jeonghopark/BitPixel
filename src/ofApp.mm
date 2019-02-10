@@ -81,6 +81,8 @@ void ofApp::setup() {
     squareCam.setImageType(OF_IMAGE_COLOR_ALPHA);
     squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
+    lineScoreNumber = 23;
+
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         bIPhone = false;
@@ -147,7 +149,6 @@ void ofApp::setup() {
     
     scaleSetting.setup();
     
-    lineScoreNumber = 23;
     
     touchPos.assign(2, ofVec2f());
     
@@ -254,6 +255,9 @@ void ofApp::setIPad() {
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
     
+    // FIXME: Position
+    menuAreaY = screenW - 40 + 30 * 7;
+
     
     float _sizeF = screenW;
     ctrlPnX = 0;
@@ -283,7 +287,7 @@ void ofApp::setIPhone() {
     ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
     guideWidthStep = 96 / _widthDefault * _sizeF;
     guideHeightStep = 64 / _widthDefault * _sizeF;
-    lineScoreStepX = screenW / 21.0;  // 30.3764
+    lineScoreStepX = screenW / float(lineScoreNumber - 1);
     lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;  // 1.6
     //    stepBasePos = 105 / _widthDefault * _sizeF;
     pixeShapeSize = 1 / _widthDefault * _sizeF;
@@ -292,16 +296,19 @@ void ofApp::setIPhone() {
     
     
     
-    float _thredSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 1;
-    float __speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5;
-    float _controlAreaSize = ofGetHeight() - screenW;
+    float _thredSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 0.75;
+    float __speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5.25;
+    float _controlAreaH = ofGetHeight() - menuAreaY;
 
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
     //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + __speedSlideControlPos);
-    speedCPos = ofPoint(__speedSlideControlPos, screenW + _controlAreaSize * 0.5);
-    speedLineLength = ofPoint(speedCPos.y - 100, speedCPos.y + 100);
+    
+    float _lineLenghtRatio = _controlAreaH * 0.7 * 0.5;
+    
+    speedCPos = ofPoint(__speedSlideControlPos, menuAreaY + _controlAreaH * 0.5);
+    speedLineLength = ofPoint(speedCPos.y - _lineLenghtRatio, speedCPos.y + _lineLenghtRatio);
     bSpeedCtrl = false;
     
     //    thresholdCSize = ctrlRectS * 0.9;
@@ -313,8 +320,8 @@ void ofApp::setIPhone() {
     //    intervalPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    intervalPos = ofPoint(screenW * 0.5, screenH * 0.8/10.0);
     //    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPos);
-    intervalPos = ofPoint(_thredSlideControlPos, screenW + _controlAreaSize * 0.5);
-    ctrlLineLength = ofPoint(intervalPos.y - 100, intervalPos.y + 100);
+    intervalPos = ofPoint(_thredSlideControlPos, menuAreaY + _controlAreaH * 0.5);
+    ctrlLineLength = ofPoint(intervalPos.y - _lineLenghtRatio, intervalPos.y + _lineLenghtRatio);
     bthresholdCtrl = false;
     intervalDist = 1;
     
@@ -324,16 +331,17 @@ void ofApp::setIPhone() {
     //    float _posIndexLeft = screenH * 1.84/10.0;
     //    float _posIndexRight = screenH - _posIndexLeft;
     
-    float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 2;
-    float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4;
+    float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 1.75;
+    float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4.25;
     
-    base4Pos = ofPoint(_posIndexLeft, ofGetHeight() * 11.0 / 12.0);
-    base5Pos = ofPoint(_posIndexLeft, ofGetHeight() * 10.0 / 12.0);
-    base6Pos = ofPoint(_posIndexLeft, ofGetHeight() * 9.0 / 12.0);
-    base7Pos = ofPoint(_posIndexRight, ofGetHeight() * 11.0 / 12.0);
-    base8Pos = ofPoint(_posIndexRight, ofGetHeight() * 10.0 / 12.0);
-    base9Pos = ofPoint(_posIndexRight, ofGetHeight() * 9.0 / 12.0);
+    base4Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 1.0 / 4.0);
+    base5Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 2.0 / 4.0);
+    base6Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 3.0 / 4.0);
+    base7Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 1.0 / 4.0);
+    base8Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 2.0 / 4.0);
+    base9Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 3.0 / 4.0);
     baseSize = ctrlRectS * 0.85;
+    
     
     
 }
@@ -669,14 +677,6 @@ void ofApp::mainCameraCaptureViewiPhone() {
 void ofApp::drawIPhone() {
     
     //    ofPushMatrix();
-    //    ofTranslate(ofGetWidth() * 0.5 * 2, screenPosLeftY);
-    //    ofTranslate(screenW, screenPosLeftY);
-    //    ofRotateZDeg(90);
-    
-    
-    //
-    //
-    //    ofPushMatrix();
     //    ofPushStyle();
     //    if (WHITE_VIEW) {
     //        ofSetColor(255, 255);
@@ -688,24 +688,14 @@ void ofApp::drawIPhone() {
     //    ofPopMatrix();
 
     
-    //FIXME: Translate (???)
+    // FIXME: Translate (???)
     ofPushMatrix();
     ofTranslate(0, -40);
-
-    ofPushMatrix();
-    ofPushStyle();
-    ofSetColor(uiLineColor);
-    ofTranslate(0, screenW + 30 * 7);
-    ofDrawLine(0, 0, ofGetWidth(), 0);
-    ofPopStyle();
-    ofPopMatrix();
-    
     drawLineScoreIPhone(bCameraCapturePlay);
     ofPopMatrix();
     
     mainCameraCaptureViewiPhone();
 
-    
 //    drawControlElementIPhone(bCameraCapturePlay);
 //    drawBaseInterface(bCameraCapturePlay);
 
@@ -715,8 +705,22 @@ void ofApp::drawIPhone() {
     menuImgDraw(bCameraCapturePlay);
     
     
+    // FIXME: Translate (???)
+    ofPushMatrix();
+    ofTranslate(0, menuAreaY);
+    
+    ofPushStyle();
+    ofSetColor(uiLineColor);
+    ofDrawLine(0, 40 - 30 * 7, ofGetWidth(), 40 - 30 * 7);
+    ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, 40 - 30 * 7);
+    ofDrawLine(0, 0, ofGetWidth(), 0);
+    ofPopStyle();
+    
+    ofPopMatrix();
     
 }
+
+
 
 
 
@@ -1669,21 +1673,21 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     ofTranslate(_pos);
     
-    if (!bIPhone) {
-        ofRotateZDeg(0);
-    } else {
-        if (_base == 5) {
-            ofRotateZDeg(18);
-        } else if (_base == 7) {
-            ofRotateZDeg(38.571429);
-        } else if (_base == 8) {
-            ofRotateZDeg(45);
-        } else if (_base == 9) {
-            ofRotateZDeg(50);
-        } else {
-            ofRotateZDeg(0);
-        }
-    }
+//    if (!bIPhone) {
+//        ofRotateZDeg(0);
+//    } else {
+//        if (_base == 5) {
+//            ofRotateZDeg(18);
+//        } else if (_base == 7) {
+//            ofRotateZDeg(38.571429);
+//        } else if (_base == 8) {
+//            ofRotateZDeg(45);
+//        } else if (_base == 9) {
+//            ofRotateZDeg(50);
+//        } else {
+//            ofRotateZDeg(0);
+//        }
+//    }
     
     
     if (WHITE_VIEW) {
