@@ -138,6 +138,7 @@ public:
     float ctrlRectS;
     
     ofPoint speedCPos;
+    ofPoint speedLineLength;
     float speedCSize;
     bool bSpeedCtrl;
     
@@ -146,6 +147,7 @@ public:
     bool bthresholdCtrl;
     
     ofPoint intervalPos;
+    ofPoint ctrlLineLength;
     float intervalSize;
     bool bInterval;
     
@@ -198,6 +200,7 @@ public:
     int intervalDist;
     
     ScaleSetting scaleSetting;
+    
     
     
     int playOldNote1;

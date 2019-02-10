@@ -264,8 +264,9 @@ void ofApp::setIPhone() {
     
     shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
     
-    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5;
-    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5;
+    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
+    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
+
     
     lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
     
@@ -289,16 +290,19 @@ void ofApp::setIPhone() {
     
     controlObjectLineWidth = 2;
     
-    float _firstStepPosSideControl = (screenH - screenPosRightY) * 0.85 / 3.0;
-    float _secondStepPosSideControl = (screenH - screenPosRightY) * 2.15 / 3.0;
     
+    
+    float _thredSlideControlPos = ofGetWidth() * 0.15;
+    float __speedSlideControlPos = ofGetWidth() * 0.85;
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
-    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
-    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _secondStepPosSideControl);
+//    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
+//    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + __speedSlideControlPos);
+    float _controlAreaSize = ofGetHeight() - screenW;
+    speedCPos = ofPoint(__speedSlideControlPos, screenW + _controlAreaSize * 0.5);
+    speedLineLength = ofPoint(speedCPos.y - 100, speedCPos.y + 100);
     bSpeedCtrl = false;
-    
     
     //    thresholdCSize = ctrlRectS * 0.9;
     //    thresholdCPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
@@ -308,24 +312,29 @@ void ofApp::setIPhone() {
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    intervalPos = ofPoint(screenW * 0.5, screenH * 0.8/10.0);
-    intervalPos = ofPoint(screenW * 0.5, _firstStepPosSideControl);
+//    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPos);
+    intervalPos = ofPoint(_thredSlideControlPos, screenW + _controlAreaSize * 0.5);
+    ctrlLineLength = ofPoint(intervalPos.y - 100, intervalPos.y + 100);
     bthresholdCtrl = false;
     intervalDist = 1;
+    
+    
+    
     
     //    float _posIndexLeft = screenH * 1.84/10.0;
     //    float _posIndexRight = screenH - _posIndexLeft;
     
-    float _posIndexLeft = _secondStepPosSideControl;
-    float _posIndexRight = screenPosRightY + _firstStepPosSideControl;
+    float _posIndexLeft = ofGetWidth() * 0.3;
+    float _posIndexRight = ofGetWidth() * 0.7;
     
-    base4Pos = ofPoint(screenW * 3.0 / 4.0, _posIndexLeft);
-    base5Pos = ofPoint(screenW * 2.0 / 4.0, _posIndexLeft);
-    base6Pos = ofPoint(screenW * 1.0 / 4.0, _posIndexLeft);
-    
-    base7Pos = ofPoint(screenW * 3.0 / 4.0, _posIndexRight);
-    base8Pos = ofPoint(screenW * 2.0 / 4.0, _posIndexRight);
-    base9Pos = ofPoint(screenW * 1.0 / 4.0, _posIndexRight);
+    base4Pos = ofPoint(_posIndexLeft, ofGetHeight() * 11.0 / 12.0);
+    base5Pos = ofPoint(_posIndexLeft, ofGetHeight() * 10.0 / 12.0);
+    base6Pos = ofPoint(_posIndexLeft, ofGetHeight() * 9.0 / 12.0);
+    base7Pos = ofPoint(_posIndexRight, ofGetHeight() * 11.0 / 12.0);
+    base8Pos = ofPoint(_posIndexRight, ofGetHeight() * 10.0 / 12.0);
+    base9Pos = ofPoint(_posIndexRight, ofGetHeight() * 9.0 / 12.0);
     baseSize = ctrlRectS * 0.85;
+    
     
 }
 
@@ -678,15 +687,13 @@ void ofApp::drawIPhone() {
 //    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
 //    ofPopStyle();
 //    ofPopMatrix();
-//
-//
-//    drawControlElementIPhone();
-//
-//
+
+    
+    drawControlElementIPhone();
 
     drawLineScoreIPhone(bCameraCapturePlay);
 
-    //    drawBaseInterface();
+    drawBaseInterface();
     
     menuImgDraw(bCameraCapturePlay);
 
@@ -775,6 +782,8 @@ void ofApp::drawControlElementIPad() {
     float _xL2 = ctrlPnW * 0.5 + _offsetXPos * 0.5;
     ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
     
+    
+    
     float _xM = ctrlPnW * 0.5;
     if (WHITE_VIEW) {
         ofSetColor(0, 40);
@@ -796,25 +805,25 @@ void ofApp::drawControlElementIPhone() {
     
     ofPushStyle();
     
-    if (WHITE_VIEW) {
-        ofSetColor(255);
-    } else {
-        ofSetColor(backgroundColor);
-    }
+//    if (WHITE_VIEW) {
+//        ofSetColor(255);
+//    } else {
+//        ofSetColor(backgroundColor);
+//    }
+//
+//    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
+//    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
     
-    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
-    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 10);
-    } else {
-        ofSetColor(backgroundColor);
-    }
-    
-    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
-    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-    
-    ofPopStyle();
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 10);
+//    } else {
+//        ofSetColor(backgroundColor);
+//    }
+//
+//    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
+//    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
+//
+//    ofPopStyle();
     
     
     
@@ -827,11 +836,15 @@ void ofApp::drawControlElementIPhone() {
         ofSetColor(uiLineColor);
     }
     
-    float _speedY = speedCPos.y;
-    ofDrawLine(screenW * 0.1, _speedY, screenW * 0.9, _speedY);
-    
+//    ofDrawLine(intervalPos.x, _intervalY, intervalPos.x, _intervalY);
+//    ofDrawLine(intervalPos.x, 0, intervalPos.x, ofGetHeight());
+
     float _intervalY = intervalPos.y;
-    ofDrawLine(screenW * 0.1, _intervalY, screenW * 0.9, _intervalY);
+    ofDrawLine(intervalPos.x, ctrlLineLength.x, intervalPos.x, ctrlLineLength.y);
+    
+    float _speedY = speedCPos.y;
+    ofDrawLine(speedCPos.x, speedLineLength.x, speedCPos.x, speedLineLength.y);
+    
     
     ofPopStyle();
     ofPopMatrix();
@@ -842,42 +855,42 @@ void ofApp::drawControlElementIPhone() {
     
     
     
-    ofPushMatrix();
-    ofPushStyle();
+//    ofPushMatrix();
+//    ofPushStyle();
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 40);
+//    } else {
+//        ofSetColor(uiLineColor);
+//    }
+//
+//    ofPoint _line1S = ofPoint(0, screenPosLeftY);
+//    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
+//    ofDrawLine(_line1S, _line1E);
+//
+//    ofPoint _line2S = ofPoint(0, screenPosRightY);
+//    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
+//    ofDrawLine(_line2S, _line2E);
+//
+//    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
+//    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
+//    ofDrawLine(_lineUpS, _lineUpE);
+//
+//    ofPopStyle();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 40);
-    } else {
-        ofSetColor(uiLineColor);
-    }
     
-    ofPoint _line1S = ofPoint(0, screenPosLeftY);
-    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
-    ofDrawLine(_line1S, _line1E);
-    
-    ofPoint _line2S = ofPoint(0, screenPosRightY);
-    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
-    ofDrawLine(_line2S, _line2E);
-    
-    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
-    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
-    ofDrawLine(_lineUpS, _lineUpE);
-    
-    ofPopStyle();
-    
-    
-    ofPushStyle();
-    if (WHITE_VIEW) {
-        ofSetColor(0, 40);
-    } else {
-        ofSetColor(uiLineColor);
-    }
-    
-    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
-    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
-    ofDrawLine(_lineMS, _lineME);
-    
-    ofPopStyle();
+//    ofPushStyle();
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 40);
+//    } else {
+//        ofSetColor(uiLineColor);
+//    }
+//
+//    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
+//    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
+//    ofDrawLine(_lineMS, _lineME);
+//
+//    ofPopStyle();
     
     ofPopMatrix();
     
@@ -1538,21 +1551,21 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     ofTranslate(_pos);
     
-    if (!bIPhone) {
-        ofRotateZDeg(0);
-    } else {
-        if (_base == 5) {
-            ofRotateZDeg(18);
-        } else if (_base == 7) {
-            ofRotateZDeg(38.571429);
-        } else if (_base == 8) {
-            ofRotateZDeg(45);
-        } else if (_base == 9) {
-            ofRotateZDeg(50);
-        } else {
-            ofRotateZDeg(0);
-        }
-    }
+//    if (!bIPhone) {
+//        ofRotateZDeg(0);
+//    } else {
+//        if (_base == 5) {
+//            ofRotateZDeg(18);
+//        } else if (_base == 7) {
+//            ofRotateZDeg(38.571429);
+//        } else if (_base == 8) {
+//            ofRotateZDeg(45);
+//        } else if (_base == 9) {
+//            ofRotateZDeg(50);
+//        } else {
+//            ofRotateZDeg(0);
+//        }
+//    }
     
     
     //    if (WHITE_VIEW) {
@@ -1923,19 +1936,17 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
     float _tolerance = 2;
     
-    ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
+    ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
     touchPos[touch.id] = _chgdTouch;
     
     distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
-        
         float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
         if ((_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
             bSpeedCtrl = true;
         }
-        
     }
     
     
@@ -1946,7 +1957,6 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         if ((_distI < intervalSize * _tolerance) && bInterval == false) {
             bInterval = true;
         }
-        
     }
     
     
@@ -2037,12 +2047,10 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
     distS[touch.id] = ofDist(speedCPos.x, speedCPos.y, touchPos[touch.id].x, touchPos[touch.id].y);
     
     for (int i = 0; i < 2; i++) {
-        
         float _distS = ofDist(speedCPos.x, speedCPos.y, touchPos[i].x, touchPos[i].y);
         if ((_distS < thresholdCSize * _tolerance) && bSpeedCtrl == false) {
             bSpeedCtrl = true;
         }
-        
     }
     
     distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
@@ -2054,9 +2062,6 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
         }
         
     }
-    
-    
-    
     
     if (touch.id == 0) {
         
@@ -2131,13 +2136,9 @@ void ofApp::iPadTouchDown(ofTouchEventArgs & touch) {
 void ofApp::touchDown(ofTouchEventArgs & touch) {
     
     if (!bIPhone) {
-        
         iPadTouchDown(touch);
-        
     } else {
-        
         iPhoneTouchDown(touch);
-        
     }
     
 }
@@ -2151,6 +2152,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y - shiftValueIphoneY);
     
     touchPos[touch.id] = _chgdTouch;
+    
     if (bSpeedCtrl) {
         float _minY = ctrlPnY + speedCSize * 0.75;
         float _maxY = screenH - speedCSize * 0.75;
@@ -2160,7 +2162,6 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
             float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
             synthMain.setParameter("tempo", _tempo);
         }
-        
     }
     
     //        if (bthresholdCtrl) {
@@ -2185,8 +2186,7 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
         }
     }
     
-    
-    
+
     if (touch.id == 0) {
         
         //        if (bSpeedCtrl) {
@@ -2229,8 +2229,8 @@ void ofApp::iPadTouchMoved(ofTouchEventArgs & touch) {
             
         }
         
-        
     }
+    
 }
 
 
@@ -2242,34 +2242,57 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
+//    if (bSpeedCtrl) {
+//        float _minX = ofGetWidth() * 0.15;
+//        float _maxX = screenW * 0.9;
+//        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
+//            speedCPos.x = touchPos[touch.id].x;
+//            float _tempo = ofMap(speedCPos.x, _minX, _maxX, minSpeed, maxSpeed);
+//            synthMain.setParameter("tempo", _tempo);
+//        }
+//    }
+    
     if (bSpeedCtrl) {
-        float _minX = screenW * 0.1;
-        float _maxX = screenW * 0.9;
-        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
-            speedCPos.x = touchPos[touch.id].x;
-            float _tempo = ofMap(speedCPos.x, _minX, _maxX, minSpeed, maxSpeed);
+        float _minY = speedLineLength.x;
+        float _maxY = speedLineLength.y;
+        if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x > ofGetWidth() * 0.8) {
+            speedCPos.y = touchPos[touch.id].y;
+            float _tempo = ofMap(speedCPos.y, _minY, _maxY, minSpeed, maxSpeed);
             synthMain.setParameter("tempo", _tempo);
         }
     }
     
+//    if (bInterval) {
+//        float _minX = ofGetWidth() * 0.15;
+//        float _maxX = screenW * 0.9;
+//        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
+//            intervalPos.x = touchPos[touch.id].x;
+//            float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
+//            intervalDist = _interval;
+//        }
+//    }
+
     if (bInterval) {
-        float _minX = screenW * 0.1;
-        float _maxX = screenW * 0.9;
-        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
-            intervalPos.x = touchPos[touch.id].x;
-            float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
+        float _minY = ctrlLineLength.x;
+        float _maxY = ctrlLineLength.y;
+        if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x < ofGetWidth() * 0.2) {
+            intervalPos.y = touchPos[touch.id].y;
+            float _interval = ofMap(intervalPos.y, _minY, _maxY, 20, 0);
             intervalDist = _interval;
         }
     }
+
     
-    if (touch.id == 0) {
-        float _xL = screenPosLeftY;
-        float _xR = screenPosLeftY + iPhonePreviewSize;
-        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
-        }
-        
-    }
+    
+//    if (touch.id == 0) {
+//        float _xL = screenPosLeftY;
+//        float _xR = screenPosLeftY + iPhonePreviewSize;
+//        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+//            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
+//        }
+//    }
+    
+    
 }
 
 
@@ -2656,8 +2679,9 @@ vector<int> ofApp::convertDecimalToNBase(int n, int base, int size) {
     a[i] = res;
     
     while (1) {
-        if (div == 0) break;
-        else {
+        if (div == 0) {
+            break;
+        } else {
             i++;
             res = div % base;
             div = div / base;
