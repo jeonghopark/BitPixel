@@ -803,7 +803,7 @@ void ofApp::drawControlElementIPad() {
 //--------------------------------------------------------------
 void ofApp::drawControlElementIPhone() {
     
-    ofPushStyle();
+//    ofPushStyle();
     
 //    if (WHITE_VIEW) {
 //        ofSetColor(255);
@@ -845,9 +845,9 @@ void ofApp::drawControlElementIPhone() {
     float _speedY = speedCPos.y;
     ofDrawLine(speedCPos.x, speedLineLength.x, speedCPos.x, speedLineLength.y);
     
-    
     ofPopStyle();
     ofPopMatrix();
+    
     
     
     drawElemSpeedShape();
@@ -892,7 +892,7 @@ void ofApp::drawControlElementIPhone() {
 //
 //    ofPopStyle();
     
-    ofPopMatrix();
+//    ofPopMatrix();
     
     
 }
