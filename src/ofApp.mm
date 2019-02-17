@@ -179,7 +179,7 @@ void ofApp::menuImgSetup() {
     float _scaleImport = 0.05;
     libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
     
-    changeCamera.load("cameraChange.png");
+    changeCamera.load("cameraChange_1.png");
     float _scaleChange = 0.05;
     cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.9, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
     
@@ -420,7 +420,7 @@ void ofApp::calculatePixels(ofImage _img) {
         if (!bIPhone) {
             _src = edge.getPixels().getData();
         } else {
-            edge.rotate90(-1);
+//            edge.rotate90(-1);
             _src = edge.getPixels().getData();
         }
         
@@ -592,6 +592,12 @@ void ofApp::mainCameraCaptureViewiPhone() {
     
     ofPushMatrix();
     
+//    ofTranslate(screenW * 0.5, screenW * 0.5);
+//    ofRotateZDeg(90);
+//    ofTranslate(-screenW * 0.5, -screenW * 0.5);
+
+    ofPushMatrix();
+    
     ofPushStyle();
     if (!bCameraCapturePlay) {
         if (WHITE_VIEW) {
@@ -668,7 +674,9 @@ void ofApp::mainCameraCaptureViewiPhone() {
     }
     
     ofPopMatrix();
-    
+
+    ofPopMatrix();
+
 }
 
 
@@ -697,7 +705,6 @@ void ofApp::drawIPhone() {
     mainCameraCaptureViewiPhone();
 
     
-    
     // FIXME: Translate (???)
     ofPushMatrix();
     ofTranslate(0, menuAreaY);
@@ -707,7 +714,7 @@ void ofApp::drawIPhone() {
     ofDrawLine(0, 40 - 30 * 7, ofGetWidth(), 40 - 30 * 7);
     ofSetColor(uiLineColor, 120);
     ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, 40 - 30 * 7);
-    ofSetColor(uiLineColor, 120);
+    ofSetColor(uiLineColor, 180);
     ofDrawLine(0, 0, ofGetWidth(), 0);
     ofPopStyle();
     
