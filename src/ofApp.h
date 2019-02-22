@@ -265,7 +265,7 @@ public:
     void menuImgSetup();
     void menuImgDraw(bool playOn);
     
-    ofRectangle composingMode;
+    ofRectangle composeMode;
     ofImage capture;
     
     ofRectangle libaryImport;

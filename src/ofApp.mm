@@ -173,7 +173,7 @@ void ofApp::menuImgSetup() {
     
     capture.load("capture.png");
     float _scaleCapture = 0.05;
-    composingMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
+    composeMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
     
     importImg.load("photoLibrary.png");
     float _scaleImport = 0.05;
@@ -721,10 +721,12 @@ void ofApp::drawIPhone() {
     ofPopMatrix();
     
     
-    //    drawControlElementIPhone(bCameraCapturePlay);
-    //    drawBaseInterface(bCameraCapturePlay);
-    drawControlElementIPhone(true);
-    drawBaseInterface(true);
+    drawControlElementIPhone(bCameraCapturePlay);
+    //    drawControlElementIPhone(true);
+
+    drawBaseInterface(bCameraCapturePlay);
+    //    drawBaseInterface(true);
+
     
     menuImgDraw(bCameraCapturePlay);
     
@@ -742,7 +744,7 @@ void ofApp::menuImgDraw(bool playOn) {
     if (playOn) {
         returnCaptureMode.draw(returnCapture);
     } else {
-        capture.draw(composingMode);
+        capture.draw(composeMode);
         importImg.draw(libaryImport);
         changeCamera.draw(cameraChange);
     }
@@ -1982,20 +1984,22 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
     distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
-    for (int i = 0; i < 2; i++) {
-        float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
-        if ((_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
-            bSpeedCtrl = true;
+    if (bCameraCapturePlay) {
+        for (int i = 0; i < 2; i++) {
+            float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
+            if ((_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
+                bSpeedCtrl = true;
+            }
         }
-    }
-    
-    
-    distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
-    
-    for (int i = 0; i < 2; i++) {
-        float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
-        if ((_distI < intervalSize * _tolerance) && bInterval == false) {
-            bInterval = true;
+        
+        
+        distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
+        
+        for (int i = 0; i < 2; i++) {
+            float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
+            if ((_distI < intervalSize * _tolerance) && bInterval == false) {
+                bInterval = true;
+            }
         }
     }
     
@@ -2029,45 +2033,43 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         float _xL = screenPosLeftY;
         float _xR = screenPosLeftY + iPhonePreviewSize;
         if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-            
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.x;
-            
         }
         
+    }
+
+    if (bCameraCapturePlay) {
+        float _torelanceTouchDownIPhone = 2;
+        float _4BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y);
+        if (_4BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 4;
+        }
         
+        float _5BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y);
+        if (_5BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 5;
+        }
         
-    }
-    
-    float _torelanceTouchDownIPhone = 2;
-    float _4BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base4Pos.x, base4Pos.y);
-    if (_4BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 4;
-    }
-    
-    float _5BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base5Pos.x, base5Pos.y);
-    if (_5BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 5;
-    }
-    
-    float _6BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y);
-    if (_6BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 6;
-    }
-    
-    float _7BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y);
-    if (_7BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 7;
-    }
-    
-    float _8BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y);
-    if (_8BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 8;
-    }
-    
-    float _9BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y);
-    if (_9BaseDist < baseSize * _torelanceTouchDownIPhone) {
-        baseSelection = 9;
+        float _6BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base6Pos.x, base6Pos.y);
+        if (_6BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 6;
+        }
+        
+        float _7BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base7Pos.x, base7Pos.y);
+        if (_7BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 7;
+        }
+        
+        float _8BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base8Pos.x, base8Pos.y);
+        if (_8BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 8;
+        }
+        
+        float _9BaseDist = ofDist(_chgdTouch.x, _chgdTouch.y, base9Pos.x, base9Pos.y);
+        if (_9BaseDist < baseSize * _torelanceTouchDownIPhone) {
+            baseSelection = 9;
+        }
     }
     
 }
@@ -2437,7 +2439,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     //
     //    }
     
-    if (composingMode.inside(_chgdTouch)) {
+    if (composeMode.inside(_chgdTouch)) {
         if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
             bufferImg = edge;
