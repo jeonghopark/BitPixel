@@ -1997,7 +1997,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         
         for (int i = 0; i < 2; i++) {
             float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
-            if ((_distI < intervalSize * _tolerance) && bInterval == false) {
+            if ((_distI < intervalSize * 0.642857 * _tolerance) && bInterval == false) {
                 bInterval = true;
             }
         }
