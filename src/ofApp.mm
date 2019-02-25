@@ -1976,7 +1976,7 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
-    float _tolerance = 2;
+    float _tolerance = 2 * 0.642857;
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
@@ -1984,20 +1984,21 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
     distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
+    
+    
     if (bCameraCapturePlay) {
         for (int i = 0; i < 2; i++) {
             float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
-            if ((_distS < speedCSize * 0.642857 * _tolerance) && bSpeedCtrl == false) {
+            if ((_distS < speedCSize * _tolerance) && bSpeedCtrl == false) {
                 bSpeedCtrl = true;
             }
         }
-        
         
         distI[touch.id] = ofDist(intervalPos.x, intervalPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
         
         for (int i = 0; i < 2; i++) {
             float _distI = ofDist(intervalPos.x, intervalPos.y , touchPos[i].x, touchPos[i].y);
-            if ((_distI < intervalSize * 0.642857 * _tolerance) && bInterval == false) {
+            if ((_distI < intervalSize * _tolerance) && bInterval == false) {
                 bInterval = true;
             }
         }
@@ -2416,29 +2417,6 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
-    //    if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
-    //
-    //        if ((whitePixels.size() > 2) && (touch.id == 0)) {
-    //            bCameraCapturePlay = !bCameraCapturePlay;
-    //            //            blur(edge, 3);
-    //            bufferImg = edge;
-    //
-    //            if (!bCameraCapturePlay) {
-    //                index = 0;
-    //                ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
-    //            } else {
-    //                scoreMake();
-    //                //                noteIndex = index;
-    //                ofAddListener(*metroOut, this, &ofApp::triggerReceive);
-    //                bPlayNote = true;
-    //            }
-    //
-    //            grayThreshold = 120;
-    //            touchDownDefault = 0;
-    //        }
-    //
-    //    }
-    
     if (composeMode.inside(_chgdTouch)) {
         if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
@@ -2492,13 +2470,9 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
 void ofApp::touchUp(ofTouchEventArgs & touch) {
     
     if (!bIPhone) {
-        
         iPadTouchUp(touch);
-        
     } else {
-        
         iPhoneTouchUp(touch);
-        
     }
     
 }
