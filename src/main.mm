@@ -15,6 +15,8 @@ int main() {
     settings.enableHardwareOrientationAnimation = false; // enables native orientation changes to be animated.
     settings.glesVersion = OFXIOS_RENDERER_ES2; // type of renderer to use, ES1, ES2, ES3
     settings.windowMode = OF_FULLSCREEN;
+    settings.enableMultiTouch = true;
+    
     ofCreateWindow(settings);
     
 	return ofRunApp(new ofApp);

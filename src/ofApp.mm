@@ -67,14 +67,12 @@ void ofApp::setup() {
     lineScoreNumber = 23;
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        //        cout << "iPad" << endl;
         //        bIPhone = false;
         //        screenW = ofGetWidth();
         //        screenH = ofGetWidth() * 4.0 / 3.0;
         //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
         //        setIPad();
     } else {
-        cout << "iPhone" << endl;
         bIPhone = true;
         screenW = ofGetWidth();
         screenH = ofGetHeight();
@@ -2269,6 +2267,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
 //--------------------------------------------------------------
 void ofApp::touchDown(ofTouchEventArgs & touch) {
     
+    
     //    if (!bIPhone) {
     //        iPadTouchDown(touch);
     //    } else {
@@ -2376,6 +2375,8 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
+    
+    
     //    if (bSpeedCtrl) {
     //        float _minX = ofGetWidth() * 0.15;
     //        float _maxX = screenW * 0.9;
@@ -2392,7 +2393,7 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
         
         if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x > ofGetWidth() * 0.8) {
             speedCPos.y = touchPos[touch.id].y;
-            float _tempo = ofMap(speedCPos.y, _minY, _maxY, minSpeed, maxSpeed);
+            float _tempo = ofMap(speedCPos.y, _minY, _maxY, maxSpeed, minSpeed);
             synthMain.setParameter("tempo", _tempo);
         }
     }
@@ -2413,7 +2414,7 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
         
         if ((touchPos[touch.id].y > _minY) && (touchPos[touch.id].y < _maxY) && touchPos[touch.id].x < ofGetWidth() * 0.2) {
             intervalPos.y = touchPos[touch.id].y;
-            float _interval = ofMap(intervalPos.y, _minY, _maxY, 20, 0);
+            float _interval = ofMap(intervalPos.y, _minY, _maxY, 0, 20);
             intervalDist = _interval;
         }
     }
