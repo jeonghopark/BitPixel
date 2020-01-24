@@ -2429,6 +2429,10 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     //        }
     //    }
     
+    if (_chgdTouch.y < iPhonePreviewSize) {
+        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
+    }
+    
     
 }
 
