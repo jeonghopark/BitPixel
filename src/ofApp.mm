@@ -147,6 +147,8 @@ void ofApp::setup() {
     
     menuImgSetup();
     
+    importLibraryImg = false;
+    
 }
 
 
@@ -334,13 +336,23 @@ void ofApp::setIPhone() {
 void ofApp::update() {
     
 #ifndef SIMUALTOR
-    cam.update();
     
-    if (cam.isFrameNew()) {
-        squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-        calculatePixels(squareCam);
+    if (importLibraryImg) {
+        if (libraryImg.getImageUpdated()) {
+            squareCam.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
+            libraryImg.close();
+            calculatePixels(squareCam);
+        }
+    } else {
+        cam.update();
+
+        if (cam.isFrameNew()) {
+            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+            calculatePixels(squareCam);
+        }
     }
     
+
 #else
     
     squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
@@ -2550,6 +2562,12 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             cam.setDesiredFrameRate(15);
             camSize = cam.getWidth(); // 360
         }
+    }
+    
+    
+    if (libaryImport.inside(_chgdTouch)) {
+        libraryImg.openLibrary();
+        importLibraryImg = true;
     }
     
     

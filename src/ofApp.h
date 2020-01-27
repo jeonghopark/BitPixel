@@ -4,7 +4,7 @@
 
 //#include "ofMain.h"
 #include "ofxiOS.h"
-//#include "ofxiOSExtras.h"
+#include "ofxiOSImagePicker.h"
 
 #ifdef SIMUALTOR
 #else
@@ -285,6 +285,9 @@ public:
     ofRectangle returnCapture;
     ofImage returnCaptureMode;
 
+    
+    ofxiOSImagePicker libraryImg;
+    bool importLibraryImg;
 };
 
 
