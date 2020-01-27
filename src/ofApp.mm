@@ -165,6 +165,10 @@ void ofApp::menuImgSetup() {
     float _scaleImport = 0.05;
     libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
 
+    importCancleImg.load("cancleLibrary.png");
+    float _scaleImportCacle = 0.05;
+    libaryImportCancle.setFromCenter(ofGetWidth() * 0.9, ofGetHeight() * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
+
     cameraModeImg.load("cameraMode.png");
     float _scaleMode = 0.05;
     cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
@@ -812,6 +816,7 @@ void ofApp::menuImgDraw(bool playOn) {
     } else {
         if (importLibraryImg) {
             cameraModeImg.draw(cameraMode);
+            importCancleImg.draw(libaryImportCancle);
         } else {
             importImg.draw(libaryImport);
         }
@@ -2575,16 +2580,18 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
         }
     }
     
-    
     if (!importLibraryImg && libaryImport.inside(_chgdTouch)) {
         libraryImg.openLibrary();
         importLibraryImg = true;
     }
-
     
     if (libraryImportDone && importLibraryImg && cameraMode.inside(_chgdTouch)) {
         importLibraryImg = false;
         libraryImportDone = false;
+    }
+
+    if (!bPlayNote && libaryImportCancle.inside(_chgdTouch)) {
+        libraryImg.openLibrary();
     }
 
     

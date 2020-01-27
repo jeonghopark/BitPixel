@@ -278,6 +278,9 @@ public:
     ofRectangle libaryImport;
     ofImage importImg;
 
+    ofRectangle libaryImportCancle;
+    ofImage importCancleImg;
+
     ofRectangle cameraMode;
     ofImage cameraModeImg;
     
