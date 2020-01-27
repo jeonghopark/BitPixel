@@ -149,6 +149,7 @@ void ofApp::setup() {
     
     importLibraryImg = false;
     
+    libraryImportDone = false;
 }
 
 
@@ -163,6 +164,10 @@ void ofApp::menuImgSetup() {
     importImg.load("photoLibrary.png");
     float _scaleImport = 0.05;
     libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
+
+    cameraModeImg.load("cameraMode.png");
+    float _scaleMode = 0.05;
+    cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
     
     changeCamera.load("cameraChange_1.png");
     float _scaleChange = 0.05;
@@ -342,6 +347,7 @@ void ofApp::update() {
             squareCam.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
             libraryImg.close();
             calculatePixels(squareCam);
+            libraryImportDone = true;
         }
     } else {
         cam.update();
@@ -804,10 +810,15 @@ void ofApp::menuImgDraw(bool playOn) {
     if (playOn) {
         returnCaptureMode.draw(returnCapture);
     } else {
+        if (importLibraryImg) {
+            cameraModeImg.draw(cameraMode);
+        } else {
+            importImg.draw(libaryImport);
+        }
         capture.draw(composeMode);
-        importImg.draw(libaryImport);
         changeCamera.draw(cameraChange);
     }
+    
     
     ofPopStyle();
     
@@ -2565,10 +2576,17 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     }
     
     
-    if (libaryImport.inside(_chgdTouch)) {
+    if (!importLibraryImg && libaryImport.inside(_chgdTouch)) {
         libraryImg.openLibrary();
         importLibraryImg = true;
     }
+
+    
+    if (libraryImportDone && importLibraryImg && cameraMode.inside(_chgdTouch)) {
+        importLibraryImg = false;
+        libraryImportDone = false;
+    }
+
     
     
     if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {

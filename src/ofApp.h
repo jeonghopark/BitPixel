@@ -278,6 +278,11 @@ public:
     ofRectangle libaryImport;
     ofImage importImg;
 
+    ofRectangle cameraMode;
+    ofImage cameraModeImg;
+    
+    bool libraryImportDone;
+
     ofRectangle cameraChange;
     ofImage changeCamera;
     bool frontCameraOnOff;
