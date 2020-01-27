@@ -159,11 +159,11 @@ void ofApp::setup() {
 void ofApp::menuImgSetup() {
     capture.load("capture.png");
     float _scaleCapture = 0.05;
-    composeMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
+    composeMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
     
     importImg.load("photoLibrary.png");
     float _scaleImport = 0.05;
-    libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
+    libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
 
     importCancleImg.load("cancleLibrary.png");
     float _scaleImportCacle = 0.05;
@@ -171,15 +171,15 @@ void ofApp::menuImgSetup() {
 
     cameraModeImg.load("cameraMode.png");
     float _scaleMode = 0.05;
-    cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.9, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
+    cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
     
     changeCamera.load("cameraChange_1.png");
     float _scaleChange = 0.05;
-    cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.9, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
+    cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.85, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
     
     returnCaptureMode.load("returnCameraMode.png");
     float _scaleReturn = 0.05;
-    returnCapture.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.9, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
+    returnCapture.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
     
 }
 //
@@ -2542,7 +2542,6 @@ void ofApp::touchMoved(ofTouchEventArgs & touch) {
 void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
-    
     if (composeMode.inside(_chgdTouch)) {
         if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
@@ -2590,24 +2589,26 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
         libraryImportDone = false;
     }
 
-    if (!bPlayNote && libaryImportCancle.inside(_chgdTouch)) {
+    if (libraryImportDone && libaryImportCancle.inside(_chgdTouch)) {
+        cout << "open" << endl;
         libraryImg.openLibrary();
+        importLibraryImg = true;
     }
 
     
     
-    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
-        
-        bPlayNote = !bPlayNote;
-        
-        if (!bPlayNote) {
-            ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
-        } else {
-            ofAddListener(*metroOut, this, &ofApp::triggerReceive);
-        }
-        
-    }
-    
+//    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
+//
+//        bPlayNote = !bPlayNote;
+//
+//        if (!bPlayNote) {
+//            ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
+//        } else {
+//            ofAddListener(*metroOut, this, &ofApp::triggerReceive);
+//        }
+//
+//    }
+//
     
     float _tolerance = 2;
     
