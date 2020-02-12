@@ -2093,7 +2093,6 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     distS[touch.id] = ofDist(speedCPos.x, speedCPos.y , touchPos[touch.id].x, touchPos[touch.id].y);
     
     
-    
     if (bCameraCapturePlay) {
         for (int i = 0; i < 2; i++) {
             float _distS = ofDist(speedCPos.x, speedCPos.y , touchPos[i].x, touchPos[i].y);
@@ -2550,6 +2549,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             if (!bCameraCapturePlay) {
                 index = 0;
                 ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
+                bPlayNote = false;
             } else {
                 scoreMake();
                 //                noteIndex = index;
@@ -2563,7 +2563,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     }
     
     
-    if (cameraChange.inside(_chgdTouch)) {
+    if (!bPlayNote && cameraChange.inside(_chgdTouch)) {
         frontCameraOnOff = !frontCameraOnOff;
         
         if (frontCameraOnOff) {
@@ -2579,20 +2579,30 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
         }
     }
     
-    if (!importLibraryImg && libaryImport.inside(_chgdTouch)) {
-        libraryImg.openLibrary();
-        importLibraryImg = true;
+    if (!bPlayNote && libaryImport.inside(_chgdTouch)) {
+//        if (!bPlayNote) {
+            libraryImg.openLibrary();
+            importLibraryImg = true;
+//            importLibraryImg = false;
+//        }
     }
     
-    if (libraryImportDone && importLibraryImg && cameraMode.inside(_chgdTouch)) {
-        importLibraryImg = false;
-        libraryImportDone = false;
-    }
+//    if (importLibraryImg && libaryImport.inside(_chgdTouch)) {
+//        if (!bCameraCapturePlay) {
+//            cout << "open" << endl;
+//            libraryImg.openLibrary();
+//            importLibraryImg = false;
+//        }
+////        importLibraryImg = false;
+////        libraryImportDone = false;
+//    }
 
-    if (libraryImportDone && libaryImportCancle.inside(_chgdTouch)) {
-        cout << "open" << endl;
-        libraryImg.openLibrary();
-        importLibraryImg = true;
+    if (libaryImportCancle.inside(_chgdTouch)) {
+//        libraryImg.openLibrary();
+        if (!bCameraCapturePlay) {
+            cout << "open" << endl;
+            importLibraryImg = false;
+        }
     }
 
     
