@@ -14,7 +14,6 @@ void ofApp::setup() {
     
     ofSetOrientation(OF_ORIENTATION_DEFAULT);
     
-    
     //    [[AVAudioSession sharedInstance] setDelegate:self];
     //    NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
@@ -348,7 +347,12 @@ void ofApp::update() {
     
     if (importLibraryImg) {
         if (libraryImg.getImageUpdated()) {
-            squareCam.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
+            ofImage _buffImg;
+            _buffImg.allocate(libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
+            _buffImg.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
+            _buffImg.resize(cam.getWidth(), cam.getHeight());
+            squareCam.setFromPixels(_buffImg.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+            
             libraryImg.close();
             calculatePixels(squareCam);
             libraryImportDone = true;
@@ -2600,7 +2604,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     if (libaryImportCancle.inside(_chgdTouch)) {
 //        libraryImg.openLibrary();
         if (!bCameraCapturePlay) {
-            cout << "open" << endl;
+//            cout << "open" << endl;
             importLibraryImg = false;
         }
     }
