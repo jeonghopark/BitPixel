@@ -3,7 +3,7 @@
 #include "ofApp.h"
 #include <AVFoundation/AVFoundation.h>
 
-#ifdef SIMUALTOR
+#if TARGET_OS_SIMULATOR
 #else
 using namespace ofxCv;
 using namespace cv;
@@ -49,7 +49,7 @@ void ofApp::setup() {
     
     //    backgroundControPanel.load("controlBackground.png");
     
-#ifdef SIMUALTOR
+#if TARGET_OS_SIMULATOR
     camSize = 360; // 360
 #else
     cam.setDeviceID(0);
@@ -331,8 +331,21 @@ void ofApp::setIPhone() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+        
+#if TARGET_OS_SIMULATOR
     
-#ifndef SIMUALTOR
+    squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    
+    if (bIPhone) {
+    } else {
+        squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+    }
+    
+    if (squareCam.isAllocated()) {
+        calculatePixels(squareCam);
+    }
+
+#else
     
     if (importLibraryImg) {
         if (libraryImg.getImageUpdated()) {
@@ -355,23 +368,9 @@ void ofApp::update() {
         }
     }
     
-
-#else
-    
-    squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
-    
-    if (bIPhone) {
-    } else {
-        squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-    }
-    
-    if (squareCam.isAllocated()) {
-        calculatePixels(squareCam);
-    }
-    
 #endif
     
-    //    if (TARGET_IPHONE_SIMULATOR) {
+    //    if (SIMULATOR) {
     //
     //        if (bIPhone) {
     //            squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
@@ -411,7 +410,7 @@ void ofApp::update() {
 //--------------------------------------------------------------
 void ofApp::calculatePixels(ofImage _img) {
     
-#ifdef SIMUALTOR
+#if TARGET_OS_SIMULATOR
 #else
     
     convertColor(_img, gray, CV_RGB2GRAY);
@@ -521,7 +520,7 @@ void ofApp::draw() {
     drawIPhone();
     //    }
     //    debugLayout();
-#ifdef SIMUALTOR
+#if TARGET_OS_SIMULATOR
     debugLayout();
 #endif
     
@@ -2464,6 +2463,8 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     if (!bPlayNote && cameraChange.inside(_chgdTouch)) {
         frontCameraOnOff = !frontCameraOnOff;
         
+#if TARGET_OS_SIMULATOR
+#else
         if (frontCameraOnOff) {
             cam.setDeviceID(0);
             cam.setup(480, 360);
@@ -2475,6 +2476,9 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             cam.setDesiredFrameRate(15);
             camSize = cam.getWidth(); // 360
         }
+
+#endif
+        
     }
     
     if (!bPlayNote && libaryImport.inside(_chgdTouch)) {
