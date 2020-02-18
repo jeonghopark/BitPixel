@@ -9,10 +9,11 @@ using namespace ofxCv;
 using namespace cv;
 #endif
 
+#import <sys/utsname.h>
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-    
+        
     ofSetOrientation(OF_ORIENTATION_DEFAULT);
     
     //    [[AVAudioSession sharedInstance] setDelegate:self];
@@ -66,19 +67,53 @@ void ofApp::setup() {
     
     lineScoreNumber = 23;
     
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        //        bIPhone = false;
-        //        screenW = ofGetWidth();
-        //        screenH = ofGetWidth() * 4.0 / 3.0;
-        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
-        //        setIPad();
-    } else {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        float _height = [UIScreen mainScreen].nativeBounds.size.height;
+        switch (int(_height)) {
+            case 1136:
+//                cout << "IPHONE 5,5S,5C" << endl;
+                safeZoneFactor = 0;
+                break;
+            case 1334:
+//                cout << "IPHONE 6,7,8 IPHONE 6S,7S,8S " << endl;
+                safeZoneFactor = 0;
+                break;
+            case 1920:
+            case 2208:
+                safeZoneFactor = 0;
+//                cout << "IPHONE 6PLUS, 6SPLUS, 7PLUS, 8PLUS" << endl;
+                break;
+            case 2436:
+//                cout << "IPHONE 11 Pro, IPHONE X, IPHONE XS" << endl;
+                safeZoneFactor = 3;
+                break;
+            case 2688:
+//                cout << "IPHONE 11 Pro Max, IPHONE XS_MAX" << endl;
+                safeZoneFactor = 3;
+                break;
+            case 1792:
+//                cout << "IPHONE 11, IPHONE XR" << endl;
+                safeZoneFactor = 2;
+                break;
+//            default:
+//                cout << "UNDETERMINED" << endl;
+        }
+    }
+    
+    
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         bIPhone = true;
         screenW = ofGetWidth();
         screenH = ofGetHeight();
         iPhonePreviewSize = screenW;
         debugCameraImage.load("debug_layout_cat.jpg");
         setIPhone();
+    } else {
+        //        bIPhone = false;
+        //        screenW = ofGetWidth();
+        //        screenH = ofGetWidth() * 4.0 / 3.0;
+        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
+        //        setIPad();
     }
     
     //    bIPhone = true;
@@ -184,7 +219,7 @@ void ofApp::menuImgSetup() {
 //--------------------------------------------------------------
 //void ofApp::setIPad() {
 //
-//    float _sizeF = screenW;
+//    float screenW = screenW;
 //    ctrlPnX = 0;
 //    ctrlPnY = screenW;
 //    ctrlPnW = screenW;
@@ -201,14 +236,14 @@ void ofApp::menuImgSetup() {
 //    cameraScreenRatio = screenW / camSize;  // 4.2666666
 //
 //    float _widthDefault = 1536.0;
-//    pixelCircleSize = 10 / _widthDefault * _sizeF;
-//    ctrlRectS = 80 / _widthDefault * _sizeF;
-//    guideWidthStep = 96 / _widthDefault * _sizeF;
-//    guideHeightStep = 64 / _widthDefault * _sizeF;
-//    lineScoreStepX = 35.5 / _widthDefault * _sizeF;
-//    lineScoreStepY = 5 / _widthDefault * _sizeF;
-//    stepBasePos = 105 / _widthDefault * _sizeF;
-//    pixeShapeSize = 1 / _widthDefault * _sizeF;
+//    pixelCircleSize = 10 / _widthDefault * screenW;
+//    ctrlRectS = 80 / _widthDefault * screenW;
+//    guideWidthStep = 96 / _widthDefault * screenW;
+//    guideHeightStep = 64 / _widthDefault * screenW;
+//    lineScoreStepX = 35.5 / _widthDefault * screenW;
+//    lineScoreStepY = 5 / _widthDefault * screenW;
+//    stepBasePos = 105 / _widthDefault * screenW;
+//    pixeShapeSize = 1 / _widthDefault * screenW;
 //
 //    controlObjectLineWidth = 2;
 //
@@ -245,39 +280,35 @@ void ofApp::setIPhone() {
     // FIXME: Position
     menuAreaY = screenW - 40 + 30 * 7;
     
-    
-    float _sizeF = screenW;
     ctrlPnX = 0;
     ctrlPnY = screenW;
     ctrlPnW = screenW;
-    ctrlPnH = screenH - ctrlPnY;
-    ctrlPnH = screenW * 4.0 / 5.0;
+//    ctrlPnH = screenH - ctrlPnY;
+//    ctrlPnH = screenW * 4.0 / 5.0;
     
-    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
+//    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
     
     screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
-    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
+//    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
     
-    
-    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
+//    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
     
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
     //    cameraScreenRatio = screenW / cam.getWidth();
     thresholdValue = 80;
     
-    
     cameraScreenRatio = iPhonePreviewSize / camSize; // 1.77777777
     
     float _widthDefault = screenW * 2.4;
-    pixelCircleSize = 10 / _widthDefault * _sizeF;
-    ctrlRectS = (screenW * 0.125) / _widthDefault * _sizeF;
-    guideWidthStep = 96 / _widthDefault * _sizeF;
-    guideHeightStep = 64 / _widthDefault * _sizeF;
+    pixelCircleSize = 10 / _widthDefault * screenW;
+    ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
+    guideWidthStep = 96 / _widthDefault * screenW;
+    guideHeightStep = 64 / _widthDefault * screenW;
     lineScoreStepX = screenW / float(lineScoreNumber - 1);
-    lineScoreStepY = (screenW * 0.006) / _widthDefault * _sizeF;  // 1.6
-    //    stepBasePos = 105 / _widthDefault * _sizeF;
-    pixeShapeSize = 1 / _widthDefault * _sizeF;
+    lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
+    //    stepBasePos = 105 / _widthDefault * screenW;
+    pixeShapeSize = 1 / _widthDefault * screenW;
     
     controlObjectLineWidth = 2;
     
@@ -519,13 +550,54 @@ void ofApp::draw() {
     //    } else {
     drawIPhone();
     //    }
-    //    debugLayout();
+
 #if TARGET_OS_SIMULATOR
-    debugLayout();
+    debugRatioLayout();
 #endif
     
 }
 
+
+//--------------------------------------------------------------
+void ofApp::debugRatioLayout() {
+    
+    ofPushStyle();
+    
+    // safeZone
+    // iPhone X Pro Max  = x 3
+    ofSetColor(255, 0, 0);
+    ofDrawBitmapString(ofToString(ofGetHeight()), 10, 100);
+    
+    int xProMaxSafeZonePixelHeight = 44 * safeZoneFactor;
+    float upSafeZoneY = xProMaxSafeZonePixelHeight;
+    ofDrawLine(0, upSafeZoneY, ofGetWidth(), upSafeZoneY);
+    
+    float dnSafeZoneY = ofGetHeight() - xProMaxSafeZonePixelHeight;
+    ofDrawLine(0, dnSafeZoneY, ofGetWidth(), dnSafeZoneY);
+
+    float interfaceZoneHeight = ofGetHeight() - xProMaxSafeZonePixelHeight - 500;
+    ofDrawLine(0, interfaceZoneHeight, ofGetWidth(), interfaceZoneHeight);
+
+//    ofSetColor(255, 30);
+//    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+//
+//    ofSetColor(120, 255, 120);
+//    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
+//    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
+//
+//    ofSetColor(120, 255, 120);
+//    for (int i = 0; i < 5; i++) {
+//        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
+//    }
+//
+//    ofSetColor(255, 180, 120);
+//    for (int i = 0; i < 3; i++) {
+//        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
+//    }
+    
+    ofPopStyle();
+    
+}
 
 //--------------------------------------------------------------
 void ofApp::debugLayout() {

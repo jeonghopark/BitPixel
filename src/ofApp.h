@@ -63,8 +63,10 @@ public:
     bool bPlayNote;
     bool bCameraCapturePlay;
     
-    
     void debugLayout();
+    void debugRatioLayout();
+    
+    int safeZoneFactor;
     
     // ofxTonic
     ofxTonicSynth createSynthVoiceIn();
