@@ -59,6 +59,10 @@ public:
     void audioRequested(float * output, int bufferSize, int nChannels);
     void audioReceived(float * input, int bufferSize, int nChannels);
     
+    void activeAudioSilenceMode();
+    void setupColors();
+    
+    int iosDeviceSet();
     
     bool bPlayNote;
     bool bCameraCapturePlay;
@@ -66,12 +70,13 @@ public:
     void debugLayout();
     void debugRatioLayout();
     
-    int safeZoneFactor;
+    int safeZoneHeightFactor;
     
     // ofxTonic
     ofxTonicSynth createSynthVoiceIn();
     ofxTonicSynth controlSynthParameter;
-    void synthSetting();
+    void createSynthVoice();
+    void setSynthMain();
     ControlGenerator bpm;
     ControlGenerator metro;
     ofEvent<float> * metroOut;
@@ -80,6 +85,7 @@ public:
     int noteIndex;
     int oldNoteIndex[NUM_SYNTH_LINE];
     
+    void setupImage();
     
     // Main
     // void setIPad();
@@ -100,7 +106,7 @@ public:
     ofVideoGrabber cam;
 #endif
     
-    ofImage squareCam;
+    ofImage captureCamImg;
     ofImage edge;
     ofPixels gray;
     bool camOpen;
@@ -170,7 +176,6 @@ public:
     void drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c);
     void drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c);
     
-    
     void activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c);
     float activeSpeed;
     float activeFactor;
@@ -186,9 +191,7 @@ public:
     
     int baseSelection;
     
-    
     // ofxCvGrayscaleImage grayImage;
-    
     
     // Decimal to N Base
     vector<int> convertDecimalToNBase(int n, int base, int size);
@@ -205,23 +208,18 @@ public:
     int intervalDist;
     
     ScaleSetting scaleSetting;
-    
-    
-    
+
     // int playOldNote1;
     // int drawOldPointNote1;
     // int drawOldLineNote1;
-    
     
     // void drawScoreCircleLineIPad(vector<int> _vNote, int _scoreCh);
     void drawScoreCircleLineIPhone(vector<int> _vNote, int _scoreCh);
     void trigScoreNote(vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh);
     
-    
     float pixeShapeSize;
     
     ofImage backgroundControPanel;
-    
     
     int lineScoreNumber;
     
@@ -248,13 +246,10 @@ public:
     ofColor backgroundColor;
     ofColor uiLineColor;
     
-    
     void drawCircle(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int xDefaultPos);
     void drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX, float stepY, int scoreCh, int xDefaultPos);
     
-    
     void calculatePixels(ofImage _img);
-    
     
     void iPhoneTouchDown(ofTouchEventArgs & touch);
     // void iPadTouchDown(ofTouchEventArgs & touch);
@@ -264,7 +259,6 @@ public:
     
     void iPhoneTouchUp(ofTouchEventArgs & touch);
     // void iPadTouchUp(ofTouchEventArgs & touch);
-    
     
     float menuAreaY;
     void menuImgSetup();
@@ -290,7 +284,6 @@ public:
     
     ofRectangle returnCapture;
     ofImage returnCaptureMode;
-    
     
     ofxiOSImagePicker libraryImg;
     bool importLibraryImg;

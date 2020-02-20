@@ -12,9 +12,7 @@ using namespace cv;
 #import <sys/utsname.h>
 
 //--------------------------------------------------------------
-void ofApp::setup() {
-        
-    ofSetOrientation(OF_ORIENTATION_DEFAULT);
+void ofApp::activeAudioSilenceMode() {
     
     //    [[AVAudioSession sharedInstance] setDelegate:self];
     //    NSError *error = nil;
@@ -22,7 +20,13 @@ void ofApp::setup() {
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setupColors() {
+ 
     colorVar[0] = ofColor(192, 25, 30);
     colorVar[1] = ofColor(79, 185, 73);
     colorVar[2] = ofColor(255, 172, 0);
@@ -36,6 +40,17 @@ void ofApp::setup() {
     contourLineColor = ofColor(230, 221, 193);
     eventColor = ofColor(230, 221, 193);
     uiLineColor = ofColor(230, 221, 193);
+
+}
+
+//--------------------------------------------------------------
+void ofApp::setup() {
+        
+    ofSetOrientation(OF_ORIENTATION_DEFAULT);
+    
+    activeAudioSilenceMode();
+    
+    setupColors();
     
     baseSelection = 7;
     
@@ -50,80 +65,77 @@ void ofApp::setup() {
     
     //    backgroundControPanel.load("controlBackground.png");
     
-#if TARGET_OS_SIMULATOR
-    camSize = 360; // 360
-#else
-    cam.setDeviceID(0);
-    cam.setup(480, 360);
-    cam.setDesiredFrameRate(15);
-    camSize = cam.getWidth(); // 360
-#endif
+    safeZoneHeightFactor = iosDeviceSet();
     
-    bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    squareCam.setImageType(OF_IMAGE_COLOR_ALPHA);
-    squareCam.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    setupImage();
     
-    lineScoreNumber = 23;
+    createSynthVoice();
+    setSynthMain();
     
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        float _height = [UIScreen mainScreen].nativeBounds.size.height;
-        switch (int(_height)) {
-            case 1136:
-//                cout << "IPHONE 5,5S,5C" << endl;
-                safeZoneFactor = 0;
-                break;
-            case 1334:
-//                cout << "IPHONE 6,7,8 IPHONE 6S,7S,8S " << endl;
-                safeZoneFactor = 0;
-                break;
-            case 1920:
-            case 2208:
-                safeZoneFactor = 0;
-//                cout << "IPHONE 6PLUS, 6SPLUS, 7PLUS, 8PLUS" << endl;
-                break;
-            case 2436:
-//                cout << "IPHONE 11 Pro, IPHONE X, IPHONE XS" << endl;
-                safeZoneFactor = 3;
-                break;
-            case 2688:
-//                cout << "IPHONE 11 Pro Max, IPHONE XS_MAX" << endl;
-                safeZoneFactor = 3;
-                break;
-            case 1792:
-//                cout << "IPHONE 11, IPHONE XR" << endl;
-                safeZoneFactor = 2;
-                break;
-//            default:
-//                cout << "UNDETERMINED" << endl;
+    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+    
+    activeFactor = 0;
+    activeSpeed = 0.1;
+    
+    menuImgSetup();
+    
+    importLibraryImg = false;
+    libraryImportDone = false;
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setupImage() {
+ 
+    #if TARGET_OS_SIMULATOR
+        camSize = 360; // 360
+    #else
+        cam.setDeviceID(0);
+        cam.setup(480, 360);
+        cam.setDesiredFrameRate(15);
+        camSize = cam.getWidth(); // 360
+    #endif
+        
+        bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+        gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+        edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+        captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
+        captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+        
+        lineScoreNumber = 23;
+        
+        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+            bIPhone = true;
+            screenW = ofGetWidth();
+            screenH = ofGetHeight();
+            iPhonePreviewSize = screenW;
+            debugCameraImage.load("debug_layout_cat.jpg");
+            setIPhone();
+        } else {
+            //        bIPhone = false;
+            //        screenW = ofGetWidth();
+            //        screenH = ofGetWidth() * 4.0 / 3.0;
+            //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
+            //        setIPad();
         }
-    }
+        
+        //    bIPhone = true;
+        //    screenW = ofGetWidth();
+        //    screenH = ofGetHeight();
+        //    iPhonePreviewSize = screenW;
+        //    debugCameraImage.load("debug_layout_cat.jpg");
+        //    setIPhone();
+        
+        cannyThreshold1 = 120;
+        cannyThreshold2 = 120;
+        grayThreshold = 120;
     
-    
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        bIPhone = true;
-        screenW = ofGetWidth();
-        screenH = ofGetHeight();
-        iPhonePreviewSize = screenW;
-        debugCameraImage.load("debug_layout_cat.jpg");
-        setIPhone();
-    } else {
-        //        bIPhone = false;
-        //        screenW = ofGetWidth();
-        //        screenH = ofGetWidth() * 4.0 / 3.0;
-        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
-        //        setIPad();
-    }
-    
-    //    bIPhone = true;
-    //    screenW = ofGetWidth();
-    //    screenH = ofGetHeight();
-    //    iPhonePreviewSize = screenW;
-    //    debugCameraImage.load("debug_layout_cat.jpg");
-    //    setIPhone();
-    
-    synthSetting();
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setSynthMain() {
     
     maxSpeed = 200;
     minSpeed = 30;
@@ -152,10 +164,6 @@ void ofApp::setup() {
     .wetLevel(0.1);
     
     synthMain.setOutputGen((synth[0] + synth[1] + synth[2] + synth[3] + synth[4] + synth[5] + synth[6]) * 1.0 / NUM_SYNTH_LINE * 3 >> delay >> reverb);
-
-    cannyThreshold1 = 120;
-    cannyThreshold2 = 120;
-    grayThreshold = 120;
     
     // note music play
     index = 0;
@@ -171,17 +179,49 @@ void ofApp::setup() {
     scaleSetting.setup();
     
     touchPos.assign(2, ofVec2f());
+
+}
+
+
+//--------------------------------------------------------------
+int ofApp::iosDeviceSet() {
     
-    ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
+    int _value = 0;
     
-    activeFactor = 0;
-    activeSpeed = 0.1;
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        float _height = [UIScreen mainScreen].nativeBounds.size.height;
+        switch (int(_height)) {
+            case 1136:
+                //                cout << "IPHONE 5,5S,5C" << endl;
+                _value = 0;
+                break;
+            case 1334:
+                //                cout << "IPHONE 6,7,8 IPHONE 6S,7S,8S " << endl;
+                _value = 0;
+                break;
+            case 1920:
+            case 2208:
+                _value = 0;
+                //                cout << "IPHONE 6PLUS, 6SPLUS, 7PLUS, 8PLUS" << endl;
+                break;
+            case 2436:
+                //                cout << "IPHONE 11 Pro, IPHONE X, IPHONE XS" << endl;
+                _value = 3;
+                break;
+            case 2688:
+                //                cout << "IPHONE 11 Pro Max, IPHONE XS_MAX" << endl;
+                _value = 3;
+                break;
+            case 1792:
+                //                cout << "IPHONE 11, IPHONE XR" << endl;
+                _value = 2;
+                break;
+                //            default:
+                //                cout << "UNDETERMINED" << endl;
+        }
+    }
     
-    menuImgSetup();
-    
-    importLibraryImg = false;
-    
-    libraryImportDone = false;
+    return _value;
     
 }
 
@@ -365,15 +405,15 @@ void ofApp::update() {
         
 #if TARGET_OS_SIMULATOR
     
-    squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
     if (bIPhone) {
     } else {
-        squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
     }
     
-    if (squareCam.isAllocated()) {
-        calculatePixels(squareCam);
+    if (captureCamImg.isAllocated()) {
+        calculatePixels(captureCamImg);
     }
 
 #else
@@ -384,18 +424,18 @@ void ofApp::update() {
             _buffImg.allocate(libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
             _buffImg.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
             _buffImg.resize(cam.getWidth(), cam.getHeight());
-            squareCam.setFromPixels(_buffImg.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+            captureCamImg.setFromPixels(_buffImg.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
             
             libraryImg.close();
-            calculatePixels(squareCam);
+            calculatePixels(captureCamImg);
             libraryImportDone = true;
         }
     } else {
         cam.update();
 
         if (cam.isFrameNew()) {
-            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-            calculatePixels(squareCam);
+            captureCamImg.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+            calculatePixels(captureCamImg);
         }
     }
     
@@ -404,13 +444,13 @@ void ofApp::update() {
     //    if (SIMULATOR) {
     //
     //        if (bIPhone) {
-    //            squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    //            captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     //        } else {
-    //            squareCam.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+    //            captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
     //        }
     //
-    //        if (squareCam.isAllocated()) {
-    //            calculatePixels(squareCam);
+    //        if (captureCamImg.isAllocated()) {
+    //            calculatePixels(captureCamImg);
     //        }
     //
     //    } else {
@@ -418,8 +458,8 @@ void ofApp::update() {
     //        cam.update();
     //
     //        if (cam.isFrameNew()) {
-    //            squareCam.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-    //            calculatePixels(squareCam);
+    //            captureCamImg.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+    //            calculatePixels(captureCamImg);
     //        }
     //
     //    }
@@ -568,7 +608,7 @@ void ofApp::debugRatioLayout() {
     ofSetColor(255, 0, 0);
     ofDrawBitmapString(ofToString(ofGetHeight()), 10, 100);
     
-    int xProMaxSafeZonePixelHeight = 44 * safeZoneFactor;
+    int xProMaxSafeZonePixelHeight = 44 * safeZoneHeightFactor;
     float upSafeZoneY = xProMaxSafeZonePixelHeight;
     ofDrawLine(0, upSafeZoneY, ofGetWidth(), upSafeZoneY);
     
@@ -2662,7 +2702,7 @@ void ofApp::audioReceived(float * output, int bufferSize, int nChannels) {
 }
 
 //--------------------------------------------------------------
-void ofApp::synthSetting() {
+void ofApp::createSynthVoice() {
     
     float _volume = 0.9;
     
