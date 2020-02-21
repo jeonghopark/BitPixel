@@ -315,6 +315,7 @@ void ofApp::menuImgSetup() {
 void ofApp::setIPhone() {
     
     controlAreaPosTopY = screenH - controlAreaSize.y;
+    lineScoreAreaPosTopY = screenH - controlAreaSize.y - lineScoreAreaSize.y;
         
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
@@ -1459,7 +1460,7 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
         ofPushMatrix();
         
         //     FIXME: Translate (???)
-        ofTranslate(0, controlAreaPosTopY - lineScoreAreaSize.y - 40);
+        ofTranslate(0, lineScoreAreaPosTopY - 40);
         
         ofPushStyle();
         

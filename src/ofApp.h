@@ -87,6 +87,8 @@ public:
     
     void setupImage();
     
+    float controlAreaPosTopY;
+    float lineScoreAreaPosTopY;
     ofVec2f controlAreaSize;
     ofVec2f lineScoreAreaSize;
     // void setIPad();
@@ -262,7 +264,6 @@ public:
     void iPhoneTouchUp(ofTouchEventArgs & touch);
     // void iPadTouchUp(ofTouchEventArgs & touch);
     
-    float controlAreaPosTopY;
     void menuImgSetup();
     void menuImgDraw(bool playOn);
     
