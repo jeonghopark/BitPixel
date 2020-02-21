@@ -73,6 +73,8 @@ void ofApp::setup() {
     controlAreaSize.set(ofGetWidth(), 326);
     lineScoreAreaSize.set(ofGetWidth(), 170);
     
+    iPhonePreviewSize = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
+
     setupImage();
     
     createSynthVoice();
@@ -111,9 +113,6 @@ void ofApp::setupImage() {
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         bIPhone = true;
-        screenW = ofGetWidth();
-        screenH = ofGetHeight();
-        iPhonePreviewSize = screenW;
         debugCameraImage.load("debug_layout_cat.jpg");
         setIPhone();
     } else {
@@ -314,8 +313,11 @@ void ofApp::menuImgSetup() {
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
     
-    controlAreaPosTopY = screenH - controlAreaSize.y;
-    lineScoreAreaPosTopY = screenH - controlAreaSize.y - lineScoreAreaSize.y;
+    float _screenW = ofGetWidth();
+    float _screenH = ofGetHeight();
+    
+    controlAreaPosTopY = _screenH - controlAreaSize.y;
+    lineScoreAreaPosTopY = _screenH - controlAreaSize.y - lineScoreAreaSize.y;
         
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
@@ -323,16 +325,16 @@ void ofApp::setIPhone() {
     
     cameraScreenRatio = iPhonePreviewSize / camSize; // 1.77777777
     
-    float _widthDefault = screenW * 2.4;
-    pixelCircleSize = 10 / _widthDefault * screenW;
-    ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
-    lineScoreStepX = screenW / float(lineScoreStepSize - 1);
-    lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
-    pixeShapeSize = 1 / _widthDefault * screenW;
+    float _widthDefault = _screenW * 2.4;
+    pixelCircleSize = 10 / _widthDefault * _screenW;
+    ctrlRectS = (_screenW * 0.125) / _widthDefault * _screenW;
+    lineScoreStepX = _screenW / float(lineScoreStepSize - 1);
+    lineScoreStepY = (_screenW * 0.006) / _widthDefault * _screenW;  // 1.6
+    pixeShapeSize = 1 / _widthDefault * _screenW;
     
-    float _thredSlideControlPosX = screenW * 1.0 / 6.0 * 0.75;
-    float _speedSlideControlPosX = screenW * 1.0 / 6.0 * 5.25;
-    float _controlAreaH = screenH - controlAreaPosTopY;
+    float _thredSlideControlPosX = _screenW * 1.0 / 6.0 * 0.75;
+    float _speedSlideControlPosX = _screenW * 1.0 / 6.0 * 5.25;
+    float _controlAreaH = _screenH - controlAreaPosTopY;
     speedCSize = ctrlRectS * 1.4;
 
     float _lineLenghtRatio = _controlAreaH * 0.35;
@@ -349,8 +351,8 @@ void ofApp::setIPhone() {
     bthresholdCtrl = false;
     intervalDist = 1;
         
-    float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 1.75;
-    float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4.25;
+    float _posIndexLeft = _screenW * 1.0 / 6.0 * 1.75;
+    float _posIndexRight = _screenW * 1.0 / 6.0 * 4.25;
     
     base4Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + _controlAreaH * 1.0 / 4.0);
     base5Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + _controlAreaH * 2.0 / 4.0);
