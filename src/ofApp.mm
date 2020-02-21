@@ -65,10 +65,13 @@ void ofApp::setup() {
     
     //    backgroundControPanel.load("controlBackground.png");
     
+    safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
+
     lineScoreStepSize = 23;
     controlObjectLineWidth = 2;
     
-    safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
+    controlAreaSize.set(ofGetWidth(), 326);
+    lineScoreAreaSize.set(ofGetWidth(), 170);
     
     setupImage();
     
@@ -311,25 +314,10 @@ void ofApp::menuImgSetup() {
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
     
-    // FIXME: Position
-    controlAreaPosTopY = screenW - 40 + 30 * 7;
-    
-    ctrlPnX = 0;
-    ctrlPnY = screenW;
-    ctrlPnW = screenW;
-    //    ctrlPnH = screenH - ctrlPnY;
-    //    ctrlPnH = screenW * 4.0 / 5.0;
-    
-    //    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
-    
-    //    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
-    //    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
-    
-    //    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
-    
+    controlAreaPosTopY = screenH - controlAreaSize.y;
+        
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
-    //    cameraScreenRatio = screenW / cam.getWidth();
     thresholdValue = 80;
     
     cameraScreenRatio = iPhonePreviewSize / camSize; // 1.77777777
@@ -337,45 +325,29 @@ void ofApp::setIPhone() {
     float _widthDefault = screenW * 2.4;
     pixelCircleSize = 10 / _widthDefault * screenW;
     ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
-    //    guideWidthStep = 96 / _widthDefault * screenW;
-    //    guideHeightStep = 64 / _widthDefault * screenW;
     lineScoreStepX = screenW / float(lineScoreStepSize - 1);
     lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
-    //    stepBasePos = 105 / _widthDefault * screenW;
     pixeShapeSize = 1 / _widthDefault * screenW;
     
     float _thredSlideControlPosX = screenW * 1.0 / 6.0 * 0.75;
     float _speedSlideControlPosX = screenW * 1.0 / 6.0 * 5.25;
     float _controlAreaH = screenH - controlAreaPosTopY;
-    
     speedCSize = ctrlRectS * 1.4;
-    //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
-    //    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
-    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _speedSlideControlPosX);
-    
+
     float _lineLenghtRatio = _controlAreaH * 0.35;
     
     speedCPos = ofPoint(_speedSlideControlPosX, controlAreaPosTopY + _controlAreaH * 0.5);
     speedLineLength = ofPoint(speedCPos.y - _lineLenghtRatio, speedCPos.y + _lineLenghtRatio);
     bSpeedCtrl = false;
     
-    //    thresholdCSize = ctrlRectS * 0.9;s
-    //    thresholdCPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
-    //    thresholdCPos = ofPoint(screenW * 0.5, screenH * 9.0/10.0);
     bthresholdCtrl = false;
     
     intervalSize = ctrlRectS * 0.9;
-    //    intervalPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
-    //    intervalPos = ofPoint(screenW * 0.5, screenH * 0.8/10.0);
-    //    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPosX);
     intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + _controlAreaH * 0.5);
     ctrlLineLength = ofPoint(intervalPos.y - _lineLenghtRatio, intervalPos.y + _lineLenghtRatio);
     bthresholdCtrl = false;
     intervalDist = 1;
-    
-    //    float _posIndexLeft = screenH * 1.84/10.0;
-    //    float _posIndexRight = screenH - _posIndexLeft;
-    
+        
     float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 1.75;
     float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4.25;
     
@@ -818,48 +790,36 @@ void ofApp::mainCameraCaptureViewiPhone() {
 //--------------------------------------------------------------
 void ofApp::drawIPhone() {
     
-    //    ofPushMatrix();
-    //    ofPushStyle();
-    //    if (WHITE_VIEW) {
-    //        ofSetColor(255, 255);
-    //    } else {
-    //        ofSetColor(backgroundColor);
-    //    }
-    //    ofDrawRectangle(0, screenPosLeftY, screenW - iPhonePreviewSize, iPhonePreviewSize);
-    //    ofPopStyle();
-    //    ofPopMatrix();
-    
-    // FIXME: Translate (???)
-    ofPushMatrix();
-    ofTranslate(0, -40);
     drawLineScoreIPhone(bCameraCapturePlay);
-    ofPopMatrix();
     
     mainCameraCaptureViewiPhone();
     
-    // FIXME: Translate (???)
-    ofPushMatrix();
-    ofTranslate(0, controlAreaPosTopY);
-    
-    ofPushStyle();
-    ofSetColor(uiLineColor, 180);
-    ofDrawLine(0, 40 - 30 * 7, ofGetWidth(), 40 - 30 * 7);
-    ofSetColor(uiLineColor, 120);
-    ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, 40 - 30 * 7);
-    ofSetColor(uiLineColor, 180);
-    ofDrawLine(0, 0, ofGetWidth(), 0);
-    ofPopStyle();
-    
-    ofPopMatrix();
+    drawIPhoneBaseLineLayout();
     
     drawControlElementIPhone(bCameraCapturePlay);
-    //    drawControlElementIPhone(true);
     
     drawBaseInterface(bCameraCapturePlay);
-    //    drawBaseInterface(true);
     
     menuImgDraw(bCameraCapturePlay);
     
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawIPhoneBaseLineLayout() {
+    
+    ofPushMatrix();
+    ofTranslate(0, controlAreaPosTopY - lineScoreAreaSize.y);
+    ofPushStyle();
+    ofSetColor(uiLineColor, 180);
+    ofDrawLine(0, 0, ofGetWidth(), 0);
+    ofSetColor(uiLineColor, 120);
+    ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, lineScoreAreaSize.y);
+    ofSetColor(uiLineColor, 180);
+    ofDrawLine(0, lineScoreAreaSize.y, ofGetWidth(), lineScoreAreaSize.y);
+    ofPopStyle();
+    ofPopMatrix();
+
 }
 
 
@@ -1498,7 +1458,8 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
     if (playOn) {
         ofPushMatrix();
         
-        ofTranslate(0, iPhonePreviewSize);
+        //     FIXME: Translate (???)
+        ofTranslate(0, controlAreaPosTopY - lineScoreAreaSize.y - 40);
         
         ofPushStyle();
         

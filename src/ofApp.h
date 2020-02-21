@@ -87,11 +87,13 @@ public:
     
     void setupImage();
     
-    // Main
+    ofVec2f controlAreaSize;
+    ofVec2f lineScoreAreaSize;
     // void setIPad();
     void setIPhone();
     // void drawIPad();
     void drawIPhone();
+    void drawIPhoneBaseLineLayout();
     float screenW, screenH;
     
     float iPhonePreviewSize;
