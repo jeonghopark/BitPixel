@@ -322,7 +322,7 @@ void ofApp::setIPhone() {
     
     //    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
     
-    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
+    //    screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
     //    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
     
     //    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
