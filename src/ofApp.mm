@@ -20,13 +20,13 @@ void ofApp::activeAudioSilenceMode() {
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-
+    
 }
 
 
 //--------------------------------------------------------------
 void ofApp::setupColors() {
- 
+    
     colorVar[0] = ofColor(192, 25, 30);
     colorVar[1] = ofColor(79, 185, 73);
     colorVar[2] = ofColor(255, 172, 0);
@@ -40,12 +40,12 @@ void ofApp::setupColors() {
     contourLineColor = ofColor(230, 221, 193);
     eventColor = ofColor(230, 221, 193);
     uiLineColor = ofColor(230, 221, 193);
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-        
+    
     ofSetOrientation(OF_ORIENTATION_DEFAULT);
     
     activeAudioSilenceMode();
@@ -66,7 +66,8 @@ void ofApp::setup() {
     //    backgroundControPanel.load("controlBackground.png");
     
     lineScoreStepSize = 23;
-
+    controlObjectLineWidth = 2;
+    
     safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
     
     setupImage();
@@ -89,47 +90,40 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::setupImage() {
- 
-    #if TARGET_OS_SIMULATOR
-        camSize = 360; // 360
-    #else
-        cam.setDeviceID(0);
-        cam.setup(480, 360);
-        cam.setDesiredFrameRate(15);
-        camSize = cam.getWidth(); // 360
-    #endif
-        
-        bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-        gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-        edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-        captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
-        captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
-                
-        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-            bIPhone = true;
-            screenW = ofGetWidth();
-            screenH = ofGetHeight();
-            iPhonePreviewSize = screenW;
-            debugCameraImage.load("debug_layout_cat.jpg");
-            setIPhone();
-        } else {
-            //        bIPhone = false;
-            //        screenW = ofGetWidth();
-            //        screenH = ofGetWidth() * 4.0 / 3.0;
-            //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
-            //        setIPad();
-        }
-        
-        //    bIPhone = true;
-        //    screenW = ofGetWidth();
-        //    screenH = ofGetHeight();
-        //    iPhonePreviewSize = screenW;
-        //    debugCameraImage.load("debug_layout_cat.jpg");
-        //    setIPhone();
-        
-        cannyThreshold1 = 120;
-        cannyThreshold2 = 120;
-        grayThreshold = 120;
+    
+#if TARGET_OS_SIMULATOR
+    camSize = 360; // 360
+#else
+    cam.setDeviceID(0);
+    cam.setup(480, 360);
+    cam.setDesiredFrameRate(15);
+    camSize = cam.getWidth(); // 360
+#endif
+    
+    bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
+    captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        bIPhone = true;
+        screenW = ofGetWidth();
+        screenH = ofGetHeight();
+        iPhonePreviewSize = screenW;
+        debugCameraImage.load("debug_layout_cat.jpg");
+        setIPhone();
+    } else {
+        //        bIPhone = false;
+        //        screenW = ofGetWidth();
+        //        screenH = ofGetWidth() * 4.0 / 3.0;
+        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
+        //        setIPad();
+    }
+    
+    cannyThreshold1 = 120;
+    cannyThreshold2 = 120;
+    grayThreshold = 120;
     
 }
 
@@ -179,7 +173,7 @@ void ofApp::setSynthMain() {
     scaleSetting.setup();
     
     touchPos.assign(2, ofVec2f());
-
+    
 }
 
 
@@ -236,11 +230,11 @@ void ofApp::menuImgSetup() {
     importImg.load("photoLibrary.png");
     float _scaleImport = 0.05;
     libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
-
+    
     importCancleImg.load("cancleLibrary.png");
     float _scaleImportCacle = 0.05;
     libaryImportCancle.setFromCenter(ofGetWidth() * 0.9, ofGetHeight() * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
-
+    
     cameraModeImg.load("cameraMode.png");
     float _scaleMode = 0.05;
     cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
@@ -318,20 +312,20 @@ void ofApp::menuImgSetup() {
 void ofApp::setIPhone() {
     
     // FIXME: Position
-    menuAreaY = screenW - 40 + 30 * 7;
+    controlAreaPosTopY = screenW - 40 + 30 * 7;
     
     ctrlPnX = 0;
     ctrlPnY = screenW;
     ctrlPnW = screenW;
-//    ctrlPnH = screenH - ctrlPnY;
-//    ctrlPnH = screenW * 4.0 / 5.0;
+    //    ctrlPnH = screenH - ctrlPnY;
+    //    ctrlPnH = screenW * 4.0 / 5.0;
     
-//    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
+    //    shiftValueIphoneY = ofGetHeight() * 0.5 - (screenH) * 0.5;
     
     screenPosLeftY = ofGetHeight() * 0.5 - iPhonePreviewSize * 0.5; // 248
-//    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
+    //    screenPosRightY = ofGetHeight() * 0.5 + iPhonePreviewSize * 0.5; // 888
     
-//    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
+    //    lineScoreRightX = ofGetWidth() - iPhonePreviewSize;
     
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
@@ -343,27 +337,25 @@ void ofApp::setIPhone() {
     float _widthDefault = screenW * 2.4;
     pixelCircleSize = 10 / _widthDefault * screenW;
     ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
-//    guideWidthStep = 96 / _widthDefault * screenW;
-//    guideHeightStep = 64 / _widthDefault * screenW;
+    //    guideWidthStep = 96 / _widthDefault * screenW;
+    //    guideHeightStep = 64 / _widthDefault * screenW;
     lineScoreStepX = screenW / float(lineScoreStepSize - 1);
     lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
     //    stepBasePos = 105 / _widthDefault * screenW;
     pixeShapeSize = 1 / _widthDefault * screenW;
     
-    controlObjectLineWidth = 2;
-    
-    float _thredSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 0.75;
-    float _speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5.25;
-    float _controlAreaH = ofGetHeight() - menuAreaY;
+    float _thredSlideControlPosX = screenW * 1.0 / 6.0 * 0.75;
+    float _speedSlideControlPosX = screenW * 1.0 / 6.0 * 5.25;
+    float _controlAreaH = screenH - controlAreaPosTopY;
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
-    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _speedSlideControlPos);
+    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _speedSlideControlPosX);
     
-    float _lineLenghtRatio = _controlAreaH * 0.7 * 0.5;
+    float _lineLenghtRatio = _controlAreaH * 0.35;
     
-    speedCPos = ofPoint(_speedSlideControlPos, menuAreaY + _controlAreaH * 0.5);
+    speedCPos = ofPoint(_speedSlideControlPosX, controlAreaPosTopY + _controlAreaH * 0.5);
     speedLineLength = ofPoint(speedCPos.y - _lineLenghtRatio, speedCPos.y + _lineLenghtRatio);
     bSpeedCtrl = false;
     
@@ -375,8 +367,8 @@ void ofApp::setIPhone() {
     intervalSize = ctrlRectS * 0.9;
     //    intervalPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    intervalPos = ofPoint(screenW * 0.5, screenH * 0.8/10.0);
-    //    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPos);
-    intervalPos = ofPoint(_thredSlideControlPos, menuAreaY + _controlAreaH * 0.5);
+    //    intervalPos = ofPoint(screenW * 0.5, _thredSlideControlPosX);
+    intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + _controlAreaH * 0.5);
     ctrlLineLength = ofPoint(intervalPos.y - _lineLenghtRatio, intervalPos.y + _lineLenghtRatio);
     bthresholdCtrl = false;
     intervalDist = 1;
@@ -387,12 +379,12 @@ void ofApp::setIPhone() {
     float _posIndexLeft = ofGetWidth() * 1.0 / 6.0 * 1.75;
     float _posIndexRight = ofGetWidth() * 1.0 / 6.0 * 4.25;
     
-    base4Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 1.0 / 4.0);
-    base5Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 2.0 / 4.0);
-    base6Pos = ofPoint(_posIndexLeft, menuAreaY + _controlAreaH * 3.0 / 4.0);
-    base7Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 1.0 / 4.0);
-    base8Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 2.0 / 4.0);
-    base9Pos = ofPoint(_posIndexRight, menuAreaY + _controlAreaH * 3.0 / 4.0);
+    base4Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + _controlAreaH * 1.0 / 4.0);
+    base5Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + _controlAreaH * 2.0 / 4.0);
+    base6Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + _controlAreaH * 3.0 / 4.0);
+    base7Pos = ofPoint(_posIndexRight, controlAreaPosTopY + _controlAreaH * 1.0 / 4.0);
+    base8Pos = ofPoint(_posIndexRight, controlAreaPosTopY + _controlAreaH * 2.0 / 4.0);
+    base9Pos = ofPoint(_posIndexRight, controlAreaPosTopY + _controlAreaH * 3.0 / 4.0);
     baseSize = ctrlRectS * 0.85;
     
     frontCameraOnOff = true;
@@ -402,12 +394,13 @@ void ofApp::setIPhone() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-        
+    
 #if TARGET_OS_SIMULATOR
     
     captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
     if (bIPhone) {
+        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     } else {
         captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
     }
@@ -415,7 +408,7 @@ void ofApp::update() {
     if (captureCamImg.isAllocated()) {
         calculatePixels(captureCamImg);
     }
-
+    
 #else
     
     if (importLibraryImg) {
@@ -432,7 +425,7 @@ void ofApp::update() {
         }
     } else {
         cam.update();
-
+        
         if (cam.isFrameNew()) {
             captureCamImg.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
             calculatePixels(captureCamImg);
@@ -441,29 +434,6 @@ void ofApp::update() {
     
 #endif
     
-    //    if (SIMULATOR) {
-    //
-    //        if (bIPhone) {
-    //            captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
-    //        } else {
-    //            captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-    //        }
-    //
-    //        if (captureCamImg.isAllocated()) {
-    //            calculatePixels(captureCamImg);
-    //        }
-    //
-    //    } else {
-    //
-    //        cam.update();
-    //
-    //        if (cam.isFrameNew()) {
-    //            captureCamImg.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
-    //            calculatePixels(captureCamImg);
-    //        }
-    //
-    //    }
-    //
     if (bCameraCapturePlay) {
         activeSpeed = 0.6;
         activeFactor += activeSpeed;
@@ -590,7 +560,7 @@ void ofApp::draw() {
     //    } else {
     drawIPhone();
     //    }
-
+    
 #if TARGET_OS_SIMULATOR
     debugRatioLayout();
 #endif
@@ -614,26 +584,26 @@ void ofApp::debugRatioLayout() {
     
     float dnSafeZoneY = ofGetHeight() - xProMaxSafeZonePixelHeight;
     ofDrawLine(0, dnSafeZoneY, ofGetWidth(), dnSafeZoneY);
-
+    
     float interfaceZoneHeight = ofGetHeight() - xProMaxSafeZonePixelHeight - 500;
     ofDrawLine(0, interfaceZoneHeight, ofGetWidth(), interfaceZoneHeight);
-
-//    ofSetColor(255, 30);
-//    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-//
-//    ofSetColor(120, 255, 120);
-//    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
-//    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
-//
-//    ofSetColor(120, 255, 120);
-//    for (int i = 0; i < 5; i++) {
-//        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
-//    }
-//
-//    ofSetColor(255, 180, 120);
-//    for (int i = 0; i < 3; i++) {
-//        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
-//    }
+    
+    //    ofSetColor(255, 30);
+    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    //
+    //    ofSetColor(120, 255, 120);
+    //    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
+    //    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
+    //
+    //    ofSetColor(120, 255, 120);
+    //    for (int i = 0; i < 5; i++) {
+    //        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
+    //    }
+    //
+    //    ofSetColor(255, 180, 120);
+    //    for (int i = 0; i < 3; i++) {
+    //        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
+    //    }
     
     ofPopStyle();
     
@@ -869,7 +839,7 @@ void ofApp::drawIPhone() {
     
     // FIXME: Translate (???)
     ofPushMatrix();
-    ofTranslate(0, menuAreaY);
+    ofTranslate(0, controlAreaPosTopY);
     
     ofPushStyle();
     ofSetColor(uiLineColor, 180);
@@ -920,79 +890,79 @@ void ofApp::menuImgDraw(bool playOn) {
 //--------------------------------------------------------------
 void ofApp::drawControlElementIPad() {
     
-//    ofPushStyle();
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(255);
-//    } else {
-//        ofSetColor(0);
-//    }
-//
-//    ofDrawRectangle(0, ctrlPnY, ctrlPnW, ctrlPnH);
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 10);
-//    } else {
-//        ofSetColor(255, 20);
-//    }
-//
-//    //    backgroundControPanel.draw(0, ctrlPnY, ctrlPnW, 140);
-//    ofPopStyle();
-//
-//    ofPushMatrix();
-//    ofPushStyle();
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 80);
-//    } else {
-//        ofSetColor(255, 80);
-//    }
-//
-//    float _speedX = guideWidthStep;
-//    float _yD = 20;
-//    ofDrawLine(_speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
-//
-//    float _thresholdX = guideWidthStep * 15;
-//    ofDrawLine(_thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
-//
-//    //    float _intervalX = guideWidthStep * 2.5;
-//    //    ofDrawLine(_intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
-//
-//    ofPopStyle();
-//    ofPopMatrix();
-//
-//    drawElemSpeedShape();
-//    drawElemIntervalShape();
-//
-//    ofPushMatrix();
-//    ofPushStyle();
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 80);
-//    } else {
-//        ofSetColor(255, 80);
-//    }
-//
-//    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
-//
-//    float _xL1 = ctrlPnW * 0.5 - _offsetXPos * 0.5;
-//    ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
-//
-//    float _xL2 = ctrlPnW * 0.5 + _offsetXPos * 0.5;
-//    ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
-//
-//    float _xM = ctrlPnW * 0.5;
-//
-//    if (WHITE_VIEW) {
-//        ofSetColor(0, 40);
-//    } else {
-//        ofSetColor(255, 40);
-//    }
-//
-//    ofDrawLine(_xM, ctrlPnY + _yD, _xM, screenH - _yD);
-//
-//    ofPopStyle();
-//    ofPopMatrix();
+    //    ofPushStyle();
+    //
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(255);
+    //    } else {
+    //        ofSetColor(0);
+    //    }
+    //
+    //    ofDrawRectangle(0, ctrlPnY, ctrlPnW, ctrlPnH);
+    //
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(0, 10);
+    //    } else {
+    //        ofSetColor(255, 20);
+    //    }
+    //
+    //    //    backgroundControPanel.draw(0, ctrlPnY, ctrlPnW, 140);
+    //    ofPopStyle();
+    //
+    //    ofPushMatrix();
+    //    ofPushStyle();
+    //
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(0, 80);
+    //    } else {
+    //        ofSetColor(255, 80);
+    //    }
+    //
+    //    float _speedX = guideWidthStep;
+    //    float _yD = 20;
+    //    ofDrawLine(_speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
+    //
+    //    float _thresholdX = guideWidthStep * 15;
+    //    ofDrawLine(_thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
+    //
+    //    //    float _intervalX = guideWidthStep * 2.5;
+    //    //    ofDrawLine(_intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
+    //
+    //    ofPopStyle();
+    //    ofPopMatrix();
+    //
+    //    drawElemSpeedShape();
+    //    drawElemIntervalShape();
+    //
+    //    ofPushMatrix();
+    //    ofPushStyle();
+    //
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(0, 80);
+    //    } else {
+    //        ofSetColor(255, 80);
+    //    }
+    //
+    //    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
+    //
+    //    float _xL1 = ctrlPnW * 0.5 - _offsetXPos * 0.5;
+    //    ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
+    //
+    //    float _xL2 = ctrlPnW * 0.5 + _offsetXPos * 0.5;
+    //    ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
+    //
+    //    float _xM = ctrlPnW * 0.5;
+    //
+    //    if (WHITE_VIEW) {
+    //        ofSetColor(0, 40);
+    //    } else {
+    //        ofSetColor(255, 40);
+    //    }
+    //
+    //    ofDrawLine(_xM, ctrlPnY + _yD, _xM, screenH - _yD);
+    //
+    //    ofPopStyle();
+    //    ofPopMatrix();
     
 }
 
@@ -2170,14 +2140,18 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bInterval = false;
         //        }
         
-        float _xL = screenPosLeftY;
-        float _xR = screenPosLeftY + iPhonePreviewSize;
-        
-        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+//        float _xL = screenPosLeftY;
+//        float _xR = screenPosLeftY + iPhonePreviewSize;
+//        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+//            grayThreshold = 120;
+//            touchDownDefault = _chgdTouch.x;
+//        }
+
+        if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.x;
         }
-        
+
     }
     
     if (bCameraCapturePlay) {
@@ -2422,7 +2396,7 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
     touchPos[touch.id] = _chgdTouch;
-
+    
     //    if (bSpeedCtrl) {
     //        float _minX = ofGetWidth() * 0.15;
     //        float _maxX = screenW * 0.9;
@@ -2588,49 +2562,49 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             cam.setDesiredFrameRate(15);
             camSize = cam.getWidth(); // 360
         }
-
+        
 #endif
         
     }
     
     if (!bPlayNote && libaryImport.inside(_chgdTouch)) {
-//        if (!bPlayNote) {
-            libraryImg.openLibrary();
-            importLibraryImg = true;
-//            importLibraryImg = false;
-//        }
+        //        if (!bPlayNote) {
+        libraryImg.openLibrary();
+        importLibraryImg = true;
+        //            importLibraryImg = false;
+        //        }
     }
     
-//    if (importLibraryImg && libaryImport.inside(_chgdTouch)) {
-//        if (!bCameraCapturePlay) {
-//            cout << "open" << endl;
-//            libraryImg.openLibrary();
-//            importLibraryImg = false;
-//        }
-////        importLibraryImg = false;
-////        libraryImportDone = false;
-//    }
-
+    //    if (importLibraryImg && libaryImport.inside(_chgdTouch)) {
+    //        if (!bCameraCapturePlay) {
+    //            cout << "open" << endl;
+    //            libraryImg.openLibrary();
+    //            importLibraryImg = false;
+    //        }
+    ////        importLibraryImg = false;
+    ////        libraryImportDone = false;
+    //    }
+    
     if (libaryImportCancle.inside(_chgdTouch)) {
-//        libraryImg.openLibrary();
+        //        libraryImg.openLibrary();
         if (!bCameraCapturePlay) {
-//            cout << "open" << endl;
+            //            cout << "open" << endl;
             importLibraryImg = false;
         }
     }
     
-//    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
-//
-//        bPlayNote = !bPlayNote;
-//
-//        if (!bPlayNote) {
-//            ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
-//        } else {
-//            ofAddListener(*metroOut, this, &ofApp::triggerReceive);
-//        }
-//
-//    }
-//
+    //    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
+    //
+    //        bPlayNote = !bPlayNote;
+    //
+    //        if (!bPlayNote) {
+    //            ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
+    //        } else {
+    //            ofAddListener(*metroOut, this, &ofApp::triggerReceive);
+    //        }
+    //
+    //    }
+    //
     
     float _tolerance = 2;
     

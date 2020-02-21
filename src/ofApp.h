@@ -260,7 +260,7 @@ public:
     void iPhoneTouchUp(ofTouchEventArgs & touch);
     // void iPadTouchUp(ofTouchEventArgs & touch);
     
-    float menuAreaY;
+    float controlAreaPosTopY;
     void menuImgSetup();
     void menuImgDraw(bool playOn);
     
