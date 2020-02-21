@@ -140,7 +140,7 @@ public:
     // control Panel
     void drawControlElementIPad();
     void drawControlElementIPhone(bool playOn);
-    void debugControlPDraw();
+//    void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
     int guideWidthStep, guideHeightStep;
     int maxSpeed, minSpeed;

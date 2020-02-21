@@ -343,8 +343,8 @@ void ofApp::setIPhone() {
     float _widthDefault = screenW * 2.4;
     pixelCircleSize = 10 / _widthDefault * screenW;
     ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
-    guideWidthStep = 96 / _widthDefault * screenW;
-    guideHeightStep = 64 / _widthDefault * screenW;
+//    guideWidthStep = 96 / _widthDefault * screenW;
+//    guideHeightStep = 64 / _widthDefault * screenW;
     lineScoreStepX = screenW / float(lineScoreStepSize - 1);
     lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
     //    stepBasePos = 105 / _widthDefault * screenW;
@@ -920,79 +920,79 @@ void ofApp::menuImgDraw(bool playOn) {
 //--------------------------------------------------------------
 void ofApp::drawControlElementIPad() {
     
-    ofPushStyle();
-    
-    if (WHITE_VIEW) {
-        ofSetColor(255);
-    } else {
-        ofSetColor(0);
-    }
-    
-    ofDrawRectangle(0, ctrlPnY, ctrlPnW, ctrlPnH);
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 10);
-    } else {
-        ofSetColor(255, 20);
-    }
-    
-    //    backgroundControPanel.draw(0, ctrlPnY, ctrlPnW, 140);
-    ofPopStyle();
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 80);
-    } else {
-        ofSetColor(255, 80);
-    }
-    
-    float _speedX = guideWidthStep;
-    float _yD = 20;
-    ofDrawLine(_speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
-    
-    float _thresholdX = guideWidthStep * 15;
-    ofDrawLine(_thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
-    
-    //    float _intervalX = guideWidthStep * 2.5;
-    //    ofDrawLine(_intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-    drawElemSpeedShape();
-    drawElemIntervalShape();
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 80);
-    } else {
-        ofSetColor(255, 80);
-    }
-    
-    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
-    
-    float _xL1 = ctrlPnW * 0.5 - _offsetXPos * 0.5;
-    ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
-    
-    float _xL2 = ctrlPnW * 0.5 + _offsetXPos * 0.5;
-    ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
-    
-    float _xM = ctrlPnW * 0.5;
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0, 40);
-    } else {
-        ofSetColor(255, 40);
-    }
-    
-    ofDrawLine(_xM, ctrlPnY + _yD, _xM, screenH - _yD);
-    
-    ofPopStyle();
-    ofPopMatrix();
+//    ofPushStyle();
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(255);
+//    } else {
+//        ofSetColor(0);
+//    }
+//
+//    ofDrawRectangle(0, ctrlPnY, ctrlPnW, ctrlPnH);
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 10);
+//    } else {
+//        ofSetColor(255, 20);
+//    }
+//
+//    //    backgroundControPanel.draw(0, ctrlPnY, ctrlPnW, 140);
+//    ofPopStyle();
+//
+//    ofPushMatrix();
+//    ofPushStyle();
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 80);
+//    } else {
+//        ofSetColor(255, 80);
+//    }
+//
+//    float _speedX = guideWidthStep;
+//    float _yD = 20;
+//    ofDrawLine(_speedX, ctrlPnY + _yD, _speedX, screenH - _yD);
+//
+//    float _thresholdX = guideWidthStep * 15;
+//    ofDrawLine(_thresholdX, ctrlPnY + _yD, _thresholdX, screenH - _yD);
+//
+//    //    float _intervalX = guideWidthStep * 2.5;
+//    //    ofDrawLine(_intervalX, ctrlPnY + _yD, _intervalX, screenH - _yD);
+//
+//    ofPopStyle();
+//    ofPopMatrix();
+//
+//    drawElemSpeedShape();
+//    drawElemIntervalShape();
+//
+//    ofPushMatrix();
+//    ofPushStyle();
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 80);
+//    } else {
+//        ofSetColor(255, 80);
+//    }
+//
+//    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
+//
+//    float _xL1 = ctrlPnW * 0.5 - _offsetXPos * 0.5;
+//    ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
+//
+//    float _xL2 = ctrlPnW * 0.5 + _offsetXPos * 0.5;
+//    ofDrawLine(_xL2, ctrlPnY + _yD, _xL2, screenH - _yD);
+//
+//    float _xM = ctrlPnW * 0.5;
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0, 40);
+//    } else {
+//        ofSetColor(255, 40);
+//    }
+//
+//    ofDrawLine(_xM, ctrlPnY + _yD, _xM, screenH - _yD);
+//
+//    ofPopStyle();
+//    ofPopMatrix();
     
 }
 
@@ -2072,36 +2072,36 @@ void ofApp::drawShape(ofPoint pos, int base, int size) {
 
 
 //--------------------------------------------------------------
-void ofApp::debugControlPDraw() {
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    if (WHITE_VIEW) {
-        ofSetColor(0);
-    } else {
-        ofSetColor(255);
-    }
-    
-    for (int i = 0; i < 15; i++) {
-        float _x1 = i * guideWidthStep + guideWidthStep;
-        ofDrawLine(_x1, ctrlPnY, _x1, screenH);
-    }
-    
-    for (int j = 0; j < 7; j++) {
-        float _y1 = j * guideHeightStep + guideHeightStep;
-        ofDrawLine(0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY);
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-    ofPushStyle();
-    ofSetColor(0);
-    ofDrawBitmapString(ofToString(ofGetFrameRate(), 2), 10, screenH - 10);
-    ofPopStyle();
-    
-}
+//void ofApp::debugControlPDraw() {
+//
+//    ofPushMatrix();
+//    ofPushStyle();
+//
+//    if (WHITE_VIEW) {
+//        ofSetColor(0);
+//    } else {
+//        ofSetColor(255);
+//    }
+//
+//    for (int i = 0; i < 15; i++) {
+//        float _x1 = i * guideWidthStep + guideWidthStep;
+//        ofDrawLine(_x1, ctrlPnY, _x1, screenH);
+//    }
+//
+//    for (int j = 0; j < 7; j++) {
+//        float _y1 = j * guideHeightStep + guideHeightStep;
+//        ofDrawLine(0, _y1 + ctrlPnY, screenW, _y1 + ctrlPnY);
+//    }
+//
+//    ofPopStyle();
+//    ofPopMatrix();
+//
+//    ofPushStyle();
+//    ofSetColor(0);
+//    ofDrawBitmapString(ofToString(ofGetFrameRate(), 2), 10, screenH - 10);
+//    ofPopStyle();
+//
+//}
 
 
 //--------------------------------------------------------------
