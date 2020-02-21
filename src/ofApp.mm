@@ -353,17 +353,17 @@ void ofApp::setIPhone() {
     controlObjectLineWidth = 2;
     
     float _thredSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 0.75;
-    float __speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5.25;
+    float _speedSlideControlPos = ofGetWidth() * 1.0 / 6.0 * 5.25;
     float _controlAreaH = ofGetHeight() - menuAreaY;
     
     speedCSize = ctrlRectS * 1.4;
     //    speedCPos = ofPoint(15 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    speedCPos = ofPoint(screenW * 0.5, screenH * 9.2 / 10.0);
-    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + __speedSlideControlPos);
+    //    speedCPos = ofPoint(screenW * 0.5, screenPosRightY + _speedSlideControlPos);
     
     float _lineLenghtRatio = _controlAreaH * 0.7 * 0.5;
     
-    speedCPos = ofPoint(__speedSlideControlPos, menuAreaY + _controlAreaH * 0.5);
+    speedCPos = ofPoint(_speedSlideControlPos, menuAreaY + _controlAreaH * 0.5);
     speedLineLength = ofPoint(speedCPos.y - _lineLenghtRatio, speedCPos.y + _lineLenghtRatio);
     bSpeedCtrl = false;
     
