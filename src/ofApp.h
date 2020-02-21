@@ -62,7 +62,7 @@ public:
     void activeAudioSilenceMode();
     void setupColors();
     
-    int iosDeviceSet();
+    int iPhoneXDeviceScreenFactor();
     
     bool bPlayNote;
     bool bCameraCapturePlay;
@@ -221,7 +221,7 @@ public:
     
     ofImage backgroundControPanel;
     
-    int lineScoreNumber;
+    int lineScoreStepSize;
     
     bool bIPhone;
     float shiftValueIphoneY;

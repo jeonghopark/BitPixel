@@ -65,7 +65,9 @@ void ofApp::setup() {
     
     //    backgroundControPanel.load("controlBackground.png");
     
-    safeZoneHeightFactor = iosDeviceSet();
+    lineScoreStepSize = 23;
+
+    safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
     
     setupImage();
     
@@ -102,9 +104,7 @@ void ofApp::setupImage() {
         edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
         captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
         captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
-        
-        lineScoreNumber = 23;
-        
+                
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
             bIPhone = true;
             screenW = ofGetWidth();
@@ -184,7 +184,7 @@ void ofApp::setSynthMain() {
 
 
 //--------------------------------------------------------------
-int ofApp::iosDeviceSet() {
+int ofApp::iPhoneXDeviceScreenFactor() {
     
     int _value = 0;
     
@@ -345,7 +345,7 @@ void ofApp::setIPhone() {
     ctrlRectS = (screenW * 0.125) / _widthDefault * screenW;
     guideWidthStep = 96 / _widthDefault * screenW;
     guideHeightStep = 64 / _widthDefault * screenW;
-    lineScoreStepX = screenW / float(lineScoreNumber - 1);
+    lineScoreStepX = screenW / float(lineScoreStepSize - 1);
     lineScoreStepY = (screenW * 0.006) / _widthDefault * screenW;  // 1.6
     //    stepBasePos = 105 / _widthDefault * screenW;
     pixeShapeSize = 1 / _widthDefault * screenW;
@@ -367,7 +367,7 @@ void ofApp::setIPhone() {
     speedLineLength = ofPoint(speedCPos.y - _lineLenghtRatio, speedCPos.y + _lineLenghtRatio);
     bSpeedCtrl = false;
     
-    //    thresholdCSize = ctrlRectS * 0.9;
+    //    thresholdCSize = ctrlRectS * 0.9;s
     //    thresholdCPos = ofPoint(1 * guideWidthStep, ctrlPnY + ctrlPnH * 0.5);
     //    thresholdCPos = ofPoint(screenW * 0.5, screenH * 9.0/10.0);
     bthresholdCtrl = false;
@@ -973,7 +973,7 @@ void ofApp::drawControlElementIPad() {
         ofSetColor(255, 80);
     }
     
-    int _offsetXPos = lineScoreStepX * (lineScoreNumber - 1);
+    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
     
     float _xL1 = ctrlPnW * 0.5 - _offsetXPos * 0.5;
     ofDrawLine(_xL1, ctrlPnY + _yD, _xL1, screenH - _yD);
@@ -1467,7 +1467,7 @@ void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
 //--------------------------------------------------------------
 //void ofApp::drawLineScoreIPad() {
 //
-//    int _xNumber = lineScoreNumber;
+//    int _xNumber = lineScoreStepSize;
 //    int _stepX = lineScoreStepX;
 //    int _stepY = lineScoreStepY;
 //    int _offsetNote = 56;
@@ -1497,7 +1497,7 @@ void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
 //--------------------------------------------------------------
 //void ofApp::drawScoreCircleLineIPad(vector<int> _vNote, int _scoreCh) {
 //
-//    int _xNumber = lineScoreNumber;
+//    int _xNumber = lineScoreStepSize;
 //    //    int _middle = _xNumber * 0.5;
 //    int _stepX = lineScoreStepX;
 //    int _stepY = lineScoreStepY;
@@ -1553,13 +1553,13 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
 //--------------------------------------------------------------
 void ofApp::drawScoreCircleLineIPhone(vector<int> vNote, int scoreCh) {
     
-    int _offsetXPos = lineScoreStepX * (lineScoreNumber - 1);
+    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
     
     ofColor _c = colorVar[scoreCh - 1];
     
     if (vNote.size() > 0) {
-        drawCircle(_c, lineScoreNumber, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
-        drawLine(_c, lineScoreNumber, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
+        drawCircle(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
+        drawLine(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
     }
     
 }
