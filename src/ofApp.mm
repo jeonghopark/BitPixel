@@ -2109,7 +2109,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
 //            touchDownDefault = _chgdTouch.x;
 //        }
 
-        if ((_chgdTouch.x > 0) && (_chgdTouch.x < screenW) && (_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
+        if ((_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.x;
         }
