@@ -101,6 +101,8 @@ public:
     float iPhonePreviewSize;
     
     void mainCameraCaptureViewiPhone();
+    void realtimeCameraConvertedImageView();
+    void realtimeBufferImageView();
     
     ofImage debugCameraImage;
     
@@ -152,7 +154,7 @@ public:
     // float stepBasePos;
     
     float ctrlRectS;
-    ofPoint speedCPos;
+    ofPoint speedPos;
     ofPoint speedLineLength;
     float speedCSize;
     bool bSpeedCtrl;
@@ -162,7 +164,7 @@ public:
     bool bthresholdCtrl;
     
     ofPoint intervalPos;
-    ofPoint ctrlLineLength;
+    ofPoint intervalLineLength;
     float intervalSize;
     bool bInterval;
     
