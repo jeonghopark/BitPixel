@@ -711,7 +711,7 @@ void ofApp::mainCameraCaptureViewiPhone() {
         //        drawPlayingShapeNotes();
         //        drawPixelAllNoteShape();
         
-        for (int i = 0; i < NUM_SYNTH_LINE; i++) {  
+        for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             drawPixelAllNoteShapesIPhone(scoreNote[i], i + 1);
             drawPlayingShapeNote(scoreNote[i], i + 1);
         }
@@ -794,14 +794,20 @@ void ofApp::drawIPhoneBaseLineLayout() {
     
     ofPushMatrix();
     ofTranslate(0, controlAreaPosTopY - lineScoreAreaSize.y);
+    
     ofPushStyle();
+    
     ofSetColor(uiLineColor, 180);
     ofDrawLine(0, 0, ofGetWidth(), 0);
+    
     ofSetColor(uiLineColor, 120);
     ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, lineScoreAreaSize.y);
+    
     ofSetColor(uiLineColor, 180);
     ofDrawLine(0, lineScoreAreaSize.y, ofGetWidth(), lineScoreAreaSize.y);
+    
     ofPopStyle();
+    
     ofPopMatrix();
 
 }
