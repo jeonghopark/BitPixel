@@ -11,6 +11,7 @@ using namespace cv;
 
 #import <sys/utsname.h>
 
+
 //--------------------------------------------------------------
 void ofApp::activeAudioSilenceMode() {
     
@@ -42,6 +43,7 @@ void ofApp::setupColors() {
     uiLineColor = ofColor(230, 221, 193);
     
 }
+
 
 //--------------------------------------------------------------
 void ofApp::setup() {
@@ -226,28 +228,32 @@ int ofApp::iPhoneXDeviceScreenFactor() {
 void ofApp::menuImgSetup() {
     
     capture.load("capture.png");
+    
+    int _w = ofGetWidth();
+    int _h = ofGetHeight();
     float _scaleCapture = 0.05;
-    composeMode.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
+    
+    composeMode.setFromCenter(_w * 0.5, _h * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
     
     importImg.load("photoLibrary.png");
     float _scaleImport = 0.05;
-    libaryImport.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
+    libaryImport.setFromCenter(_w * 0.2, _h * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
     
     importCancleImg.load("cancleLibrary.png");
     float _scaleImportCacle = 0.05;
-    libaryImportCancle.setFromCenter(ofGetWidth() * 0.9, ofGetHeight() * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
+    libaryImportCancle.setFromCenter(_w * 0.9, _h * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
     
     cameraModeImg.load("cameraMode.png");
     float _scaleMode = 0.05;
-    cameraMode.setFromCenter(ofGetWidth() * 0.2, ofGetHeight() * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
+    cameraMode.setFromCenter(_w * 0.2, _h * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
     
     changeCamera.load("cameraChange_1.png");
     float _scaleChange = 0.05;
-    cameraChange.setFromCenter(ofGetWidth() * 0.8, ofGetHeight() * 0.85, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
+    cameraChange.setFromCenter(_w * 0.8, _h * 0.85, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
     
     returnCaptureMode.load("returnCameraMode.png");
     float _scaleReturn = 0.05;
-    returnCapture.setFromCenter(ofGetWidth() * 0.5, ofGetHeight() * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
+    returnCapture.setFromCenter(_w * 0.5, _h * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
     
 }
 
@@ -582,6 +588,7 @@ void ofApp::debugRatioLayout() {
     ofPopStyle();
     
 }
+
 
 //--------------------------------------------------------------
 void ofApp::debugLayout() {
