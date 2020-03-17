@@ -94,9 +94,9 @@ public:
     // void setIPad();
     void setIPhone();
     void setInterfacePosition();
-    void setBase();
-    void setSpeedCtrl();
-    void setIntervalCtrl();
+    void setBase(float _screenWStepsize);
+    void setSpeedCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
+    void setIntervalCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
     // void drawIPad();
     void drawIPhone();
     void drawIPhoneBaseLineLayout();

@@ -345,50 +345,49 @@ void ofApp::setIPhone() {
 //--------------------------------------------------------------
 void ofApp::setInterfacePosition() {
     
-    speedCSize = ctrlRectS * 1.4;
-    intervalSize = ctrlRectS * 0.9;
-
     controlAreaPosTopY = ofGetHeight() - controlAreaSize.y;
     
-    setSpeedCtrl();
-    setIntervalCtrl();
-    setBase();
+    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
+    
+    setSpeedCtrl(_screenWStepsize, controlAreaSize);
+    setIntervalCtrl(_screenWStepsize, controlAreaSize);
+    setBase(_screenWStepsize);
 
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setSpeedCtrl() {
+void ofApp::setSpeedCtrl(float _screenWStepsize, ofVec2f _controlAreaSize) {
     
+    speedCSize = ctrlRectS * 1.4;
     bSpeedCtrl = false;
-    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
-    float _speedSlideControlPosX = _screenWStepsize * 5.25;
-    float _lineLengthRatio = controlAreaSize.y * 0.35;
+    float _posX = _screenWStepsize * 5.25;
+    float _lineLengthRatio = _controlAreaSize.y * 0.35;
 
-    speedPos = ofPoint(_speedSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
+    speedPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5);
     speedLineLength = ofPoint(speedPos.y - _lineLengthRatio, speedPos.y + _lineLengthRatio);
 
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setIntervalCtrl() {
+void ofApp::setIntervalCtrl(float _screenWStepsize, ofVec2f _controlAreaSize) {
  
+    intervalSize = ctrlRectS * 0.9;
     bthresholdCtrl = false;
-    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
-    float _thredSlideControlPosX = _screenWStepsize * 0.75;
-    float _lineLengthRatio = controlAreaSize.y * 0.35;
+    float _posX = _screenWStepsize * 0.75;
+    float _lineLengthRatio = _controlAreaSize.y * 0.35;
 
-    intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
+    intervalPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5);
     intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
 
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setBase() {
+void ofApp::setBase(float _screenWStepsize) {
     
-    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
+    baseSize = ctrlRectS * 0.85;
     float _basePosLeft = _screenWStepsize * 1.75;
     float _basePosRight = _screenWStepsize * 4.25;
     
@@ -398,7 +397,6 @@ void ofApp::setBase() {
     base7Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
     base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
     base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
-    baseSize = ctrlRectS * 0.85;
 
 }
 
