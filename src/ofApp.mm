@@ -318,14 +318,10 @@ void ofApp::menuImgSetup() {
 
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
-    
-    float _screenW = ofGetWidth();
-    float _screenWStepsize = _screenW * 1.0 / 6.0;
-    float _screenH = ofGetHeight();
-    
+        
     intervalSize = ctrlRectS * 0.9;
 
-    lineScoreAreaPosTopY = _screenH - controlAreaSize.y - lineScoreAreaSize.y;
+    lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
         
     pixelStepS = 4;
     changedCamSize = camSize / pixelStepS;  // 90
@@ -336,14 +332,26 @@ void ofApp::setIPhone() {
     // TODO: Cleanup
     pixelCircleSize = 4; // 4
     ctrlRectS = 34;
-    lineScoreStepX = _screenW / float(lineScoreStepSize - 1);
+    lineScoreStepX = ofGetWidth() / float(lineScoreStepSize - 1);
     lineScoreStepY = 1.6;  // 1.6
     pixeShapeSize = 0.4167; // 0.4167
     
     speedCSize = ctrlRectS * 1.4;
 
+    setBasePosition();
+    
+    frontCameraOnOff = true;
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setBasePosition() {
+    
+    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
+
     float _lineLengthRatio = controlAreaSize.y * 0.35;
-    controlAreaPosTopY = _screenH - controlAreaSize.y;
+    controlAreaPosTopY = ofGetHeight() - controlAreaSize.y;
     
     bSpeedCtrl = false;
     float _speedSlideControlPosX = _screenWStepsize * 5.25;
@@ -365,8 +373,6 @@ void ofApp::setIPhone() {
     base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
     base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
     baseSize = ctrlRectS * 0.85;
-    
-    frontCameraOnOff = true;
     
 }
 

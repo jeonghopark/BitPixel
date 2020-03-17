@@ -93,6 +93,7 @@ public:
     ofVec2f lineScoreAreaSize;
     // void setIPad();
     void setIPhone();
+    void setBasePosition();
     // void drawIPad();
     void drawIPhone();
     void drawIPhoneBaseLineLayout();
