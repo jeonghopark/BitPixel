@@ -54,6 +54,8 @@ void ofApp::setup() {
     
     setupColors();
     
+    frontCameraOnOff = true;
+
     baseSelection = 7;
     
     if (WHITE_VIEW) {
@@ -339,9 +341,7 @@ void ofApp::setIPhone() {
     speedCSize = ctrlRectS * 1.4;
 
     setBasePosition();
-    
-    frontCameraOnOff = true;
-    
+        
 }
 
 
