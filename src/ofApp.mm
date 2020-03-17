@@ -321,8 +321,6 @@ void ofApp::menuImgSetup() {
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
         
-    intervalSize = ctrlRectS * 0.9;
-
     lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
         
     pixelStepS = 4;
@@ -348,6 +346,8 @@ void ofApp::setIPhone() {
 //--------------------------------------------------------------
 void ofApp::setBasePosition() {
     
+    intervalSize = ctrlRectS * 0.9;
+
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
 
     float _lineLengthRatio = controlAreaSize.y * 0.35;
