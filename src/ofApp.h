@@ -91,13 +91,11 @@ public:
     float lineScoreAreaPosTopY;
     ofVec2f controlAreaSize;
     ofVec2f lineScoreAreaSize;
-    // void setIPad();
     void setIPhone();
     void setInterfacePosition();
     void setBase(float _screenWStepsize);
     void setSpeedCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
     void setIntervalCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
-    // void drawIPad();
     void drawIPhone();
     void drawIPhoneBaseLineLayout();
     float screenW, screenH;
@@ -148,7 +146,6 @@ public:
     void drawPlayingShapeNote(vector<int> _vNote, int _scoreCh);
     
     // control Panel
-    void drawControlElementIPad();
     void drawControlElementIPhone(bool playOn);
 //    void debugControlPDraw();
     float ctrlPnX, ctrlPnY, ctrlPnW, ctrlPnH;
@@ -193,7 +190,6 @@ public:
     void drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
     void drawPixelAllNoteShape();
-    // void drawPixelAllNoteShapesIPad(vector<int> _vNote, int _scoreCh);
     void drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh);
     
     void drawElemIntervalShape();
@@ -207,7 +203,6 @@ public:
     vector<int> convertDecimalToNBase(int n, int base, int size);
     
     // Line Score
-    // void drawLineScoreIPad();
     void drawLineScoreIPhone(bool playOn);
     float oldScoreNote[NUM_SYNTH_LINE];
     
@@ -223,7 +218,6 @@ public:
     // int drawOldPointNote1;
     // int drawOldLineNote1;
     
-    // void drawScoreCircleLineIPad(vector<int> _vNote, int _scoreCh);
     void drawScoreCircleLineIPhone(vector<int> _vNote, int _scoreCh);
     void trigScoreNote(vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh);
     
@@ -262,13 +256,8 @@ public:
     void calculatePixels(ofImage _img);
     
     void iPhoneTouchDown(ofTouchEventArgs & touch);
-    // void iPadTouchDown(ofTouchEventArgs & touch);
-    
     void iPhoneTouchMoved(ofTouchEventArgs & touch);
-    // void iPadTouchMoved(ofTouchEventArgs & touch);
-    
     void iPhoneTouchUp(ofTouchEventArgs & touch);
-    // void iPadTouchUp(ofTouchEventArgs & touch);
     
     void menuImgSetup();
     void menuImgDraw(bool playOn);
