@@ -348,20 +348,17 @@ void ofApp::setInterfacePosition() {
     speedCSize = ctrlRectS * 1.4;
     intervalSize = ctrlRectS * 0.9;
 
-    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
-
-    float _lineLengthRatio = controlAreaSize.y * 0.35;
     controlAreaPosTopY = ofGetHeight() - controlAreaSize.y;
     
-    setSpeedCtrlPosition();
-    setIntervalCtrlPosition();
-    setBasePosition();
+    setSpeedCtrl();
+    setIntervalCtrl();
+    setBase();
 
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setSpeedCtrlPosition() {
+void ofApp::setSpeedCtrl() {
     
     bSpeedCtrl = false;
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
@@ -375,7 +372,7 @@ void ofApp::setSpeedCtrlPosition() {
 
 
 //--------------------------------------------------------------
-void ofApp::setIntervalCtrlPosition() {
+void ofApp::setIntervalCtrl() {
  
     bthresholdCtrl = false;
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
@@ -389,7 +386,7 @@ void ofApp::setIntervalCtrlPosition() {
 
 
 //--------------------------------------------------------------
-void ofApp::setBasePosition() {
+void ofApp::setBase() {
     
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
     float _basePosLeft = _screenWStepsize * 1.75;
