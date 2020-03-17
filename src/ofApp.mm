@@ -229,8 +229,8 @@ void ofApp::menuImgSetup() {
     
     capture.load("capture.png");
     
-    int _w = ofGetWidth();
-    int _h = ofGetHeight();
+    float _w = ofGetWidth();
+    float _h = ofGetHeight();
     float _scaleCapture = 0.05;
     
     composeMode.setFromCenter(_w * 0.5, _h * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
@@ -342,29 +342,28 @@ void ofApp::setIPhone() {
     
     speedCSize = ctrlRectS * 1.4;
 
+    float _lineLengthRatio = controlAreaSize.y * 0.35;
     controlAreaPosTopY = _screenH - controlAreaSize.y;
-    float _lineLenghtRatio = controlAreaSize.y * 0.35;
+    
+    bSpeedCtrl = false;
     float _speedSlideControlPosX = _screenWStepsize * 5.25;
     speedPos = ofPoint(_speedSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
-    speedLineLength = ofPoint(speedPos.y - _lineLenghtRatio, speedPos.y + _lineLenghtRatio);
-    bSpeedCtrl = false;
+    speedLineLength = ofPoint(speedPos.y - _lineLengthRatio, speedPos.y + _lineLengthRatio);
     
     bthresholdCtrl = false;
-
     float _thredSlideControlPosX = _screenWStepsize * 0.75;
     intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
-    intervalLineLength = ofPoint(intervalPos.y - _lineLenghtRatio, intervalPos.y + _lineLenghtRatio);
-    bthresholdCtrl = false;
+    intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
     intervalDist = 1;
         
-    float _posIndexLeft = _screenWStepsize * 1.75;
-    float _posIndexRight = _screenWStepsize * 4.25;
-    base4Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
-    base5Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
-    base6Pos = ofPoint(_posIndexLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
-    base7Pos = ofPoint(_posIndexRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
-    base8Pos = ofPoint(_posIndexRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
-    base9Pos = ofPoint(_posIndexRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
+    float _basePosLeft = _screenWStepsize * 1.75;
+    float _basePosRight = _screenWStepsize * 4.25;
+    base4Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
+    base5Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
+    base6Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
+    base7Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
+    base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
+    base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
     baseSize = ctrlRectS * 0.85;
     
     frontCameraOnOff = true;
