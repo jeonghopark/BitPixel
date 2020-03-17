@@ -362,6 +362,7 @@ void ofApp::setBasePosition() {
     float _thredSlideControlPosX = _screenWStepsize * 0.75;
     intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
     intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
+    
     intervalDist = 1;
         
     float _basePosLeft = _screenWStepsize * 1.75;
@@ -464,14 +465,14 @@ void ofApp::calculatePixels(ofImage _img) {
         whitePixels.clear();
         blackPixels.clear();
         
-        unsigned char * _src;
+        unsigned char * _src = edge.getPixels().getData();
         
-        if (!bIPhone) {
-            _src = edge.getPixels().getData();
-        } else {
-            //            edge.rotate90(-1);
-            _src = edge.getPixels().getData();
-        }
+//        if (!bIPhone) {
+//            _src = edge.getPixels().getData();
+//        } else {
+//            //            edge.rotate90(-1);
+//            _src = edge.getPixels().getData();
+//        }
         
         for (int j = 0; j < camSize; j += pixelStepS) {
             for (int i = 0; i < camSize; i += pixelStepS) {
