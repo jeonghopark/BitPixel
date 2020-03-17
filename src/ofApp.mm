@@ -57,7 +57,8 @@ void ofApp::setup() {
     frontCameraOnOff = true;
 
     baseSelection = 7;
-    
+    intervalDist = 1;
+
     if (WHITE_VIEW) {
         ofBackground(255);
     } else {
@@ -336,16 +337,15 @@ void ofApp::setIPhone() {
     lineScoreStepY = 1.6;  // 1.6
     pixeShapeSize = 0.4167; // 0.4167
     
-    speedCSize = ctrlRectS * 1.4;
-
-    setBasePosition();
-        
+    setInterfacePosition();
+    
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setBasePosition() {
+void ofApp::setInterfacePosition() {
     
+    speedCSize = ctrlRectS * 1.4;
     intervalSize = ctrlRectS * 0.9;
 
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
@@ -353,20 +353,48 @@ void ofApp::setBasePosition() {
     float _lineLengthRatio = controlAreaSize.y * 0.35;
     controlAreaPosTopY = ofGetHeight() - controlAreaSize.y;
     
+    setSpeedCtrlPosition();
+    setIntervalCtrlPosition();
+    setBasePosition();
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setSpeedCtrlPosition() {
+    
     bSpeedCtrl = false;
+    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
     float _speedSlideControlPosX = _screenWStepsize * 5.25;
+    float _lineLengthRatio = controlAreaSize.y * 0.35;
+
     speedPos = ofPoint(_speedSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
     speedLineLength = ofPoint(speedPos.y - _lineLengthRatio, speedPos.y + _lineLengthRatio);
-    
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setIntervalCtrlPosition() {
+ 
     bthresholdCtrl = false;
+    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
     float _thredSlideControlPosX = _screenWStepsize * 0.75;
+    float _lineLengthRatio = controlAreaSize.y * 0.35;
+
     intervalPos = ofPoint(_thredSlideControlPosX, controlAreaPosTopY + controlAreaSize.y * 0.5);
     intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setBasePosition() {
     
-    intervalDist = 1;
-        
+    float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
     float _basePosLeft = _screenWStepsize * 1.75;
     float _basePosRight = _screenWStepsize * 4.25;
+    
     base4Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
     base5Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
     base6Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
@@ -374,7 +402,7 @@ void ofApp::setBasePosition() {
     base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
     base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
     baseSize = ctrlRectS * 0.85;
-    
+
 }
 
 
@@ -544,6 +572,7 @@ void ofApp::draw() {
     //    if (!bIPhone) {
     //        drawIPad();
     //    } else {
+    
     drawIPhone();
     //    }
     
