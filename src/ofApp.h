@@ -85,7 +85,9 @@ public:
     int noteIndex;
     int oldNoteIndex[NUM_SYNTH_LINE];
     
-    void setupImage();
+    void setCamera();
+    void setImageBuffer();
+    void setImageParameter();
     
     float controlAreaPosTopY;
     float lineScoreAreaPosTopY;

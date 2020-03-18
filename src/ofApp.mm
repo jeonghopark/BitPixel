@@ -80,8 +80,18 @@ void ofApp::setup() {
     
     iPhonePreviewSize = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
 
-    setupImage();
-    
+    setCamera();
+    setImageBuffer();
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        bIPhone = true;
+        setIPhone();
+    } else {
+        //        bIPhone = false;
+        //        screenW = ofGetWidth();
+        //        screenH = ofGetWidth() * 4.0 / 3.0;
+    }
+    setImageParameter();
+
     createSynthVoice();
     setSynthMain();
     
@@ -99,17 +109,23 @@ void ofApp::setup() {
 
 
 //--------------------------------------------------------------
-void ofApp::setupImage() {
+void ofApp::setCamera() {
     
-#if TARGET_OS_SIMULATOR
-    camSize = 360; // 360
-#else
-    cam.setDeviceID(0);
-    cam.setup(480, 360);
-    cam.setDesiredFrameRate(15);
-    camSize = cam.getWidth(); // 360
-#endif
-    
+    #if TARGET_OS_SIMULATOR
+        camSize = 360; // 360
+    #else
+        cam.setDeviceID(0);
+        cam.setup(480, 360);
+        cam.setDesiredFrameRate(15);
+        camSize = cam.getWidth(); // 360
+    #endif
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setImageBuffer() {
+        
     bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
     edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
@@ -117,20 +133,21 @@ void ofApp::setupImage() {
     captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        bIPhone = true;
         debugCameraImage.load("debug_layout_cat.jpg");
-        setIPhone();
     } else {
-        //        bIPhone = false;
-        //        screenW = ofGetWidth();
-        //        screenH = ofGetWidth() * 4.0 / 3.0;
         //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
     }
+        
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setImageParameter() {
     
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
     grayThreshold = 120;
-    
+
 }
 
 
