@@ -110,7 +110,6 @@ public:
     
     ofImage debugCameraImage;
     
-    //openCV
 #if TARGET_OS_SIMULATOR
 #else
     ofVideoGrabber cam;
