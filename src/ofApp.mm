@@ -115,9 +115,10 @@ void ofApp::setCamera() {
         camSize = 360; // 360
     #else
         cam.setDeviceID(0);
-        cam.setup(480, 360);
+        cam.setup(480, 360); // 4 : 3
         cam.setDesiredFrameRate(15);
-        camSize = cam.getWidth(); // 360
+//        camSize = cam.getWidth(); // 360
+        camSize.set(cam.getWidth(), cam.getHeight());
     #endif
 
 }
@@ -126,11 +127,11 @@ void ofApp::setCamera() {
 //--------------------------------------------------------------
 void ofApp::setImageBuffer() {
         
-    bufferImg.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    gray.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
-    edge.allocate(camSize, camSize, OF_IMAGE_GRAYSCALE);
+    bufferImg.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
+    gray.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
+    edge.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
     captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
-    captureCamImg.allocate(camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    captureCamImg.allocate(camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         debugCameraImage.load("debug_layout_cat.jpg");
@@ -283,10 +284,10 @@ void ofApp::setIPhone() {
     lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
         
     pixelStepS = 4;
-    changedCamSize = camSize / pixelStepS;  // 90
+    changedCamSize = camSize.x / pixelStepS;  // 90
     thresholdValue = 80;
     
-    cameraScreenRatio = iPhonePreviewSize / camSize; // 1.77777777
+    cameraScreenRatio = iPhonePreviewSize / camSize.x; // 1.77777777
     
     pixelCircleSize = 4; // 4
     ctrlRectS = 34;
@@ -363,12 +364,12 @@ void ofApp::update() {
     
 #if TARGET_OS_SIMULATOR
     
-    captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+    captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
     
     if (bIPhone) {
-        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
     } else {
-        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+        captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR);
     }
     
     if (captureCamImg.isAllocated()) {
@@ -383,7 +384,7 @@ void ofApp::update() {
             _buffImg.allocate(libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
             _buffImg.setFromPixels(libraryImg.getPixels(), libraryImg.getWidth(), libraryImg.getHeight(), OF_IMAGE_COLOR_ALPHA);
             _buffImg.resize(cam.getWidth(), cam.getHeight());
-            captureCamImg.setFromPixels(_buffImg.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR_ALPHA);
+            captureCamImg.setFromPixels(_buffImg.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
             
             libraryImg.close();
             calculatePixels(captureCamImg);
@@ -393,7 +394,7 @@ void ofApp::update() {
         cam.update();
         
         if (cam.isFrameNew()) {
-            captureCamImg.setFromPixels(cam.getPixels().getData(), camSize, camSize, OF_IMAGE_COLOR);
+            captureCamImg.setFromPixels(cam.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR);
             calculatePixels(captureCamImg);
         }
     }
@@ -418,6 +419,9 @@ void ofApp::update() {
 void ofApp::calculatePixels(ofImage _img) {
     
 #if TARGET_OS_SIMULATOR
+    
+    edge.setFromPixels(_img.getPixels().getData(), camSize, camSize, OF_IMAGE_GRAYSCALE);
+    
 #else
     
     convertColor(_img, gray, CV_RGB2GRAY);
@@ -454,9 +458,9 @@ void ofApp::calculatePixels(ofImage _img) {
 //            _src = edge.getPixels().getData();
 //        }
         
-        for (int j = 0; j < camSize; j += pixelStepS) {
-            for (int i = 0; i < camSize; i += pixelStepS) {
-                int _index = i + j * camSize;
+        for (int j = 0; j < camSize.y; j += pixelStepS) {
+            for (int i = 0; i < camSize.x; i += pixelStepS) {
+                int _index = i + j * camSize.x;
                 float _brightness = _src[_index];
                 pixelBright.push_back(_brightness);
             }
@@ -1961,12 +1965,12 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
             cam.setDeviceID(0);
             cam.setup(480, 360);
             cam.setDesiredFrameRate(15);
-            camSize = cam.getWidth(); // 360
+            camSize.set(cam.getWidth(), cam.getHeight()); // 360
         } else {
             cam.setDeviceID(1);
             cam.setup(480, 360);
             cam.setDesiredFrameRate(15);
-            camSize = cam.getWidth(); // 360
+            camSize.set(cam.getWidth(), cam.getHeight()); // 360
         }
         
 #endif

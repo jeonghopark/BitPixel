@@ -139,7 +139,10 @@ public:
     int pixelCircleSize;
     
     //Video
-    float videoGrabberW, videoGrabberH, camSize, changedCamSize;
+    float videoGrabberW;
+    float videoGrabberH;
+    ofVec2f camSize;
+    float changedCamSize;
     float cameraScreenRatio;
     
     // Graphics
