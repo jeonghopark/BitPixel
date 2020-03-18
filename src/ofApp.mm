@@ -135,7 +135,8 @@ void ofApp::setImageBuffer() {
     captureCamImg.allocate(camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        debugCameraImage.load("debug_layout_cat.jpg");
+        debugCameraImage.load("debug_layout_cat_e.jpg");
+        debugCameraImage.setImageType(OF_IMAGE_GRAYSCALE);
     } else {
         //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
     }
