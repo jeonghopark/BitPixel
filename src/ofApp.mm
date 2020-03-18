@@ -78,7 +78,7 @@ void ofApp::setup() {
     controlAreaSize.set(ofGetWidth(), 326);
     lineScoreAreaSize.set(ofGetWidth(), 170);
     
-    iPhonePreviewSize = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
+    cameraPreviewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y);
 
     setCamera();
     setImageBuffer();
@@ -110,15 +110,16 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::setCamera() {
-    
+        
     #if TARGET_OS_SIMULATOR
         camSize = 360; // 360
     #else
         cam.setDeviceID(0);
-        cam.setup(480, 360); // 4 : 3
+        cam.setup(360, 480); // 4 : 3
         cam.setDesiredFrameRate(15);
 //        camSize = cam.getWidth(); // 360
-        camSize.set(cam.getWidth(), cam.getHeight());
+    float _ratio = 360.0 / ofGetWidth();
+        camSize.set(cameraPreviewSize.x * _ratio, cameraPreviewSize.y * _ratio);
     #endif
 
 }
@@ -287,7 +288,7 @@ void ofApp::setIPhone() {
     changedCamSize = camSize.x / pixelStepS;  // 90
     thresholdValue = 80;
     
-    cameraScreenRatio = iPhonePreviewSize / camSize.x; // 1.77777777
+    cameraScreenRatio = cameraPreviewSize.x / camSize.x; // 1.77777777
     
     pixelCircleSize = 4; // 4
     ctrlRectS = 34;
@@ -420,7 +421,7 @@ void ofApp::calculatePixels(ofImage _img) {
     
 #if TARGET_OS_SIMULATOR
     
-    edge.setFromPixels(_img.getPixels().getData(), camSize, camSize, OF_IMAGE_GRAYSCALE);
+    edge.setFromPixels(_img.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
     
 #else
     
@@ -648,7 +649,7 @@ void ofApp::realtimeCameraConvertedImageView() {
         }
         
         ofPushMatrix();
-        edge.draw(0, 0, iPhonePreviewSize + 1, iPhonePreviewSize + 1);
+        edge.draw(0, 0, cameraPreviewSize.x + 1, cameraPreviewSize.y + 1);
         ofPopMatrix();
     }
     ofPopStyle();
@@ -671,7 +672,7 @@ void ofApp::realtimeBufferImageView() {
             ofSetColor(contourLineColor, 180);
         }
         
-        bufferImg.draw(0, 0, iPhonePreviewSize + 1, iPhonePreviewSize + 1);
+        bufferImg.draw(0, 0, cameraPreviewSize.x + 1, cameraPreviewSize.y + 1);
     }
     ofPopStyle();
 
@@ -814,8 +815,8 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         //    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
         //    ofDrawLine(_line2S, _line2E);
         //
-        //    ofPoint _lineUpS = ofPoint(screenW - iPhonePreviewSize, screenPosLeftY);
-        //    ofPoint _lineUpE = ofPoint(screenW - iPhonePreviewSize, screenPosRightY);
+        //    ofPoint _lineUpS = ofPoint(screenW - cameraPreviewSize, screenPosLeftY);
+        //    ofPoint _lineUpE = ofPoint(screenW - cameraPreviewSize, screenPosRightY);
         //    ofDrawLine(_lineUpS, _lineUpE);
         //
         //    ofPopStyle();
@@ -828,7 +829,7 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         //    }
         //
         //    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
-        //    ofPoint _lineME = ofPoint(screenW - iPhonePreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
+        //    ofPoint _lineME = ofPoint(screenW - cameraPreviewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
         //    ofDrawLine(_lineMS, _lineME);
         //
         //    ofPopStyle();
@@ -1796,13 +1797,13 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //        }
         
 //        float _xL = screenPosLeftY;
-//        float _xR = screenPosLeftY + iPhonePreviewSize;
-//        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+//        float _xR = screenPosLeftY + cameraPreviewSize;
+//        if ((_chgdTouch.x > (screenW - cameraPreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
 //            grayThreshold = 120;
 //            touchDownDefault = _chgdTouch.x;
 //        }
 
-        if ((_chgdTouch.y < iPhonePreviewSize) && (_chgdTouch.y > 0)) {
+        if ((_chgdTouch.y < cameraPreviewSize.y) && (_chgdTouch.y > 0)) {
             grayThreshold = 120;
             touchDownDefault = _chgdTouch.x;
         }
@@ -1910,13 +1911,13 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
     //    if (touch.id == 0) {
     //        float _xL = screenPosLeftY;
-    //        float _xR = screenPosLeftY + iPhonePreviewSize;
-    //        if ((_chgdTouch.x > (screenW - iPhonePreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+    //        float _xR = screenPosLeftY + cameraPreviewSize;
+    //        if ((_chgdTouch.x > (screenW - cameraPreviewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
     //            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
     //        }
     //    }
     
-    if (_chgdTouch.y < iPhonePreviewSize) {
+    if (_chgdTouch.y < cameraPreviewSize.y) {
         grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
     }
     

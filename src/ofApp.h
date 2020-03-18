@@ -102,7 +102,7 @@ public:
     void drawIPhoneBaseLineLayout();
     float screenW, screenH;
     
-    float iPhonePreviewSize;
+    ofVec2f cameraPreviewSize;
     
     void mainCameraCaptureViewiPhone();
     void realtimeCameraConvertedImageView();
