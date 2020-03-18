@@ -78,7 +78,7 @@ void ofApp::setup() {
     controlAreaSize.set(ofGetWidth(), 326);
     lineScoreAreaSize.set(ofGetWidth(), 170);
     
-    cameraPreviewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y);
+    cameraPreviewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 2 * safeZoneHeightFactor);
 
     setCamera();
     setImageBuffer();
@@ -112,13 +112,13 @@ void ofApp::setup() {
 void ofApp::setCamera() {
         
     #if TARGET_OS_SIMULATOR
-        camSize = 360; // 360
+        float _ratio = 360.0 / ofGetWidth();
+        camSize.set(cameraPreviewSize.x * _ratio, cameraPreviewSize.y * _ratio);
     #else
         cam.setDeviceID(0);
         cam.setup(360, 480); // 4 : 3
         cam.setDesiredFrameRate(15);
-//        camSize = cam.getWidth(); // 360
-    float _ratio = 360.0 / ofGetWidth();
+        float _ratio = 360.0 / ofGetWidth();
         camSize.set(cameraPreviewSize.x * _ratio, cameraPreviewSize.y * _ratio);
     #endif
 
@@ -640,6 +640,8 @@ void ofApp::realtimeCameraConvertedImageView() {
       
     ofPushMatrix();
     
+    ofTranslate(0, 44 * 1 * safeZoneHeightFactor);
+    
     ofPushStyle();
     if (!bCameraCapturePlay) {
         if (WHITE_VIEW) {
@@ -663,6 +665,8 @@ void ofApp::realtimeCameraConvertedImageView() {
 void ofApp::realtimeBufferImageView() {
     
     ofPushMatrix();
+
+    ofTranslate(0, 44 * 1 * safeZoneHeightFactor);
 
     ofPushStyle();
     if (bCameraCapturePlay) {
