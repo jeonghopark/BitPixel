@@ -998,11 +998,9 @@ void ofApp::drawBaseInterface(bool playOn) {
     if (playOn) {
         
         ofPushMatrix();
-        
         ofTranslate(0, 0);
         
         ofPushStyle();
-        
         ofColor _c[6];
         
         for (int i = 0; i < 6; i++) {
@@ -1021,6 +1019,7 @@ void ofApp::drawBaseInterface(bool playOn) {
         drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
         
         if (bCameraCapturePlay) {
+//            activeShapeFillColor(base4Pos, baseSelection, baseSize, _c[baseSelection - 4]);
             switch (baseSelection) {
                 case 4:
                     activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
