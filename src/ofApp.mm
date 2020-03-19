@@ -13,39 +13,6 @@ using namespace cv;
 
 
 //--------------------------------------------------------------
-void ofApp::activeAudioSilenceMode() {
-    
-    //    [[AVAudioSession sharedInstance] setDelegate:self];
-    //    NSError *error = nil;
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
-    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
-    [[AVAudioSession sharedInstance] setActive:YES error:nil];
-    //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setupColors() {
-    
-    colorVar[0] = ofColor(192, 25, 30);
-    colorVar[1] = ofColor(79, 185, 73);
-    colorVar[2] = ofColor(255, 172, 0);
-    colorVar[3] = ofColor(68, 128, 173);
-    colorVar[4] = ofColor(58, 193, 197);
-    colorVar[5] = ofColor(249, 154, 249);
-    colorVar[6] = ofColor(142, 82, 137);
-    
-    backgroundColor = ofColor(13, 13, 15);
-    
-    contourLineColor = ofColor(230, 221, 193);
-    eventColor = ofColor(230, 221, 193);
-    uiLineColor = ofColor(230, 221, 193);
-    
-}
-
-
-//--------------------------------------------------------------
 void ofApp::setup() {
     
     ofSetOrientation(OF_ORIENTATION_DEFAULT);
@@ -77,7 +44,9 @@ void ofApp::setup() {
     cameraViewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 2 * safeZoneHeightFactor);
 
     setCamera();
+    
     setImageBuffer();
+    
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         bIPhone = true;
         setIPhone();
@@ -86,9 +55,11 @@ void ofApp::setup() {
         //        screenW = ofGetWidth();
         //        screenH = ofGetWidth() * 4.0 / 3.0;
     }
+
     setImageParameter();
 
     createSynthVoice();
+
     setSynthMain();
     
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
@@ -105,96 +76,34 @@ void ofApp::setup() {
 
 
 //--------------------------------------------------------------
-void ofApp::setCamera() {
-        
-    #if TARGET_OS_SIMULATOR
-        float _ratio = 360.0 / ofGetWidth();
-        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
-    #else
-        cam.setDeviceID(0);
-        cam.setup(360, 480); // 4 : 3
-        cam.setDesiredFrameRate(15);
-        float _ratio = 360.0 / ofGetWidth();
-        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
-    #endif
-
+void ofApp::activeAudioSilenceMode() {
+    
+    //    [[AVAudioSession sharedInstance] setDelegate:self];
+    //    NSError *error = nil;
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayAndRecord error: nil];
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: nil];
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    //    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
 }
 
 
 //--------------------------------------------------------------
-void ofApp::setImageBuffer() {
-        
-    bufferImg.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
-    gray.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
-    edge.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
-    captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
-    captureCamImg.allocate(camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
+void ofApp::setupColors() {
     
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        debugCameraImage.load("debug_layout_cat_e.jpg");
-        debugCameraImage.setImageType(OF_IMAGE_GRAYSCALE);
-    } else {
-        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
-    }
-        
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setImageParameter() {
+    colorVar[0] = ofColor(192, 25, 30);
+    colorVar[1] = ofColor(79, 185, 73);
+    colorVar[2] = ofColor(255, 172, 0);
+    colorVar[3] = ofColor(68, 128, 173);
+    colorVar[4] = ofColor(58, 193, 197);
+    colorVar[5] = ofColor(249, 154, 249);
+    colorVar[6] = ofColor(142, 82, 137);
     
-    cannyThreshold1 = 120;
-    cannyThreshold2 = 120;
-    grayThreshold = 120;
-
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setSynthMain() {
+    backgroundColor = ofColor(13, 13, 15);
     
-    maxSpeed = 200;
-    minSpeed = 30;
-    bpm = synthMain.addParameter("tempo", 100).min(minSpeed).max(maxSpeed);
-    metro = ControlMetro().bpm(4 * bpm);
-    metroOut = synthMain.createOFEvent(metro);
-    
-    Reverb reverb = Reverb()
-    .preDelayTime(0.001)
-    .inputLPFCutoff(18000)
-    .inputHPFCutoff(20)
-    .decayTime(1.0)
-    .decayLPFCutoff(16000)
-    .decayHPFCutoff(20)
-    .stereoWidth(1.0)
-    .density(0.75)
-    .roomShape(0.5)
-    .roomSize(0.25)
-    .dryLevel(ControlDbToLinear().input(0.0))
-    .wetLevel(ControlDbToLinear().input(-16.0));
-    
-    BasicDelay delay = BasicDelay(0.5f, 1.0f)
-    .delayTime(0.1f)
-    .feedback(0.1)
-    .dryLevel(1.0f - 0.1)
-    .wetLevel(0.1);
-    
-    synthMain.setOutputGen((synth[0] + synth[1] + synth[2] + synth[3] + synth[4] + synth[5] + synth[6]) * 1.0 / NUM_SYNTH_LINE * 3 >> delay >> reverb);
-    
-    // note music play
-    index = 0;
-    noteIndex = 0;
-    
-    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-        oldNoteIndex[i] = 0;
-    }
-    
-    bPlayNote = false;
-    bCameraCapturePlay = false;
-    
-    scaleSetting.setup();
-    
-    touchPos.assign(2, ofVec2f());
+    contourLineColor = ofColor(230, 221, 193);
+    eventColor = ofColor(230, 221, 193);
+    uiLineColor = ofColor(230, 221, 193);
     
 }
 
@@ -243,36 +152,38 @@ int ofApp::iPhoneXDeviceScreenFactor() {
 
 
 //--------------------------------------------------------------
-void ofApp::menuImgSetup() {
+void ofApp::setCamera() {
+        
+    #if TARGET_OS_SIMULATOR
+        float _ratio = 360.0 / ofGetWidth();
+        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
+    #else
+        cam.setDeviceID(0);
+        cam.setup(360, 480); // 4 : 3
+        cam.setDesiredFrameRate(15);
+        float _ratio = 360.0 / ofGetWidth();
+        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
+    #endif
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setImageBuffer() {
+        
+    bufferImg.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
+    gray.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
+    edge.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
+    captureCamImg.setImageType(OF_IMAGE_COLOR_ALPHA);
+    captureCamImg.allocate(camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
     
-    capture.load("capture.png");
-    
-    float _w = ofGetWidth();
-    float _h = ofGetHeight();
-    float _scaleCapture = 0.05;
-    
-    composeMode.setFromCenter(_w * 0.5, _h * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
-    
-    importImg.load("photoLibrary.png");
-    float _scaleImport = 0.05;
-    libaryImport.setFromCenter(_w * 0.2, _h * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
-    
-    importCancleImg.load("cancleLibrary.png");
-    float _scaleImportCacle = 0.05;
-    libaryImportCancle.setFromCenter(_w * 0.9, _h * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
-    
-    cameraModeImg.load("cameraMode.png");
-    float _scaleMode = 0.05;
-    cameraMode.setFromCenter(_w * 0.2, _h * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
-    
-    changeCamera.load("cameraChange_1.png");
-    float _scaleChange = 0.05;
-    cameraChange.setFromCenter(_w * 0.8, _h * 0.85, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
-    
-    returnCaptureMode.load("returnCameraMode.png");
-    float _scaleReturn = 0.05;
-    returnCapture.setFromCenter(_w * 0.5, _h * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
-    
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        debugCameraImage.load("debug_layout_cat_e.jpg");
+        debugCameraImage.setImageType(OF_IMAGE_GRAYSCALE);
+    } else {
+        //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
+    }
+        
 }
 
 
@@ -354,6 +265,177 @@ void ofApp::setBase(float _screenWStepsize) {
     base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0 - 44 * safeZoneHeightFactor);
     base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0 - 44 * safeZoneHeightFactor);
 
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setImageParameter() {
+    
+    cannyThreshold1 = 120;
+    cannyThreshold2 = 120;
+    grayThreshold = 120;
+
+}
+
+
+//--------------------------------------------------------------
+void ofApp::createSynthVoice() {
+    
+    float _volume = 0.9;
+    
+    ControlParameter _carrierPitch1 = synth[0].addParameter("carrierPitch1");
+    float _amountMod1 = 1;
+    ControlGenerator _rCarrierFreq1 = ControlMidiToFreq().input(_carrierPitch1);
+    ControlGenerator _rModFreq1 = _rCarrierFreq1 * 2.5;
+    Generator _modulationTone1 = SineWave().freq(_rModFreq1) * _rModFreq1 * _amountMod1;
+    Generator _tone1 = SineWave().freq(_rCarrierFreq1 + _modulationTone1);
+    ControlGenerator _envelopTrigger1 = synth[0].addParameter("trigger1");
+    Generator _env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(_envelopTrigger1).legato(false);
+    synth[0].setOutputGen(_tone1 * _env1 * _volume);
+    
+    ControlParameter _carrierPitch2 = synth[1].addParameter("carrierPitch2");
+    float _amountMod2 = 1;
+    ControlGenerator _rCarrierFreq2 = ControlMidiToFreq().input(_carrierPitch2);
+    ControlGenerator _rModFreq2 = _rCarrierFreq2 * 3.489;
+    Generator _modulationTone2 = SineWave().freq(_rModFreq2) * _rModFreq2 * _amountMod2;
+    Generator _tone2 = SineWave().freq(_rCarrierFreq2 + _modulationTone2);
+    ControlGenerator _envelopTrigger2 = synth[1].addParameter("trigger2");
+    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger2).legato(false);
+    synth[1].setOutputGen(_tone2 * _env2 * _volume);
+    
+    ControlParameter _carrierPitch3 = synth[2].addParameter("carrierPitch3");
+    float _amountMod3 = 12;
+    ControlGenerator _rCarrierFreq3 = ControlMidiToFreq().input(_carrierPitch3);
+    ControlGenerator _rModFreq3 = _rCarrierFreq3 * 14.489;
+    Generator _modulationTone3 = SineWave().freq(_rModFreq3) * _rModFreq3 * _amountMod3;
+    Generator _tone3 = SineWave().freq(_rCarrierFreq3 + _modulationTone3);
+    ControlGenerator _envelopTrigger3 = synth[2].addParameter("trigger3");
+    Generator _env3 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger3).legato(true);
+    synth[2].setOutputGen(_tone3 * _env3 * _volume);
+    
+    ControlParameter _carrierPitch4 = synth[3].addParameter("carrierPitch4");
+    float _amountMod4 = 18;
+    ControlGenerator _rCarrierFreq4 = ControlMidiToFreq().input(_carrierPitch4);
+    ControlGenerator _rModFreq4 = _rCarrierFreq4 * 1.1;
+    Generator _modulationTone4 = SineWave().freq(_rModFreq4) * _rModFreq4 * _amountMod4;
+    Generator _tone4 = SineWave().freq(_rCarrierFreq4 + _modulationTone4);
+    ControlGenerator _envelopTrigger4 = synth[3].addParameter("trigger4");
+    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger4).legato(false);
+    synth[3].setOutputGen(_tone4 * _env4 * _volume);
+    
+    ControlParameter _carrierPitch5 = synth[4].addParameter("carrierPitch5");
+    float _amountMod5 = 6;
+    ControlGenerator _rCarrierFreq5 = ControlMidiToFreq().input(_carrierPitch5);
+    ControlGenerator _rModFreq5 = _rCarrierFreq5 * 1.489;
+    Generator _modulationTone5 = SineWave().freq(_rModFreq5) * _rModFreq5 * _amountMod5;
+    Generator _tone5 = SineWave().freq(_rCarrierFreq5 + _modulationTone5);
+    ControlGenerator _envelopTrigger5 = synth[4].addParameter("trigger5");
+    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger5).legato(false);
+    synth[4].setOutputGen(_tone5 * _env5 * _volume);
+    
+    ControlParameter _carrierPitch6 = synth[5].addParameter("carrierPitch6");
+    float _amountMod6 = 2;
+    ControlGenerator _rCarrierFreq6 = ControlMidiToFreq().input(_carrierPitch6);
+    ControlGenerator _rModFreq6 = _rCarrierFreq6 * 1.109;
+    Generator _modulationTone6 = SineWave().freq(_rModFreq6) * _rModFreq6 * _amountMod6;
+    Generator _tone6 = SineWave().freq(_rCarrierFreq6 + _modulationTone6);
+    ControlGenerator _envelopTrigger6 = synth[5].addParameter("trigger6");
+    Generator _env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger6).legato(false);
+    synth[5].setOutputGen(_tone6 * _env6 * _volume);
+    
+    ControlParameter _carrierPitch7 = synth[6].addParameter("carrierPitch7");
+    float _amountMod7 = 4;
+    ControlGenerator _rCarrierFreq7 = ControlMidiToFreq().input(_carrierPitch7);
+    ControlGenerator _rModFreq7 = _rCarrierFreq7 * 3.109;
+    Generator _modulationTone7 = SineWave().freq(_rModFreq7) * _rModFreq7 * _amountMod7;
+    Generator _tone7 = SineWave().freq(_rCarrierFreq7 + _modulationTone7);
+    ControlGenerator _envelopTrigger7 = synth[6].addParameter("trigger7");
+    Generator _env7 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(_envelopTrigger7).legato(false);
+    synth[6].setOutputGen(_tone7 * _env7 * _volume);
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::setSynthMain() {
+    
+    maxSpeed = 200;
+    minSpeed = 30;
+    bpm = synthMain.addParameter("tempo", 100).min(minSpeed).max(maxSpeed);
+    metro = ControlMetro().bpm(4 * bpm);
+    metroOut = synthMain.createOFEvent(metro);
+    
+    Reverb reverb = Reverb()
+    .preDelayTime(0.001)
+    .inputLPFCutoff(18000)
+    .inputHPFCutoff(20)
+    .decayTime(1.0)
+    .decayLPFCutoff(16000)
+    .decayHPFCutoff(20)
+    .stereoWidth(1.0)
+    .density(0.75)
+    .roomShape(0.5)
+    .roomSize(0.25)
+    .dryLevel(ControlDbToLinear().input(0.0))
+    .wetLevel(ControlDbToLinear().input(-16.0));
+    
+    BasicDelay delay = BasicDelay(0.5f, 1.0f)
+    .delayTime(0.1f)
+    .feedback(0.1)
+    .dryLevel(1.0f - 0.1)
+    .wetLevel(0.1);
+    
+    synthMain.setOutputGen((synth[0] + synth[1] + synth[2] + synth[3] + synth[4] + synth[5] + synth[6]) * 1.0 / NUM_SYNTH_LINE * 3 >> delay >> reverb);
+    
+    // note music play
+    index = 0;
+    noteIndex = 0;
+    
+    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+        oldNoteIndex[i] = 0;
+    }
+    
+    bPlayNote = false;
+    bCameraCapturePlay = false;
+    
+    scaleSetting.setup();
+    
+    touchPos.assign(2, ofVec2f());
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::menuImgSetup() {
+    
+    capture.load("capture.png");
+    
+    float _w = ofGetWidth();
+    float _h = ofGetHeight();
+    float _scaleCapture = 0.05;
+    
+    composeMode.setFromCenter(_w * 0.5, _h * 0.85, capture.getWidth() * _scaleCapture, capture.getHeight() * _scaleCapture);
+    
+    importImg.load("photoLibrary.png");
+    float _scaleImport = 0.05;
+    libaryImport.setFromCenter(_w * 0.2, _h * 0.85, importImg.getWidth() * _scaleImport, importImg.getHeight() * _scaleImport);
+    
+    importCancleImg.load("cancleLibrary.png");
+    float _scaleImportCacle = 0.05;
+    libaryImportCancle.setFromCenter(_w * 0.9, _h * 0.05, importCancleImg.getWidth() * _scaleImportCacle, importCancleImg.getHeight() * _scaleImportCacle);
+    
+    cameraModeImg.load("cameraMode.png");
+    float _scaleMode = 0.05;
+    cameraMode.setFromCenter(_w * 0.2, _h * 0.85, cameraModeImg.getWidth() * _scaleMode, cameraModeImg.getHeight() * _scaleMode);
+    
+    changeCamera.load("cameraChange_1.png");
+    float _scaleChange = 0.05;
+    cameraChange.setFromCenter(_w * 0.8, _h * 0.85, changeCamera.getWidth() * _scaleChange, changeCamera.getHeight() * _scaleChange);
+    
+    returnCaptureMode.load("returnCameraMode.png");
+    float _scaleReturn = 0.05;
+    returnCapture.setFromCenter(_w * 0.5, _h * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
+    
 }
 
 
@@ -485,19 +567,6 @@ void ofApp::calculatePixels(ofImage _img) {
 
 
 //--------------------------------------------------------------
-void ofApp::triggerReceive(float & metro) {
-    
-    index++;
-    noteIndex = index;
-    
-    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-        trigScoreNote(scoreNote[i], synth[i], i + 1);
-    }
-    
-}
-
-
-//--------------------------------------------------------------
 void ofApp::draw() {
     
     drawIPhone();
@@ -510,72 +579,61 @@ void ofApp::draw() {
 
 
 //--------------------------------------------------------------
-void ofApp::debugRatioLayout() {
+void ofApp::drawIPhone() {
     
-    ofPushStyle();
+    drawLineScoreIPhone(bCameraCapturePlay);
     
-    // safeZone
-    // iPhone X Pro Max  = x 3
-    ofSetColor(255, 0, 0);
-    ofDrawBitmapString(ofToString(ofGetHeight()), 10, 100);
+    mainCameraCaptureViewiPhone();
     
-    int xProMaxSafeZonePixelHeight = 44 * safeZoneHeightFactor;
-    float upSafeZoneY = xProMaxSafeZonePixelHeight;
-    ofDrawLine(0, upSafeZoneY, ofGetWidth(), upSafeZoneY);
+    drawIPhoneBaseLineLayout();
     
-    float dnSafeZoneY = ofGetHeight() - xProMaxSafeZonePixelHeight;
-    ofDrawLine(0, dnSafeZoneY, ofGetWidth(), dnSafeZoneY);
+    drawControlElementIPhone(bCameraCapturePlay);
     
-    float interfaceZoneHeight = ofGetHeight() - xProMaxSafeZonePixelHeight - 500;
-    ofDrawLine(0, interfaceZoneHeight, ofGetWidth(), interfaceZoneHeight);
+    drawBaseInterface(bCameraCapturePlay);
     
-    //    ofSetColor(255, 30);
-    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-    //
-    //    ofSetColor(120, 255, 120);
-    //    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
-    //    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
-    //
-    //    ofSetColor(120, 255, 120);
-    //    for (int i = 0; i < 5; i++) {
-    //        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
-    //    }
-    //
-    //    ofSetColor(255, 180, 120);
-    //    for (int i = 0; i < 3; i++) {
-    //        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
-    //    }
-    
-    ofPopStyle();
+    menuImgDraw(bCameraCapturePlay);
     
 }
 
 
 //--------------------------------------------------------------
-void ofApp::debugLayout() {
+void ofApp::drawLineScoreIPhone(bool playOn) {
     
-    ofPushStyle();
-    
-    ofSetColor(255, 30);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-    
-    ofSetColor(120, 255, 120);
-    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
-    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
-    
-    ofSetColor(120, 255, 120);
-    for (int i = 0; i < 5; i++) {
-        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
+    if (playOn) {
+        ofPushMatrix();
+        
+        //     FIXME: ??? 40 pixel Translate
+        ofTranslate(0, lineScoreAreaPosTopY - 40);
+        
+        ofPushStyle();
+        
+        ofSetColor(255, 120);
+        
+        for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+            drawScoreCircleLineIPhone(scoreNote[i], i + 1);
+        }
+        
+        ofPopStyle();
+        
+        ofPopMatrix();
     }
     
-    ofSetColor(255, 180, 120);
-    for (int i = 0; i < 3; i++) {
-        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawScoreCircleLineIPhone(vector<int> vNote, int scoreCh) {
+    
+    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
+    
+    ofColor _c = colorVar[scoreCh - 1];
+    
+    if (vNote.size() > 0) {
+        drawCircle(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
+        drawLine(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
     }
     
-    ofPopStyle();
-    
-}   
+}
 
 
 //--------------------------------------------------------------
@@ -591,17 +649,12 @@ void ofApp::mainCameraCaptureViewiPhone() {
     if (bCameraCapturePlay) {
         
         drawPixelNumbersCircleNotes();
-        
-        //        drawPlayingShapeNotes();
-        //        drawPixelAllNoteShape();
-        
+                
         for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             drawPixelAllNoteShapesIPhone(scoreNote[i], i + 1);
             drawPlayingShapeNote(scoreNote[i], i + 1);
         }
-        
-        //        drawPixelShapeColorSize();
-        
+                
     }
     
     ofPopMatrix();
@@ -652,19 +705,179 @@ void ofApp::realtimeBufferImageView() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawIPhone() {
+void ofApp::drawIPhoneTrianglePixel() {
     
-    drawLineScoreIPhone(bCameraCapturePlay);
+    int _pixelSize = pixelCircleSize;  // 10
+    float _ellipseSizeR = 1.7;
     
-    mainCameraCaptureViewiPhone();
+    ofPushMatrix();
+    ofPushStyle();
+        
+    if (bCameraCapturePlay) {
+        ofSetColor(contourLineColor, 120);
+    } else {
+        ofSetColor(contourLineColor, 255);
+    }
+
+    ofEnableAntiAliasing();
     
-    drawIPhoneBaseLineLayout();
+    if (whitePixels.size() > 1) {
+        
+        for (int i = 0; i < whitePixels.size(); i++) {
+            
+            int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
+            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+            int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
+            
+            float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
+            float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            
+            ofPoint _1P = ofPoint(_x, _y - _pixelSize * _ellipseSizeR * 0.75);
+            ofPoint _2P = ofPoint(_x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
+            ofPoint _3P = ofPoint(_x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
+            
+            ofDrawTriangle(_1P, _2P, _3P);
+            
+        }
+        
+    }
     
-    drawControlElementIPhone(bCameraCapturePlay);
+    ofPopStyle();
+    ofPopMatrix();
     
-    drawBaseInterface(bCameraCapturePlay);
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawPixelNumbersCircleNotes() {
     
-    menuImgDraw(bCameraCapturePlay);
+    int _pixelSize = pixelCircleSize;
+    float _ellipseSizeR = 0.7;
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofEnableAntiAliasing();
+    
+    ofSetColor(255, 120);
+    
+    if (whitePixels.size() > 0) {
+        
+        int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
+        
+        for (int i = 0; i < _pixelNumbers; i++) {
+            
+            float _xS = ((_idPixels + i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+            
+            //            ofFill();
+            //            ofSetColor(255, 20);
+            //            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
+            
+            ofNoFill();
+            
+            ofSetColor(eventColor, 80);
+            
+            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
+            
+        }
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
+    
+    ofPushMatrix();
+    ofPushStyle();
+    ofEnableAntiAliasing();
+    
+    ofSetColor(255, 60);
+    
+    for (int i = 0; i < whitePixels.size(); i++) {
+        
+        int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
+        
+        float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint(_x, _y);
+        
+        
+        int _idLoopLine = ((i) % (whitePixels.size() - 1)) + 1;
+        int _idLoopLineOld = ((i + 1) % (whitePixels.size() - 1)) + 1;
+        
+        int _note = _vNote[_idLoopLine];
+        int _noteOld = _vNote[_idLoopLineOld];
+        
+        int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        
+        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
+            if (_note > 0) {
+                float _size = _scaledNote * pixeShapeSize;
+                drawShape(_p, baseSelection, _size);
+            }
+        }
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    //    float _h = ofMap(_scoreCh, 1, 7, 0, 255);
+    //    ofColor _c = ofColor::fromHsb(_h, 180, 255, 180);
+    
+    ofColor _c = colorVar[_scoreCh - 1];
+    
+    if (whitePixels.size() > 0) {
+        
+        int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
+        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
+        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
+        
+        float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
+        ofPoint _p = ofPoint(_x, _y);
+        
+        int _idLoopLineOld = ((1 + noteIndex) % (whitePixels.size() - 1)) + 1;
+        
+        int _note = _vNote[_noteLoopIndex];
+        int _noteOld = _vNote[_idLoopLineOld];
+        
+        int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
+        int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
+        
+        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
+            if (_note > 0) {
+                //                drawShapeWithCenterlines(_p, baseSelection, _pixelNumbers);
+                
+                float _size = _scaledNote * pixeShapeSize;
+                drawShapeWithCenterlinesColorRotation(_p, baseSelection, _size, _c);
+            }
+        }
+        
+    }
+    
+    ofPopStyle();
+    ofPopMatrix();
     
 }
 
@@ -690,30 +903,6 @@ void ofApp::drawIPhoneBaseLineLayout() {
     
     ofPopMatrix();
 
-}
-
-
-//--------------------------------------------------------------
-void ofApp::menuImgDraw(bool playOn) {
-    
-    ofPushStyle();
-    
-    if (playOn) {
-        returnCaptureMode.draw(returnCapture);
-    } else {
-        if (importLibraryImg) {
-            cameraModeImg.draw(cameraMode);
-            importCancleImg.draw(libaryImportCancle);
-        } else {
-            importImg.draw(libaryImport);
-        }
-        capture.draw(composeMode);
-        changeCamera.draw(cameraChange);
-    }
-    
-    
-    ofPopStyle();
-    
 }
 
 
@@ -806,6 +995,167 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         //    ofPopMatrix();
         
     }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawBaseInterface(bool playOn) {
+    
+    if (playOn) {
+        
+        ofPushMatrix();
+        
+        ofTranslate(0, 0);
+        
+        ofPushStyle();
+        
+        ofColor _c[6];
+        
+        for (int i = 0; i < 6; i++) {
+            if (baseSelection == (4 + i)) {
+                _c[i] = uiLineColor;
+            } else {
+                _c[i] = ofColor(30);
+            }
+        }
+        
+        drawShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+        drawShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+        drawShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+        drawShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+        drawShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+        drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
+        
+        if (bCameraCapturePlay) {
+            switch (baseSelection) {
+                case 4:
+                    activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
+                    break;
+                    
+                case 5:
+                    activeShapeFillColor(base5Pos, 5, baseSize, _c[1]);
+                    break;
+                    
+                case 6:
+                    activeShapeFillColor(base6Pos, 6, baseSize, _c[2]);
+                    break;
+                    
+                case 7:
+                    activeShapeFillColor(base7Pos, 7, baseSize, _c[3]);
+                    break;
+                    
+                case 8:
+                    activeShapeFillColor(base8Pos, 8, baseSize, _c[4]);
+                    break;
+                    
+                case 9:
+                    activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+        }
+        
+        ofPopMatrix();
+        ofPopStyle();
+        
+    }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::menuImgDraw(bool playOn) {
+    
+    ofPushStyle();
+    
+    if (playOn) {
+        returnCaptureMode.draw(returnCapture);
+    } else {
+        if (importLibraryImg) {
+            cameraModeImg.draw(cameraMode);
+            importCancleImg.draw(libaryImportCancle);
+        } else {
+            importImg.draw(libaryImport);
+        }
+        capture.draw(composeMode);
+        changeCamera.draw(cameraChange);
+    }
+    
+    
+    ofPopStyle();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::debugRatioLayout() {
+    
+    ofPushStyle();
+    
+    // safeZone
+    // iPhone X Pro Max  = x 3
+    ofSetColor(255, 0, 0);
+    ofDrawBitmapString(ofToString(ofGetHeight()), 10, 100);
+    
+    int xProMaxSafeZonePixelHeight = 44 * safeZoneHeightFactor;
+    float upSafeZoneY = xProMaxSafeZonePixelHeight;
+    ofDrawLine(0, upSafeZoneY, ofGetWidth(), upSafeZoneY);
+    
+    float dnSafeZoneY = ofGetHeight() - xProMaxSafeZonePixelHeight;
+    ofDrawLine(0, dnSafeZoneY, ofGetWidth(), dnSafeZoneY);
+    
+    float interfaceZoneHeight = ofGetHeight() - xProMaxSafeZonePixelHeight - 500;
+    ofDrawLine(0, interfaceZoneHeight, ofGetWidth(), interfaceZoneHeight);
+    
+    //    ofSetColor(255, 30);
+    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    //
+    //    ofSetColor(120, 255, 120);
+    //    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
+    //    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
+    //
+    //    ofSetColor(120, 255, 120);
+    //    for (int i = 0; i < 5; i++) {
+    //        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
+    //    }
+    //
+    //    ofSetColor(255, 180, 120);
+    //    for (int i = 0; i < 3; i++) {
+    //        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
+    //    }
+    
+    ofPopStyle();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::debugLayout() {
+    
+    ofPushStyle();
+    
+    ofSetColor(255, 30);
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    
+    ofSetColor(120, 255, 120);
+    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
+    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
+    
+    ofSetColor(120, 255, 120);
+    for (int i = 0; i < 5; i++) {
+        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
+    }
+    
+    ofSetColor(255, 180, 120);
+    for (int i = 0; i < 3; i++) {
+        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
+    }
+    
+    ofPopStyle();
     
 }
 
@@ -911,253 +1261,6 @@ void ofApp::drawTrianglePixel() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawIPhoneTrianglePixel() {
-    
-    int _pixelSize = pixelCircleSize;  // 10
-    float _ellipseSizeR = 1.7;
-    
-    ofPushMatrix();
-    ofPushStyle();
-        
-    if (bCameraCapturePlay) {
-        ofSetColor(contourLineColor, 120);
-    } else {
-        ofSetColor(contourLineColor, 255);
-    }
-
-    ofEnableAntiAliasing();
-    
-    if (whitePixels.size() > 1) {
-        
-        for (int i = 0; i < whitePixels.size(); i++) {
-            
-            int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-            int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-            
-            float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
-            float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            ofPoint _1P = ofPoint(_x, _y - _pixelSize * _ellipseSizeR * 0.75);
-            ofPoint _2P = ofPoint(_x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
-            ofPoint _3P = ofPoint(_x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
-            
-            ofDrawTriangle(_1P, _2P, _3P);
-            
-        }
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
-    
-    ofPushMatrix();
-    ofPushStyle();
-    ofEnableAntiAliasing();
-    
-    ofSetColor(255, 60);
-    
-    for (int i = 0; i < whitePixels.size(); i++) {
-        
-        int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-        
-        float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint(_x, _y);
-        
-        
-        int _idLoopLine = ((i) % (whitePixels.size() - 1)) + 1;
-        int _idLoopLineOld = ((i + 1) % (whitePixels.size() - 1)) + 1;
-        
-        int _note = _vNote[_idLoopLine];
-        int _noteOld = _vNote[_idLoopLineOld];
-        
-        int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-        int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-        
-        
-        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
-            if (_note > 0) {
-                float _size = _scaledNote * pixeShapeSize;
-                drawShape(_p, baseSelection, _size);
-            }
-        }
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawPixelNumbersCircleNotes() {
-    
-    int _pixelSize = pixelCircleSize;
-    float _ellipseSizeR = 0.7;
-    
-    ofPushMatrix();
-    ofPushStyle();
-    ofEnableAntiAliasing();
-    
-    ofSetColor(255, 120);
-    
-    if (whitePixels.size() > 0) {
-        
-        int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-        
-        for (int i = 0; i < _pixelNumbers; i++) {
-            
-            float _xS = ((_idPixels + i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-            float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            //            ofFill();
-            //            ofSetColor(255, 20);
-            //            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
-            
-            ofNoFill();
-            
-            ofSetColor(eventColor, 80);
-            
-            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
-            
-        }
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawPlayingShapeNotes() {
-    
-    ofPushMatrix();
-    ofPushStyle();
-    ofEnableAntiAliasing();
-    
-    ofSetColor(255, 120);
-    
-    if (whitePixels.size() > 0) {
-        
-        int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-        
-        float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint(_x, _y);
-        
-        drawShape(_p, baseSelection, _pixelNumbers);
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    //    float _h = ofMap(_scoreCh, 1, 7, 0, 255);
-    //    ofColor _c = ofColor::fromHsb(_h, 180, 255, 180);
-    
-    ofColor _c = colorVar[_scoreCh - 1];
-    
-    if (whitePixels.size() > 0) {
-        
-        int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
-        int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-        int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-        
-        float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-        ofPoint _p = ofPoint(_x, _y);
-        
-        int _idLoopLineOld = ((1 + noteIndex) % (whitePixels.size() - 1)) + 1;
-        
-        int _note = _vNote[_noteLoopIndex];
-        int _noteOld = _vNote[_idLoopLineOld];
-        
-        int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
-        int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-        
-        if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
-            if (_note > 0) {
-                //                drawShapeWithCenterlines(_p, baseSelection, _pixelNumbers);
-                
-                float _size = _scaledNote * pixeShapeSize;
-                drawShapeWithCenterlinesColorRotation(_p, baseSelection, _size, _c);
-            }
-        }
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawLineScoreIPhone(bool playOn) {
-    
-    if (playOn) {
-        ofPushMatrix();
-        
-        //     FIXME: ??? 40 pixel Translate
-        ofTranslate(0, lineScoreAreaPosTopY - 40);
-        
-        ofPushStyle();
-        
-        ofSetColor(255, 120);
-        
-        for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-            drawScoreCircleLineIPhone(scoreNote[i], i + 1);
-        }
-        
-        ofPopStyle();
-        
-        ofPopMatrix();
-    }
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawScoreCircleLineIPhone(vector<int> vNote, int scoreCh) {
-    
-    int _offsetXPos = lineScoreStepX * (lineScoreStepSize - 1);
-    
-    ofColor _c = colorVar[scoreCh - 1];
-    
-    if (vNote.size() > 0) {
-        drawCircle(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
-        drawLine(_c, lineScoreStepSize, vNote, lineScoreStepX, lineScoreStepY, scoreCh, _offsetXPos);
-    }
-    
-}
-
-
-//--------------------------------------------------------------
 void ofApp::drawCircle(ofColor cIn, int xNumber, vector<int> scoreNote, float stepX, float stepY, int scoreCh, int offsetXPos) {
     
     int _middle = xNumber * 0.5;
@@ -1240,74 +1343,6 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
     }
     
     ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawBaseInterface(bool playOn) {
-    
-    if (playOn) {
-        
-        ofPushMatrix();
-        
-        ofTranslate(0, 0);
-        
-        ofPushStyle();
-        
-        ofColor _c[6];
-        
-        for (int i = 0; i < 6; i++) {
-            if (baseSelection == (4 + i)) {
-                _c[i] = uiLineColor;
-            } else {
-                _c[i] = ofColor(30);
-            }
-        }
-        
-        drawShapeFillColor(base4Pos, 4, baseSize, _c[0]);
-        drawShapeFillColor(base5Pos, 5, baseSize, _c[1]);
-        drawShapeFillColor(base6Pos, 6, baseSize, _c[2]);
-        drawShapeFillColor(base7Pos, 7, baseSize, _c[3]);
-        drawShapeFillColor(base8Pos, 8, baseSize, _c[4]);
-        drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
-        
-        if (bCameraCapturePlay) {
-            switch (baseSelection) {
-                case 4:
-                    activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
-                    break;
-                    
-                case 5:
-                    activeShapeFillColor(base5Pos, 5, baseSize, _c[1]);
-                    break;
-                    
-                case 6:
-                    activeShapeFillColor(base6Pos, 6, baseSize, _c[2]);
-                    break;
-                    
-                case 7:
-                    activeShapeFillColor(base7Pos, 7, baseSize, _c[3]);
-                    break;
-                    
-                case 8:
-                    activeShapeFillColor(base8Pos, 8, baseSize, _c[4]);
-                    break;
-                    
-                case 9:
-                    activeShapeFillColor(base9Pos, 9, baseSize, _c[5]);
-                    break;
-                    
-                default:
-                    break;
-            }
-            
-        }
-        
-        ofPopMatrix();
-        ofPopStyle();
-        
-    }
     
 }
 
@@ -1943,6 +1978,19 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
 
 
 //--------------------------------------------------------------
+void ofApp::triggerReceive(float & metro) {
+    
+    index++;
+    noteIndex = index;
+    
+    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+        trigScoreNote(scoreNote[i], synth[i], i + 1);
+    }
+    
+}
+
+
+//--------------------------------------------------------------
 void ofApp::touchUp(ofTouchEventArgs & touch) {
     
     iPhoneTouchUp(touch);
@@ -1987,83 +2035,6 @@ void ofApp::audioRequested(float * output, int bufferSize, int nChannels) {
 
 //--------------------------------------------------------------
 void ofApp::audioReceived(float * output, int bufferSize, int nChannels) {
-    
-}
-
-//--------------------------------------------------------------
-void ofApp::createSynthVoice() {
-    
-    float _volume = 0.9;
-    
-    ControlParameter _carrierPitch1 = synth[0].addParameter("carrierPitch1");
-    float _amountMod1 = 1;
-    ControlGenerator _rCarrierFreq1 = ControlMidiToFreq().input(_carrierPitch1);
-    ControlGenerator _rModFreq1 = _rCarrierFreq1 * 2.5;
-    Generator _modulationTone1 = SineWave().freq(_rModFreq1) * _rModFreq1 * _amountMod1;
-    Generator _tone1 = SineWave().freq(_rCarrierFreq1 + _modulationTone1);
-    ControlGenerator _envelopTrigger1 = synth[0].addParameter("trigger1");
-    Generator _env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(_envelopTrigger1).legato(false);
-    synth[0].setOutputGen(_tone1 * _env1 * _volume);
-    
-    ControlParameter _carrierPitch2 = synth[1].addParameter("carrierPitch2");
-    float _amountMod2 = 1;
-    ControlGenerator _rCarrierFreq2 = ControlMidiToFreq().input(_carrierPitch2);
-    ControlGenerator _rModFreq2 = _rCarrierFreq2 * 3.489;
-    Generator _modulationTone2 = SineWave().freq(_rModFreq2) * _rModFreq2 * _amountMod2;
-    Generator _tone2 = SineWave().freq(_rCarrierFreq2 + _modulationTone2);
-    ControlGenerator _envelopTrigger2 = synth[1].addParameter("trigger2");
-    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger2).legato(false);
-    synth[1].setOutputGen(_tone2 * _env2 * _volume);
-    
-    ControlParameter _carrierPitch3 = synth[2].addParameter("carrierPitch3");
-    float _amountMod3 = 12;
-    ControlGenerator _rCarrierFreq3 = ControlMidiToFreq().input(_carrierPitch3);
-    ControlGenerator _rModFreq3 = _rCarrierFreq3 * 14.489;
-    Generator _modulationTone3 = SineWave().freq(_rModFreq3) * _rModFreq3 * _amountMod3;
-    Generator _tone3 = SineWave().freq(_rCarrierFreq3 + _modulationTone3);
-    ControlGenerator _envelopTrigger3 = synth[2].addParameter("trigger3");
-    Generator _env3 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger3).legato(true);
-    synth[2].setOutputGen(_tone3 * _env3 * _volume);
-    
-    ControlParameter _carrierPitch4 = synth[3].addParameter("carrierPitch4");
-    float _amountMod4 = 18;
-    ControlGenerator _rCarrierFreq4 = ControlMidiToFreq().input(_carrierPitch4);
-    ControlGenerator _rModFreq4 = _rCarrierFreq4 * 1.1;
-    Generator _modulationTone4 = SineWave().freq(_rModFreq4) * _rModFreq4 * _amountMod4;
-    Generator _tone4 = SineWave().freq(_rCarrierFreq4 + _modulationTone4);
-    ControlGenerator _envelopTrigger4 = synth[3].addParameter("trigger4");
-    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger4).legato(false);
-    synth[3].setOutputGen(_tone4 * _env4 * _volume);
-    
-    ControlParameter _carrierPitch5 = synth[4].addParameter("carrierPitch5");
-    float _amountMod5 = 6;
-    ControlGenerator _rCarrierFreq5 = ControlMidiToFreq().input(_carrierPitch5);
-    ControlGenerator _rModFreq5 = _rCarrierFreq5 * 1.489;
-    Generator _modulationTone5 = SineWave().freq(_rModFreq5) * _rModFreq5 * _amountMod5;
-    Generator _tone5 = SineWave().freq(_rCarrierFreq5 + _modulationTone5);
-    ControlGenerator _envelopTrigger5 = synth[4].addParameter("trigger5");
-    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger5).legato(false);
-    synth[4].setOutputGen(_tone5 * _env5 * _volume);
-    
-    ControlParameter _carrierPitch6 = synth[5].addParameter("carrierPitch6");
-    float _amountMod6 = 2;
-    ControlGenerator _rCarrierFreq6 = ControlMidiToFreq().input(_carrierPitch6);
-    ControlGenerator _rModFreq6 = _rCarrierFreq6 * 1.109;
-    Generator _modulationTone6 = SineWave().freq(_rModFreq6) * _rModFreq6 * _amountMod6;
-    Generator _tone6 = SineWave().freq(_rCarrierFreq6 + _modulationTone6);
-    ControlGenerator _envelopTrigger6 = synth[5].addParameter("trigger6");
-    Generator _env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger6).legato(false);
-    synth[5].setOutputGen(_tone6 * _env6 * _volume);
-    
-    ControlParameter _carrierPitch7 = synth[6].addParameter("carrierPitch7");
-    float _amountMod7 = 4;
-    ControlGenerator _rCarrierFreq7 = ControlMidiToFreq().input(_carrierPitch7);
-    ControlGenerator _rModFreq7 = _rCarrierFreq7 * 3.109;
-    Generator _modulationTone7 = SineWave().freq(_rModFreq7) * _rModFreq7 * _amountMod7;
-    Generator _tone7 = SineWave().freq(_rCarrierFreq7 + _modulationTone7);
-    ControlGenerator _envelopTrigger7 = synth[6].addParameter("trigger7");
-    Generator _env7 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(_envelopTrigger7).legato(false);
-    synth[6].setOutputGen(_tone7 * _env7 * _volume);
     
 }
 

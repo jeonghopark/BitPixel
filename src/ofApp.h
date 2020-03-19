@@ -145,7 +145,6 @@ public:
     
     // Graphics
     void drawPixelNumbersCircleNotes();
-    void drawPlayingShapeNotes();
     void drawPlayingShapeNote(vector<int> _vNote, int _scoreCh);
     
     // control Panel
@@ -192,7 +191,6 @@ public:
     
     void drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int size, ofColor color);
     void drawShape(ofPoint pos, int base, int size);
-    void drawPixelAllNoteShape();
     void drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh);
     
     void drawElemIntervalShape();
