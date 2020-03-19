@@ -760,7 +760,7 @@ void ofApp::drawPixelNumbersCircleNotes() {
     
     ofSetColor(255, 120);
     
-    if (whitePixels.size() > 0) {
+    if (whitePixels.size() > 1) {
         
         int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
         int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
@@ -770,11 +770,7 @@ void ofApp::drawPixelNumbersCircleNotes() {
             
             float _xS = ((_idPixels + i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
             float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            //            ofFill();
-            //            ofSetColor(255, 20);
-            //            ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
-            
+                        
             ofNoFill();
             
             ofSetColor(eventColor, 80);
@@ -810,7 +806,6 @@ void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
         float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
         ofPoint _p = ofPoint(_x, _y);
         
-        
         int _idLoopLine = ((i) % (whitePixels.size() - 1)) + 1;
         int _idLoopLineOld = ((i + 1) % (whitePixels.size() - 1)) + 1;
         
@@ -819,7 +814,6 @@ void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
         
         int _scaledNote = scaleSetting.noteSelector(baseSelection, _scoreCh, _note);
         int _scaledNoteOld = scaleSetting.noteSelector(baseSelection, _scoreCh, _noteOld);
-        
         
         if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
             if (_note > 0) {
@@ -841,10 +835,7 @@ void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
-    
-    //    float _h = ofMap(_scoreCh, 1, 7, 0, 255);
-    //    ofColor _c = ofColor::fromHsb(_h, 180, 255, 180);
-    
+        
     ofColor _c = colorVar[_scoreCh - 1];
     
     if (whitePixels.size() > 0) {
@@ -867,8 +858,6 @@ void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
         
         if (abs(_scaledNoteOld - _scaledNote) >= intervalDist) {
             if (_note > 0) {
-                //                drawShapeWithCenterlines(_p, baseSelection, _pixelNumbers);
-                
                 float _size = _scaledNote * pixeShapeSize;
                 drawShapeWithCenterlinesColorRotation(_p, baseSelection, _size, _c);
             }
@@ -1220,43 +1209,6 @@ void ofApp::debugRatioLayout() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawTrianglePixel() {
-    
-    int _pixelSize = pixelCircleSize;  // 10
-    float _ellipseSizeR = 1.7;
-    
-    ofPushMatrix();
-    ofPushStyle();
-    ofEnableAntiAliasing();
-    
-    if (whitePixels.size() > 1) {
-        
-        for (int i = 0; i < whitePixels.size(); i++) {
-            
-            int _noteLoopIndex = ((i) % (whitePixels.size() - 1)) + 1;
-            int _pixelNumbers = whitePixels[_noteLoopIndex].pixelN;
-            int _idPixels = whitePixels[_noteLoopIndex].indexPos - _pixelNumbers;
-            
-            float _x = ((_idPixels) % (int)changedCamSize) * pixelStepS * cameraScreenRatio - _pixelSize;
-            float _y = (int)((_idPixels) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-            
-            ofPoint _1P = ofPoint(_x, _y - _pixelSize * _ellipseSizeR * 0.75);
-            ofPoint _2P = ofPoint(_x - _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
-            ofPoint _3P = ofPoint(_x + _pixelSize * _ellipseSizeR * 0.55, _y + _pixelSize * _ellipseSizeR * 0.25);
-            
-            ofDrawTriangle(_1P, _2P, _3P);
-            
-        }
-        
-    }
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
 void ofApp::drawCircle(ofColor cIn, int xNumber, vector<int> scoreNote, float stepX, float stepY, int scoreCh, int offsetXPos) {
     
     int _middle = xNumber * 0.5;
@@ -1339,68 +1291,6 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
     }
     
     ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c) {
-    
-    ofPoint _pos = pos;
-    
-    vector<ofPoint> posLine;
-    
-    int _base = base;
-    int _size = size;
-    
-    for (int i = 0; i < _base; i++) {
-        float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
-        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
-        
-        ofPoint _p = ofPoint(_x, _y);
-        posLine.push_back(_p);
-    }
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    ofTranslate(_pos);
-    
-    if (!bIPhone) {
-        ofRotateZDeg(0);
-    } else {
-        if (_base == 5) {
-            ofRotateZDeg(18);
-        } else if (_base == 7) {
-            ofRotateZDeg(38.571429);
-        } else if (_base == 8) {
-            ofRotateZDeg(45);
-        } else if (_base == 9) {
-            ofRotateZDeg(50);
-        } else {
-            ofRotateZDeg(0);
-        }
-    }
-    
-    ofSetColor(_c, 60);
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
-    }
-    
-    ofSetColor(_c, 180);
-    
-    ofSetLineWidth(controlObjectLineWidth);
-    
-    for (int i = 0; i < posLine.size() - 1; i++) {
-        ofDrawLine(posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y);
-    }
-    
-    ofDrawLine(posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y);
-    
-    ofPopStyle();
-    ofPopMatrix();
     
 }
 
@@ -1489,10 +1379,7 @@ void ofApp::drawShape(ofPoint pos, int base, int size) {
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-    
-    //    cam.close();
-    //    std::exit(0);
-    
+        
 }
 
 

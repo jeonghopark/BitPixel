@@ -127,7 +127,6 @@ public:
     float pixelStepS;
     int changeVideoWidth, changeVideoHeight;
     vector<float> pixelBright;
-    void drawTrianglePixel();
     void drawIPhoneTrianglePixel();
     int thresholdValue;
     vector<blackWhitePixels> whitePixels;
