@@ -59,11 +59,7 @@ void ofApp::setup() {
     baseSelection = 7;
     intervalDist = 1;
 
-    if (WHITE_VIEW) {
-        ofBackground(255);
-    } else {
-        ofBackground(backgroundColor);
-    }
+    ofBackground(backgroundColor);
     
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
@@ -466,14 +462,8 @@ void ofApp::calculatePixels(ofImage _img) {
         int _bCounter = 0;
         
         for (int i = 0; i < pixelBright.size(); i++) {
-            int _whitePixel;
-            
-            if (WHITE_VIEW) {
-                _whitePixel = 255;
-            } else {
-                _whitePixel = 0;
-            }
-            
+            int _whitePixel = 0;
+                        
             if (pixelBright[i] == _whitePixel) {
                 
                 if (_bCounter == 0) {
@@ -639,11 +629,7 @@ void ofApp::realtimeCameraConvertedImageView() {
     
     ofPushStyle();
     if (!bCameraCapturePlay) {
-        if (WHITE_VIEW) {
-            ofSetColor(255, 255);
-        } else {
-            ofSetColor(contourLineColor, 120);
-        }
+        ofSetColor(contourLineColor, 120);
         
         ofPushMatrix();
         edge.draw(0, 0, cameraViewSize.x + 1, cameraViewSize.y + 1);
@@ -665,11 +651,7 @@ void ofApp::realtimeBufferImageView() {
 
     ofPushStyle();
     if (bCameraCapturePlay) {
-        if (WHITE_VIEW) {
-            ofSetColor(255, 120);
-        } else {
-            ofSetColor(contourLineColor, 180);
-        }
+        ofSetColor(contourLineColor, 180);
         
         bufferImg.draw(0, 0, cameraViewSize.x + 1, cameraViewSize.y + 1);
     }
@@ -776,11 +758,7 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         ofPushMatrix();
         ofPushStyle();
         
-        if (WHITE_VIEW) {
-            ofSetColor(0, 180);
-        } else {
-            ofSetColor(uiLineColor);
-        }
+        ofSetColor(uiLineColor);
         
         //    ofDrawLine(intervalPos.x, _intervalY, intervalPos.x, _intervalY);
         //    ofDrawLine(intervalPos.x, 0, intervalPos.x, ofGetHeight());
@@ -845,11 +823,7 @@ void ofApp::drawElemSpeedShape() {
     
     ofPushStyle();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 180);
-    } else {
-        ofSetColor(uiLineColor, 40);
-    }
+    ofSetColor(uiLineColor, 40);
     
     ofSetCircleResolution(24);
     float _sX = speedPos.x;
@@ -871,11 +845,7 @@ void ofApp::drawElemIntervalShape() {
     
     ofPushStyle();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 180);
-    } else {
-        ofSetColor(uiLineColor, 40);
-    }
+    ofSetColor(uiLineColor, 40);
     
     ofSetLineWidth(controlObjectLineWidth);
     
@@ -958,17 +928,9 @@ void ofApp::drawIPhoneTrianglePixel() {
     ofPushStyle();
         
     if (bCameraCapturePlay) {
-        if (WHITE_VIEW) {
-            ofSetColor(0, 120);
-        } else {
-            ofSetColor(contourLineColor, 120);
-        }
+        ofSetColor(contourLineColor, 120);
     } else {
-        if (WHITE_VIEW) {
-            ofSetColor(0, 220);
-        } else {
-            ofSetColor(contourLineColor, 255);
-        }
+        ofSetColor(contourLineColor, 255);
     }
 
     ofEnableAntiAliasing();
@@ -1007,11 +969,7 @@ void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 50);
-    } else {
-        ofSetColor(255, 60);
-    }
+    ofSetColor(255, 60);
     
     for (int i = 0; i < whitePixels.size(); i++) {
         
@@ -1059,11 +1017,7 @@ void ofApp::drawPixelNumbersCircleNotes() {
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 120);
-    } else {
-        ofSetColor(255, 120);
-    }
+    ofSetColor(255, 120);
     
     if (whitePixels.size() > 0) {
         
@@ -1082,11 +1036,7 @@ void ofApp::drawPixelNumbersCircleNotes() {
             
             ofNoFill();
             
-            if (WHITE_VIEW) {
-                ofSetColor(0, 120);
-            } else {
-                ofSetColor(eventColor, 80);
-            }
+            ofSetColor(eventColor, 80);
             
             ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
             
@@ -1107,11 +1057,7 @@ void ofApp::drawPlayingShapeNotes() {
     ofPushStyle();
     ofEnableAntiAliasing();
     
-    if (WHITE_VIEW) {
-        ofSetColor(0, 120);
-    } else {
-        ofSetColor(255, 120);
-    }
+    ofSetColor(255, 120);
     
     if (whitePixels.size() > 0) {
         
@@ -1185,16 +1131,12 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
     if (playOn) {
         ofPushMatrix();
         
-        //     FIXME: 40 pixel Translate
+        //     FIXME: ??? 40 pixel Translate
         ofTranslate(0, lineScoreAreaPosTopY - 40);
         
         ofPushStyle();
         
-        if (WHITE_VIEW) {
-            ofSetColor(0, 120);
-        } else {
-            ofSetColor(255, 120);
-        }
+        ofSetColor(255, 120);
         
         for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             drawScoreCircleLineIPhone(scoreNote[i], i + 1);
@@ -1424,11 +1366,7 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     //    }
     
-    if (WHITE_VIEW) {
-        ofSetColor(_c, 180);
-    } else {
-        ofSetColor(_c, 40);
-    }
+    ofSetColor(_c, 40);
     
     ofSetLineWidth(controlObjectLineWidth);
     
@@ -1443,11 +1381,7 @@ void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
     _shapeM.draw();
     
-    if (WHITE_VIEW) {
-        ofSetColor(255, 180);
-    } else {
-        ofSetColor(uiLineColor);
-    }
+    ofSetColor(uiLineColor);
     
     ofMesh _shapeOutLine;
     _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
@@ -1506,21 +1440,13 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     //    }
     
     
-    if (WHITE_VIEW) {
-        ofSetColor(_c, 120);
-    } else {
-        ofSetColor(_c, 120);
-    }
+    ofSetColor(_c, 120);
     
     for (int i = 0; i < posLine.size(); i++) {
         //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     }
     
-    if (WHITE_VIEW) {
-        ofSetColor(_c, 180);
-    } else {
-        ofSetColor(_c, 180);
-    }
+    ofSetColor(_c, 180);
     
     ofSetLineWidth(controlObjectLineWidth);
     
@@ -1535,11 +1461,7 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     
     float _scaleMoving = floor(activeFactor) * 0.05 + 1.2;
     
-    if (WHITE_VIEW) {
-        ofSetColor(255, 180);
-    } else {
-        ofSetColor(uiLineColor);
-    }
+    ofSetColor(uiLineColor);
     
     //    float _scale = 0;
     //    for (int j=0; j<int(activeFactor); j+=10) {
@@ -1617,21 +1539,13 @@ void ofApp::drawShapeWithCenterlines(ofPoint pos, int base, int size, ofColor _c
         }
     }
     
-    if (WHITE_VIEW) {
-        ofSetColor(_c, 120);
-    } else {
-        ofSetColor(_c, 60);
-    }
+    ofSetColor(_c, 60);
     
     for (int i = 0; i < posLine.size(); i++) {
         ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
     }
     
-    if (WHITE_VIEW) {
-        ofSetColor(_c, 180);
-    } else {
-        ofSetColor(_c, 180);
-    }
+    ofSetColor(_c, 180);
     
     ofSetLineWidth(controlObjectLineWidth);
     

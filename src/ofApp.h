@@ -36,7 +36,6 @@ class ofApp : public ofxiOSApp {
     ofxTonicSynth synth[NUM_SYNTH_LINE];
     ofxTonicSynth synthMain;
     
-    const bool WHITE_VIEW = false;
     
 public:
     
