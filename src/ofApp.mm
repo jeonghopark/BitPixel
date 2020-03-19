@@ -320,7 +320,7 @@ void ofApp::setSpeedCtrl(float _screenWStepsize, ofVec2f _controlAreaSize) {
     float _posX = _screenWStepsize * 5.25;
     float _lineLengthRatio = _controlAreaSize.y * 0.35;
 
-    speedPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5);
+    speedPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5 - 44 * safeZoneHeightFactor);
     speedLineLength = ofPoint(speedPos.y - _lineLengthRatio, speedPos.y + _lineLengthRatio);
 
 }
@@ -334,7 +334,7 @@ void ofApp::setIntervalCtrl(float _screenWStepsize, ofVec2f _controlAreaSize) {
     float _posX = _screenWStepsize * 0.75;
     float _lineLengthRatio = _controlAreaSize.y * 0.35;
 
-    intervalPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5);
+    intervalPos = ofPoint(_posX, controlAreaPosTopY + _controlAreaSize.y * 0.5 - 44 * safeZoneHeightFactor);
     intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
 
 }
@@ -347,12 +347,12 @@ void ofApp::setBase(float _screenWStepsize) {
     float _basePosLeft = _screenWStepsize * 1.75;
     float _basePosRight = _screenWStepsize * 4.25;
     
-    base4Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
-    base5Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
-    base6Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
-    base7Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0);
-    base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0);
-    base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0);
+    base4Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base5Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base6Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base7Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0 - 44 * safeZoneHeightFactor);
 
 }
 
@@ -423,10 +423,6 @@ void ofApp::calculatePixels(ofImage _img) {
     Canny(gray, edge, cannyThreshold1, cannyThreshold2, 3);
     thin(edge);
     
-    if (WHITE_VIEW) {
-        invert(edge);
-    }
-    
 #endif
     
     edge.update();
@@ -442,14 +438,7 @@ void ofApp::calculatePixels(ofImage _img) {
         blackPixels.clear();
         
         unsigned char * _src = edge.getPixels().getData();
-        
-//        if (!bIPhone) {
-//            _src = edge.getPixels().getData();
-//        } else {
-//            //            edge.rotate90(-1);
-//            _src = edge.getPixels().getData();
-//        }
-        
+                
         for (int j = 0; j < camSize.y; j += pixelStepS) {
             for (int i = 0; i < camSize.x; i += pixelStepS) {
                 int _index = i + j * camSize.x;
@@ -756,6 +745,9 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         //    ofPopStyle();
         
         ofPushMatrix();
+        
+        ofTranslate(0, 0);
+        
         ofPushStyle();
         
         ofSetColor(uiLineColor);
@@ -1258,6 +1250,9 @@ void ofApp::drawBaseInterface(bool playOn) {
     if (playOn) {
         
         ofPushMatrix();
+        
+        ofTranslate(0, 0);
+        
         ofPushStyle();
         
         ofColor _c[6];
