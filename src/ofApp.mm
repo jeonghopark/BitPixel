@@ -73,10 +73,10 @@ void ofApp::setup() {
     safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
 
     lineScoreStepSize = 23;
-    controlObjectLineWidth = 2;
-    
-    controlAreaSize.set(ofGetWidth(), 326);
     lineScoreAreaSize.set(ofGetWidth(), 170);
+    
+    controlObjectLineWidth = 2;    
+    controlAreaSize.set(ofGetWidth(), 326);
     
     cameraViewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 2 * safeZoneHeightFactor);
 
@@ -1765,7 +1765,7 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
             
             if ((_distI < intervalSize * _tolerance) && bInterval == false) {
                 bInterval = true;
-            }ur
+            }
         }
     }
     
