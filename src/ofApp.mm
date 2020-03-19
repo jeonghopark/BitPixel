@@ -911,28 +911,6 @@ void ofApp::drawControlElementIPhone(bool playOn) {
     
     if (playOn) {
         
-        //    ofPushStyle();
-        
-        //    if (WHITE_VIEW) {
-        //        ofSetColor(255);
-        //    } else {
-        //        ofSetColor(backgroundColor);
-        //    }
-        //
-        //    ofDrawRectangle(0, 0, screenW, screenPosLeftY);
-        //    ofDrawRectangle(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-        
-        //    if (WHITE_VIEW) {
-        //        ofSetColor(0, 10);
-        //    } else {
-        //        ofSetColor(backgroundColor);
-        //    }
-        //
-        //    backgroundControPanel.draw(0, screenPosLeftY, screenW, -screenPosLeftY);
-        //    backgroundControPanel.draw(0, screenPosRightY, screenW, (screenH - screenPosRightY));
-        //
-        //    ofPopStyle();
-        
         ofPushMatrix();
         
         ofTranslate(0, 0);
@@ -941,13 +919,7 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         
         ofSetColor(uiLineColor);
         
-        //    ofDrawLine(intervalPos.x, _intervalY, intervalPos.x, _intervalY);
-        //    ofDrawLine(intervalPos.x, 0, intervalPos.x, ofGetHeight());
-        
-        //    float _intervalY = intervalPos.y;
         ofDrawLine(intervalPos.x, intervalLineLength.x, intervalPos.x, intervalLineLength.y);
-        
-        //    float _speedY = speedPos.y;
         ofDrawLine(speedPos.x, speedLineLength.x, speedPos.x, speedLineLength.y);
         
         ofPopStyle();
@@ -956,45 +928,66 @@ void ofApp::drawControlElementIPhone(bool playOn) {
         drawElemSpeedShape();
         drawElemIntervalShape();
         
-        //    ofPushMatrix();
-        //    ofPushStyle();
-        //
-        //    if (WHITE_VIEW) {
-        //        ofSetColor(0, 40);
-        //    } else {
-        //        ofSetColor(uiLineColor);
-        //    }
-        //
-        //    ofPoint _line1S = ofPoint(0, screenPosLeftY);
-        //    ofPoint _line1E = ofPoint(screenW, screenPosLeftY);
-        //    ofDrawLine(_line1S, _line1E);
-        //
-        //    ofPoint _line2S = ofPoint(0, screenPosRightY);
-        //    ofPoint _line2E = ofPoint(screenW, screenPosRightY);
-        //    ofDrawLine(_line2S, _line2E);
-        //
-        //    ofPoint _lineUpS = ofPoint(screenW - cameraViewSize, screenPosLeftY);
-        //    ofPoint _lineUpE = ofPoint(screenW - cameraViewSize, screenPosRightY);
-        //    ofDrawLine(_lineUpS, _lineUpE);
-        //
-        //    ofPopStyle();
-        
-        //    ofPushStyle();
-        //    if (WHITE_VIEW) {
-        //        ofSetColor(0, 40);
-        //    } else {
-        //        ofSetColor(uiLineColor);
-        //    }
-        //
-        //    ofPoint _lineMS = ofPoint(10, (screenPosRightY + screenPosLeftY) * 0.5);
-        //    ofPoint _lineME = ofPoint(screenW - cameraViewSize - 10, (screenPosRightY + screenPosLeftY) * 0.5);
-        //    ofDrawLine(_lineMS, _lineME);
-        //
-        //    ofPopStyle();
-        
-        //    ofPopMatrix();
-        
     }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawElemSpeedShape() {
+    
+    ofPushStyle();
+    
+    ofSetColor(uiLineColor, 40);
+    
+    ofSetCircleResolution(24);
+    float _sX = speedPos.x;
+    float _sY = speedPos.y;
+    //    ofNoFill();
+    ofSetLineWidth(controlObjectLineWidth);
+    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
+    
+    ofNoFill();
+    ofSetColor(uiLineColor);
+    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
+    ofPopStyle();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawElemIntervalShape() {
+    
+    ofPushStyle();
+    
+    ofSetColor(uiLineColor, 40);
+    
+    ofSetLineWidth(controlObjectLineWidth);
+    
+    float _iX = intervalPos.x;
+    float _iY = intervalPos.y;
+    
+    ofMesh _mesh;
+    _mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+    _mesh.addVertex(ofPoint(_iX, _iY));
+    _mesh.addVertex(ofPoint(_iX - intervalSize, _iY));
+    _mesh.addVertex(ofPoint(_iX, _iY - intervalSize));
+    _mesh.addVertex(ofPoint(_iX + intervalSize, _iY));
+    _mesh.addVertex(ofPoint(_iX, _iY + intervalSize));
+    _mesh.addVertex(ofPoint(_iX - intervalSize, _iY));
+    _mesh.draw();
+    
+    ofSetColor(uiLineColor);
+    ofMesh _meshLine;
+    _meshLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+    _meshLine.addVertex(ofPoint(_iX - intervalSize, _iY));
+    _meshLine.addVertex(ofPoint(_iX, _iY - intervalSize));
+    _meshLine.addVertex(ofPoint(_iX + intervalSize, _iY));
+    _meshLine.addVertex(ofPoint(_iX, _iY + intervalSize));
+    _meshLine.addVertex(ofPoint(_iX - intervalSize, _iY));
+    _meshLine.draw();
+    
+    ofPopStyle();
     
 }
 
@@ -1068,6 +1061,117 @@ void ofApp::drawBaseInterface(bool playOn) {
 
 
 //--------------------------------------------------------------
+void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
+    
+    ofPoint _pos = pos;
+    
+    vector<ofPoint> posLine;
+    
+    int _base = base;
+    int _size = size;
+    
+    for (int i = 0; i < _base; i++) {
+        float _sizeDegree = i * 360 / _base + 180.0;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
+        
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
+    }
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate(_pos);
+    
+    ofSetColor(_c, 40);
+    
+    ofSetLineWidth(controlObjectLineWidth);
+    
+    ofMesh _shapeM;
+    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+    _shapeM.addVertex(ofPoint(0, 0));
+    
+    for (int i = 0; i < posLine.size(); i++) {
+        _shapeM.addVertex(ofPoint(posLine[i].x, posLine[i].y));
+    }
+    
+    _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
+    _shapeM.draw();
+    
+    ofSetColor(uiLineColor);
+    
+    ofMesh _shapeOutLine;
+    _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+    
+    for (int i = 0; i < posLine.size(); i++) {
+        _shapeOutLine.addVertex(ofPoint(posLine[i].x, posLine[i].y));
+    }
+    
+    _shapeOutLine.addVertex(ofPoint(posLine[0].x, posLine[0].y));
+    _shapeOutLine.draw();
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
+    
+    ofPoint _pos = pos;
+    
+    vector<ofPoint> posLine;
+    
+    int _base = base;
+    int _size = size;
+    
+    for (int i = 0; i < _base; i++) {
+        float _sizeDegree = i * 360 / _base + 180.0;
+        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
+        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
+        
+        ofPoint _p = ofPoint(_x, _y);
+        posLine.push_back(_p);
+    }
+    
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate(_pos);
+    
+    ofSetColor(_c, 120);
+        
+    ofSetColor(_c, 180);
+    
+    ofSetLineWidth(controlObjectLineWidth);
+        
+    float _scaleMoving = floor(activeFactor) * 0.05 + 1.2;
+    
+    ofSetColor(uiLineColor);
+    
+    ofPushStyle();
+    ofSetColor(_c, 220);
+    
+    ofMesh _shapeOutMovingLine;
+    _shapeOutMovingLine.setMode(OF_PRIMITIVE_LINE_STRIP);
+    
+    for (int i = 0; i < posLine.size(); i++) {
+        _shapeOutMovingLine.addVertex(ofPoint(posLine[i].x * _scaleMoving, posLine[i].y * _scaleMoving));
+    }
+    
+    _shapeOutMovingLine.addVertex(ofPoint(posLine[0].x * _scaleMoving, posLine[0].y * _scaleMoving));
+    _shapeOutMovingLine.draw();
+    ofPopStyle();
+    
+    ofPopStyle();
+    ofPopMatrix();
+    
+}
+
+
+//--------------------------------------------------------------
 void ofApp::menuImgDraw(bool playOn) {
     
     ofPushStyle();
@@ -1110,113 +1214,6 @@ void ofApp::debugRatioLayout() {
     
     float interfaceZoneHeight = ofGetHeight() - xProMaxSafeZonePixelHeight - 500;
     ofDrawLine(0, interfaceZoneHeight, ofGetWidth(), interfaceZoneHeight);
-    
-    //    ofSetColor(255, 30);
-    //    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-    //
-    //    ofSetColor(120, 255, 120);
-    //    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
-    //    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
-    //
-    //    ofSetColor(120, 255, 120);
-    //    for (int i = 0; i < 5; i++) {
-    //        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
-    //    }
-    //
-    //    ofSetColor(255, 180, 120);
-    //    for (int i = 0; i < 3; i++) {
-    //        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
-    //    }
-    
-    ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::debugLayout() {
-    
-    ofPushStyle();
-    
-    ofSetColor(255, 30);
-    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-    
-    ofSetColor(120, 255, 120);
-    ofDrawLine(0, ofGetHeight() * 0.125 * 5, ofGetWidth(), ofGetHeight() * 0.125 * 5);
-    ofDrawLine(0, ofGetHeight() * 0.125 * 6.5, ofGetWidth(), ofGetHeight() * 0.125 * 6.5);
-    
-    ofSetColor(120, 255, 120);
-    for (int i = 0; i < 5; i++) {
-        ofDrawLine(ofGetWidth() * 0.2 * i, 0, ofGetWidth() * 0.2 * i, ofGetHeight());
-    }
-    
-    ofSetColor(255, 180, 120);
-    for (int i = 0; i < 3; i++) {
-        ofDrawLine(ofGetWidth() * 0.33333 * i, 0, ofGetWidth() * 0.33333 * i, ofGetHeight());
-    }
-    
-    ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawElemSpeedShape() {
-    
-    ofPushStyle();
-    
-    ofSetColor(uiLineColor, 40);
-    
-    ofSetCircleResolution(24);
-    float _sX = speedPos.x;
-    float _sY = speedPos.y;
-    //    ofNoFill();
-    ofSetLineWidth(controlObjectLineWidth);
-    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
-    
-    ofNoFill();
-    ofSetColor(uiLineColor);
-    ofDrawCircle(_sX, _sY, speedCSize * 0.5);
-    ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawElemIntervalShape() {
-    
-    ofPushStyle();
-    
-    ofSetColor(uiLineColor, 40);
-    
-    ofSetLineWidth(controlObjectLineWidth);
-    
-    float _iX = intervalPos.x;
-    float _iY = intervalPos.y;
-    //    ofDrawLine(_iX - intervalSize, _iY, _iX, _iY + intervalSize);
-    //    ofDrawLine(_iX, _iY - intervalSize, _iX + intervalSize, _iY);
-    //    ofDrawLine(_iX + intervalSize, _iY, _iX, _iY + intervalSize);
-    //    ofDrawLine(_iX, _iY - intervalSize, _iX - intervalSize, _iY);
-    
-    ofMesh _mesh;
-    _mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    _mesh.addVertex(ofPoint(_iX, _iY));
-    _mesh.addVertex(ofPoint(_iX - intervalSize, _iY));
-    _mesh.addVertex(ofPoint(_iX, _iY - intervalSize));
-    _mesh.addVertex(ofPoint(_iX + intervalSize, _iY));
-    _mesh.addVertex(ofPoint(_iX, _iY + intervalSize));
-    _mesh.addVertex(ofPoint(_iX - intervalSize, _iY));
-    _mesh.draw();
-    
-    ofSetColor(uiLineColor);
-    ofMesh _meshLine;
-    _meshLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-    _meshLine.addVertex(ofPoint(_iX - intervalSize, _iY));
-    _meshLine.addVertex(ofPoint(_iX, _iY - intervalSize));
-    _meshLine.addVertex(ofPoint(_iX + intervalSize, _iY));
-    _meshLine.addVertex(ofPoint(_iX, _iY + intervalSize));
-    _meshLine.addVertex(ofPoint(_iX - intervalSize, _iY));
-    _meshLine.draw();
     
     ofPopStyle();
     
@@ -1343,188 +1340,6 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
     }
     
     ofPopStyle();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::drawShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
-    
-    ofPoint _pos = pos;
-    
-    vector<ofPoint> posLine;
-    
-    int _base = base;
-    int _size = size;
-    
-    for (int i = 0; i < _base; i++) {
-        float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
-        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
-        
-        ofPoint _p = ofPoint(_x, _y);
-        posLine.push_back(_p);
-    }
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    ofTranslate(_pos);
-    
-    //    if (!bIPhone) {
-    //        ofRotateZDeg(0);
-    //    } else {
-    //        if (_base == 5) {
-    //            ofRotateZDeg(18);
-    //        } else if (_base == 7) {
-    //            ofRotateZDeg(38.571429);
-    //        } else if (_base == 8) {
-    //            ofRotateZDeg(45);
-    //        } else if (_base == 9) {
-    //            ofRotateZDeg(50);
-    //        } else {
-    //            ofRotateZDeg(0);
-    //        }
-    //    }
-    
-    //    if (WHITE_VIEW) {
-    //        ofSetColor(_c, 120);
-    //    } else {
-    //        ofSetColor(_c, 120);
-    //    }
-    //    for (int i = 0; i < posLine.size(); i++) {
-    //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
-    //    }
-    
-    ofSetColor(_c, 40);
-    
-    ofSetLineWidth(controlObjectLineWidth);
-    
-    ofMesh _shapeM;
-    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    _shapeM.addVertex(ofPoint(0, 0));
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        _shapeM.addVertex(ofPoint(posLine[i].x, posLine[i].y));
-    }
-    
-    _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
-    _shapeM.draw();
-    
-    ofSetColor(uiLineColor);
-    
-    ofMesh _shapeOutLine;
-    _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        _shapeOutLine.addVertex(ofPoint(posLine[i].x, posLine[i].y));
-    }
-    
-    _shapeOutLine.addVertex(ofPoint(posLine[0].x, posLine[0].y));
-    _shapeOutLine.draw();
-    
-    ofPopStyle();
-    ofPopMatrix();
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
-    
-    ofPoint _pos = pos;
-    
-    vector<ofPoint> posLine;
-    
-    int _base = base;
-    int _size = size;
-    
-    for (int i = 0; i < _base; i++) {
-        float _sizeDegree = i * 360 / _base + 180.0;
-        float _x = sin(ofDegToRad(_sizeDegree)) * _size;
-        float _y = cos(ofDegToRad(_sizeDegree)) * _size;
-        
-        ofPoint _p = ofPoint(_x, _y);
-        posLine.push_back(_p);
-    }
-    
-    ofPushMatrix();
-    ofPushStyle();
-    
-    ofTranslate(_pos);
-    
-    //    if (!bIPhone) {
-    //        ofRotateZDeg(0);
-    //    } else {
-    //        if (_base == 5) {
-    //            ofRotateZDeg(18);
-    //        } else if (_base == 7) {
-    //            ofRotateZDeg(38.571429);
-    //        } else if (_base == 8) {
-    //            ofRotateZDeg(45);
-    //        } else if (_base == 9) {
-    //            ofRotateZDeg(50);
-    //        } else {
-    //            ofRotateZDeg(0);
-    //        }
-    //    }
-    
-    
-    ofSetColor(_c, 120);
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
-    }
-    
-    ofSetColor(_c, 180);
-    
-    ofSetLineWidth(controlObjectLineWidth);
-    
-    //    ofMesh _shapeM;
-    //    _shapeM.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
-    //    _shapeM.addVertex(ofPoint(0, 0));
-    //    for (int i = 0; i < posLine.size(); i++) {
-    //        _shapeM.addVertex(ofPoint(posLine[i].x, posLine[i].y));
-    //    }
-    //    _shapeM.addVertex(ofPoint(posLine[0].x, posLine[0].y));
-    //    _shapeM.draw();
-    
-    float _scaleMoving = floor(activeFactor) * 0.05 + 1.2;
-    
-    ofSetColor(uiLineColor);
-    
-    //    float _scale = 0;
-    //    for (int j=0; j<int(activeFactor); j+=10) {
-    //        _scale = j * 0.1 + 1.2;
-    //
-    //        ofMesh _shapeOutLine;
-    //        _shapeOutLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-    //        for (int i = 0; i < posLine.size(); i++) {
-    //            _shapeOutLine.addVertex(ofPoint(posLine[i].x * _scale, posLine[i].y * _scale));
-    //        }
-    //        _shapeOutLine.addVertex(ofPoint(posLine[0].x * _scale, posLine[0].y * _scale));
-    //        ofPushStyle();
-    //        ofSetColor(255, j * 20);
-    //        _shapeOutLine.draw();
-    //        ofPopStyle();
-    //    }
-    
-    ofPushStyle();
-    ofSetColor(_c, 220);
-    
-    ofMesh _shapeOutMovingLine;
-    _shapeOutMovingLine.setMode(OF_PRIMITIVE_LINE_STRIP);
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        _shapeOutMovingLine.addVertex(ofPoint(posLine[i].x * _scaleMoving, posLine[i].y * _scaleMoving));
-    }
-    
-    _shapeOutMovingLine.addVertex(ofPoint(posLine[0].x * _scaleMoving, posLine[0].y * _scaleMoving));
-    _shapeOutMovingLine.draw();
-    ofPopStyle();
-    
-    ofPopStyle();
-    ofPopMatrix();
     
 }
 

@@ -66,7 +66,6 @@ public:
     bool bPlayNote;
     bool bCameraCapturePlay;
     
-    void debugLayout();
     void debugRatioLayout();
     
     int safeZoneHeightFactor;
