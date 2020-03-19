@@ -55,6 +55,8 @@ void ofApp::setup() {
         //        screenW = ofGetWidth();
         //        screenH = ofGetWidth() * 4.0 / 3.0;
     }
+    
+    setInterfacePosition();
 
     setImageParameter();
 
@@ -204,8 +206,6 @@ void ofApp::setIPhone() {
     lineScoreStepY = 1.6;  // 1.6
     pixeShapeSize = 0.4167; // 0.4167
     
-    setInterfacePosition();
-    
 }
 
 
@@ -257,13 +257,14 @@ void ofApp::setBase(float _screenWStepsize) {
     baseSize = ctrlRectS * 0.85;
     float _basePosLeft = _screenWStepsize * 1.75;
     float _basePosRight = _screenWStepsize * 4.25;
+    float _offSetY = controlAreaPosTopY - 44 * safeZoneHeightFactor;
     
-    base4Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0 - 44 * safeZoneHeightFactor);
-    base5Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0 - 44 * safeZoneHeightFactor);
-    base6Pos = ofPoint(_basePosLeft, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0 - 44 * safeZoneHeightFactor);
-    base7Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 1.0 / 4.0 - 44 * safeZoneHeightFactor);
-    base8Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 2.0 / 4.0 - 44 * safeZoneHeightFactor);
-    base9Pos = ofPoint(_basePosRight, controlAreaPosTopY + controlAreaSize.y * 3.0 / 4.0 - 44 * safeZoneHeightFactor);
+    base4Pos = ofPoint(_basePosLeft, controlAreaSize.y * 1.0 / 4.0 + _offSetY);
+    base5Pos = ofPoint(_basePosLeft, controlAreaSize.y * 2.0 / 4.0 + _offSetY);
+    base6Pos = ofPoint(_basePosLeft, controlAreaSize.y * 3.0 / 4.0 + _offSetY);
+    base7Pos = ofPoint(_basePosRight, controlAreaSize.y * 1.0 / 4.0 + _offSetY);
+    base8Pos = ofPoint(_basePosRight, controlAreaSize.y * 2.0 / 4.0 + _offSetY);
+    base9Pos = ofPoint(_basePosRight, controlAreaSize.y * 3.0 / 4.0 + _offSetY);
 
 }
 
@@ -283,76 +284,46 @@ void ofApp::createSynthVoice() {
     
     float _volume = 0.9;
     
-    ControlParameter _carrierPitch1 = synth[0].addParameter("carrierPitch1");
-    float _amountMod1 = 1;
-    ControlGenerator _rCarrierFreq1 = ControlMidiToFreq().input(_carrierPitch1);
-    ControlGenerator _rModFreq1 = _rCarrierFreq1 * 2.5;
-    Generator _modulationTone1 = SineWave().freq(_rModFreq1) * _rModFreq1 * _amountMod1;
-    Generator _tone1 = SineWave().freq(_rCarrierFreq1 + _modulationTone1);
-    ControlGenerator _envelopTrigger1 = synth[0].addParameter("trigger1");
-    Generator _env1 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(_envelopTrigger1).legato(false);
-    synth[0].setOutputGen(_tone1 * _env1 * _volume);
+    Generator _tone0 = addGenerator(synth[0].addParameter("carrierPitch1"), 2.5, 1);
+    Generator _env0 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(synth[0].addParameter("trigger1")).legato(false);
+    synth[0].setOutputGen(_tone0 * _env0 * _volume);
     
-    ControlParameter _carrierPitch2 = synth[1].addParameter("carrierPitch2");
-    float _amountMod2 = 1;
-    ControlGenerator _rCarrierFreq2 = ControlMidiToFreq().input(_carrierPitch2);
-    ControlGenerator _rModFreq2 = _rCarrierFreq2 * 3.489;
-    Generator _modulationTone2 = SineWave().freq(_rModFreq2) * _rModFreq2 * _amountMod2;
-    Generator _tone2 = SineWave().freq(_rCarrierFreq2 + _modulationTone2);
-    ControlGenerator _envelopTrigger2 = synth[1].addParameter("trigger2");
-    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger2).legato(false);
-    synth[1].setOutputGen(_tone2 * _env2 * _volume);
+    Generator _tone1 = addGenerator(synth[1].addParameter("carrierPitch2"), 3.489, 1);
+    Generator _env1 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(synth[1].addParameter("trigger2")).legato(false);
+    synth[1].setOutputGen(_tone1 * _env1 * _volume);
     
-    ControlParameter _carrierPitch3 = synth[2].addParameter("carrierPitch3");
-    float _amountMod3 = 12;
-    ControlGenerator _rCarrierFreq3 = ControlMidiToFreq().input(_carrierPitch3);
-    ControlGenerator _rModFreq3 = _rCarrierFreq3 * 14.489;
-    Generator _modulationTone3 = SineWave().freq(_rModFreq3) * _rModFreq3 * _amountMod3;
-    Generator _tone3 = SineWave().freq(_rCarrierFreq3 + _modulationTone3);
-    ControlGenerator _envelopTrigger3 = synth[2].addParameter("trigger3");
-    Generator _env3 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger3).legato(true);
-    synth[2].setOutputGen(_tone3 * _env3 * _volume);
+    Generator _tone2 = addGenerator(synth[2].addParameter("carrierPitch3"), 14.489, 12);
+    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(synth[2].addParameter("trigger3")).legato(true);
+    synth[2].setOutputGen(_tone2 * _env2 * _volume);
     
-    ControlParameter _carrierPitch4 = synth[3].addParameter("carrierPitch4");
-    float _amountMod4 = 18;
-    ControlGenerator _rCarrierFreq4 = ControlMidiToFreq().input(_carrierPitch4);
-    ControlGenerator _rModFreq4 = _rCarrierFreq4 * 1.1;
-    Generator _modulationTone4 = SineWave().freq(_rModFreq4) * _rModFreq4 * _amountMod4;
-    Generator _tone4 = SineWave().freq(_rCarrierFreq4 + _modulationTone4);
-    ControlGenerator _envelopTrigger4 = synth[3].addParameter("trigger4");
-    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger4).legato(false);
-    synth[3].setOutputGen(_tone4 * _env4 * _volume);
+    Generator _tone3 = addGenerator(synth[3].addParameter("carrierPitch4"), 1.1, 18);
+    Generator _env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[3].addParameter("trigger4")).legato(false);
+    synth[3].setOutputGen(_tone3 * _env3 * _volume);
     
-    ControlParameter _carrierPitch5 = synth[4].addParameter("carrierPitch5");
-    float _amountMod5 = 6;
-    ControlGenerator _rCarrierFreq5 = ControlMidiToFreq().input(_carrierPitch5);
-    ControlGenerator _rModFreq5 = _rCarrierFreq5 * 1.489;
-    Generator _modulationTone5 = SineWave().freq(_rModFreq5) * _rModFreq5 * _amountMod5;
-    Generator _tone5 = SineWave().freq(_rCarrierFreq5 + _modulationTone5);
-    ControlGenerator _envelopTrigger5 = synth[4].addParameter("trigger5");
-    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger5).legato(false);
-    synth[4].setOutputGen(_tone5 * _env5 * _volume);
+    Generator _tone4 = addGenerator(synth[4].addParameter("carrierPitch5"), 1.489, 6);
+    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[4].addParameter("trigger5")).legato(false);
+    synth[4].setOutputGen(_tone4 * _env4 * _volume);
     
-    ControlParameter _carrierPitch6 = synth[5].addParameter("carrierPitch6");
-    float _amountMod6 = 2;
-    ControlGenerator _rCarrierFreq6 = ControlMidiToFreq().input(_carrierPitch6);
-    ControlGenerator _rModFreq6 = _rCarrierFreq6 * 1.109;
-    Generator _modulationTone6 = SineWave().freq(_rModFreq6) * _rModFreq6 * _amountMod6;
-    Generator _tone6 = SineWave().freq(_rCarrierFreq6 + _modulationTone6);
-    ControlGenerator _envelopTrigger6 = synth[5].addParameter("trigger6");
-    Generator _env6 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_envelopTrigger6).legato(false);
-    synth[5].setOutputGen(_tone6 * _env6 * _volume);
+    Generator _tone5 = addGenerator(synth[5].addParameter("carrierPitch6"), 1.109, 2);
+    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[5].addParameter("trigger6")).legato(false);
+    synth[5].setOutputGen(_tone5 * _env5 * _volume);
     
-    ControlParameter _carrierPitch7 = synth[6].addParameter("carrierPitch7");
-    float _amountMod7 = 4;
-    ControlGenerator _rCarrierFreq7 = ControlMidiToFreq().input(_carrierPitch7);
-    ControlGenerator _rModFreq7 = _rCarrierFreq7 * 3.109;
-    Generator _modulationTone7 = SineWave().freq(_rModFreq7) * _rModFreq7 * _amountMod7;
-    Generator _tone7 = SineWave().freq(_rCarrierFreq7 + _modulationTone7);
-    ControlGenerator _envelopTrigger7 = synth[6].addParameter("trigger7");
-    Generator _env7 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(_envelopTrigger7).legato(false);
-    synth[6].setOutputGen(_tone7 * _env7 * _volume);
+    Generator _tone6 = addGenerator(synth[6].addParameter("carrierPitch7"), 3.109, 4);
+    Generator _env6 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(synth[6].addParameter("trigger7")).legato(false);
+    synth[6].setOutputGen(_tone6 * _env6 * _volume);
     
+}
+
+
+//--------------------------------------------------------------
+Generator ofApp::addGenerator(ControlParameter _carrierPitch, float _addFq, float _amountMod) {
+    
+    ControlGenerator _rCarrierFreq = ControlMidiToFreq().input(_carrierPitch);
+    ControlGenerator _rModFreq = _rCarrierFreq * _addFq;
+    Generator _modulationTone = SineWave().freq(_rModFreq) * _rModFreq * _amountMod;
+    
+    return SineWave().freq(_rCarrierFreq + _modulationTone);
+
 }
 
 

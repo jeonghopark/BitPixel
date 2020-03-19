@@ -74,6 +74,7 @@ public:
     ofxTonicSynth createSynthVoiceIn();
     ofxTonicSynth controlSynthParameter;
     void createSynthVoice();
+    Generator addGenerator(ControlParameter _carrierPitch, float _addFq, float _amountMod);
     void setSynthMain();
     ControlGenerator bpm;
     ControlGenerator metro;
