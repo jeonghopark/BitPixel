@@ -1384,6 +1384,14 @@ void ofApp::exit() {
 
 
 //--------------------------------------------------------------
+void ofApp::touchDown(ofTouchEventArgs & touch) {
+    
+    iPhoneTouchDown(touch);
+    
+}
+
+
+//--------------------------------------------------------------
 void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
     float _tolerance = 2 * 0.642857;
@@ -1497,9 +1505,9 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
 
 
 //--------------------------------------------------------------
-void ofApp::touchDown(ofTouchEventArgs & touch) {
+void ofApp::touchMoved(ofTouchEventArgs & touch) {
     
-    iPhoneTouchDown(touch);
+    iPhoneTouchMoved(touch);
     
 }
 
@@ -1569,9 +1577,22 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
 
 
 //--------------------------------------------------------------
-void ofApp::touchMoved(ofTouchEventArgs & touch) {
+void ofApp::triggerReceive(float & metro) {
     
-    iPhoneTouchMoved(touch);
+    index++;
+    noteIndex = index;
+    
+    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+        trigScoreNote(scoreNote[i], synth[i], i + 1);
+    }
+    
+}
+
+
+//--------------------------------------------------------------
+void ofApp::touchUp(ofTouchEventArgs & touch) {
+    
+    iPhoneTouchUp(touch);
     
 }
 
@@ -1674,27 +1695,6 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     if ((distI[touch.id] < intervalSize * _tolerance) && bInterval == true) {
         bInterval = false;
     }
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::triggerReceive(float & metro) {
-    
-    index++;
-    noteIndex = index;
-    
-    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-        trigScoreNote(scoreNote[i], synth[i], i + 1);
-    }
-    
-}
-
-
-//--------------------------------------------------------------
-void ofApp::touchUp(ofTouchEventArgs & touch) {
-    
-    iPhoneTouchUp(touch);
     
 }
 
