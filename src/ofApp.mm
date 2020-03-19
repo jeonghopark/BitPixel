@@ -283,7 +283,7 @@ void ofApp::menuImgSetup() {
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
         
-    lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y;
+    lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 1 * safeZoneHeightFactor;
         
     pixelStepS = 4;
     changedCamSize = camSize.x / pixelStepS;  // 90
@@ -702,7 +702,7 @@ void ofApp::drawIPhone() {
 void ofApp::drawIPhoneBaseLineLayout() {
     
     ofPushMatrix();
-    ofTranslate(0, controlAreaPosTopY - lineScoreAreaSize.y);
+    ofTranslate(0, lineScoreAreaPosTopY);
     
     ofPushStyle();
     
@@ -1185,7 +1185,7 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
     if (playOn) {
         ofPushMatrix();
         
-        //     FIXME: Translate (???)
+        //     FIXME: 40 pixel Translate
         ofTranslate(0, lineScoreAreaPosTopY - 40);
         
         ofPushStyle();
