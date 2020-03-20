@@ -88,15 +88,15 @@ public:
     void setImageBuffer();
     void setImageParameter();
     
-    float controlAreaPosTopY;
+    float ctrlAreaPosTopY;
     float lineScoreAreaPosTopY;
     ofVec2f controlAreaSize;
     ofVec2f lineScoreAreaSize;
     void setIPhone();
     void setInterfacePosition();
-    void setBase(float _screenWStepsize);
-    void setSpeedCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
-    void setIntervalCtrl(float _screenWStepsize, ofVec2f _controlAreaSize);
+    void setBase(float _topY, float _screenWStepsize);
+    void setSpeedCtrl(float _topY, float _screenWStepsize, ofVec2f _controlAreaSize);
+    void setIntervalCtrl(float _topY, float _screenWStepsize, ofVec2f _controlAreaSize);
     void drawIPhone();
     void drawIPhoneBaseLineLayout();
     float screenW, screenH;
