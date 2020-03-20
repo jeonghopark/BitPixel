@@ -213,7 +213,6 @@ void ofApp::setIPhone() {
 void ofApp::setInterfacePosition() {
     
     float _ctrlAreaPosTopY = ofGetHeight() - controlAreaSize.y;
-    
     float _screenWStepsize = ofGetWidth() * 1.0 / 6.0;
     
     setSpeedCtrl(_ctrlAreaPosTopY, _screenWStepsize, controlAreaSize);
