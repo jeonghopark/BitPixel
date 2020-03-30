@@ -282,33 +282,46 @@ void ofApp::setImageParameter() {
 void ofApp::createSynthVoice() {
     
     float _volume = 0.9;
-    
-    Generator _tone0 = addGenerator(synth[0].addParameter("carrierPitch1"), 2.5, 1);
-    Generator _env0 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(synth[0].addParameter("trigger1")).legato(false);
+    ControlParameter _s0 = synth[0].addParameter("carrierPitch1");
+    Generator _tone0 = addGenerator(_s0, 2.5, 1);
+    ControlParameter _t0 = synth[0].addParameter("trigger1");
+    Generator _env0 = ADSR().attack(0.01).decay(0.3).sustain(0).release(0).trigger(_t0).legato(false);
     synth[0].setOutputGen(_tone0 * _env0 * _volume);
     
-    Generator _tone1 = addGenerator(synth[1].addParameter("carrierPitch2"), 3.489, 1);
-    Generator _env1 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(synth[1].addParameter("trigger2")).legato(false);
+    ControlParameter _s1 = synth[1].addParameter("carrierPitch2");
+    Generator _tone1 = addGenerator(_s1, 3.489, 1);
+    ControlParameter _t1 = synth[1].addParameter("trigger2");
+    Generator _env1 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_t1).legato(false);
     synth[1].setOutputGen(_tone1 * _env1 * _volume);
     
-    Generator _tone2 = addGenerator(synth[2].addParameter("carrierPitch3"), 14.489, 12);
-    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(synth[2].addParameter("trigger3")).legato(true);
+    ControlParameter _s2 = synth[2].addParameter("carrierPitch3");
+    Generator _tone2 = addGenerator(_s2, 14.489, 12);
+    ControlParameter _t2 = synth[2].addParameter("trigger3");
+    Generator _env2 = ADSR().attack(0.01).decay(0.1).sustain(0).release(0).trigger(_t2).legato(true);
     synth[2].setOutputGen(_tone2 * _env2 * _volume);
     
-    Generator _tone3 = addGenerator(synth[3].addParameter("carrierPitch4"), 1.1, 18);
-    Generator _env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[3].addParameter("trigger4")).legato(false);
+    ControlParameter _s3 = synth[3].addParameter("carrierPitch4");
+    Generator _tone3 = addGenerator(_s3, 1.1, 18);
+    ControlParameter _t3 = synth[3].addParameter("trigger4");
+    Generator _env3 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_t3).legato(false);
     synth[3].setOutputGen(_tone3 * _env3 * _volume);
     
-    Generator _tone4 = addGenerator(synth[4].addParameter("carrierPitch5"), 1.489, 6);
-    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[4].addParameter("trigger5")).legato(false);
+    ControlParameter _s4 = synth[4].addParameter("carrierPitch5");
+    Generator _tone4 = addGenerator(_s4, 1.489, 6);
+    ControlParameter _t4 = synth[4].addParameter("trigger5");
+    Generator _env4 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_t4).legato(false);
     synth[4].setOutputGen(_tone4 * _env4 * _volume);
     
-    Generator _tone5 = addGenerator(synth[5].addParameter("carrierPitch6"), 1.109, 2);
-    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(synth[5].addParameter("trigger6")).legato(false);
+    ControlParameter _s5 = synth[5].addParameter("carrierPitch6");
+    Generator _tone5 = addGenerator(_s5, 1.109, 2);
+    ControlParameter _t5 = synth[5].addParameter("trigger6");
+    Generator _env5 = ADSR().attack(0.001).decay(0.1).sustain(0).release(0).trigger(_t5).legato(false);
     synth[5].setOutputGen(_tone5 * _env5 * _volume);
     
-    Generator _tone6 = addGenerator(synth[6].addParameter("carrierPitch7"), 3.109, 4);
-    Generator _env6 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(synth[6].addParameter("trigger7")).legato(false);
+    ControlParameter _s6 = synth[6].addParameter("carrierPitch7");
+    Generator _tone6 = addGenerator(_s6, 3.109, 4);
+    ControlParameter _t6 = synth[6].addParameter("trigger7");
+    Generator _env6 = ADSR().attack(0.001).decay(0.2).sustain(0).release(0).trigger(_t6).legato(false);
     synth[6].setOutputGen(_tone6 * _env6 * _volume);
     
 }
