@@ -222,9 +222,7 @@ public:
     void trigScoreNote(vector<int> _vNote, ofxTonicSynth _synthIn, int _scoreCh);
     
     float pixeShapeSize;
-    
-    ofImage backgroundControPanel;
-    
+        
     int lineScoreStepSize;
     
     bool bIPhone;

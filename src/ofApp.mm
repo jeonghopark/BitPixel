@@ -31,8 +31,7 @@ void ofApp::setup() {
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
     
-    //    backgroundControPanel.load("controlBackground.png");
-    
+
     safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
 
     lineScoreStepSize = 23;
