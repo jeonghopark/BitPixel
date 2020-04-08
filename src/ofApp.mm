@@ -72,6 +72,11 @@ void ofApp::setup() {
     importLibraryImg = false;
     libraryImportDone = false;
     
+    thresholdCPos.set(ofGetWidth() * 0.2, lineScoreAreaPosTopY * 0.5);
+    thresholdCSize = 20;
+    bthresholdCtrl = false;
+
+    
 }
 
 
@@ -571,6 +576,11 @@ void ofApp::drawIPhone() {
     drawBaseInterface(bCameraCapturePlay);
     
     menuImgDraw(bCameraCapturePlay);
+    
+    ofDrawCircle(thresholdCPos, thresholdCSize);
+    
+    ofDrawCircle(300, lineScoreAreaPosTopY * 0.2, 10);
+    ofDrawCircle(300, lineScoreAreaPosTopY * 0.8, 10);
     
 }
 
@@ -1389,7 +1399,6 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     }
     
     if (touch.id == 0) {
-        
         //        float _distS = ofDist(speedPos.x, speedPos.y , _chgdTouch.x, _chgdTouch.y);
         //
         //        if (_distS < thresholdCSize * _tolerance) {
@@ -1398,13 +1407,13 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bSpeedCtrl = false;
         //        }
         
-        //        float _distT = ofDist(thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y);
+        float _distT = ofDist(thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y);
         
-        //        if (_distT < thresholdCSize * _tolerance) {
-        //            bthresholdCtrl = true;
-        //        } else {
-        //            bthresholdCtrl = false;
-        //        }
+        if (_distT < thresholdCSize * 3) {
+            bthresholdCtrl = true;
+        } else {
+            bthresholdCtrl = false;
+        }
         
         //        float _distI = ofDist(intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y);
         //
@@ -1421,10 +1430,10 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
 //            touchDownDefault = _chgdTouch.x;
 //        }
 
-        if ((_chgdTouch.y < cameraViewSize.y) && (_chgdTouch.y > 0)) {
-            grayThreshold = 120;
-            touchDownDefault = _chgdTouch.x;
-        }
+//        if ((_chgdTouch.y < cameraViewSize.y) && (_chgdTouch.y > 0)) {
+//            grayThreshold = 120;
+//            touchDownDefault = _chgdTouch.x;
+//        }
 
     }
     
@@ -1526,6 +1535,18 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             intervalDist = _interval;
         }
     }
+
+    if (bthresholdCtrl) {
+        float _minY = lineScoreAreaPosTopY * 0.2;
+        float _maxY = lineScoreAreaPosTopY * 0.8;
+
+        if (touchPos[touch.id].y > _minY && touchPos[touch.id].y < _maxY) {
+            thresholdCPos.y = touchPos[touch.id].y;
+            float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 0, 255);
+            grayThreshold = _threshold;
+        }
+    }
+
     
     //    if (touch.id == 0) {
     //        float _xL = screenPosLeftY;
@@ -1535,9 +1556,9 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     //        }
     //    }
     
-    if (_chgdTouch.y < cameraViewSize.y) {
-        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
-    }
+//    if (_chgdTouch.y < cameraViewSize.y) {
+//        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
+//    }
     
 }
 
