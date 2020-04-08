@@ -159,11 +159,7 @@ void ofApp::setCamera() {
         float _ratio = 360.0 / ofGetWidth();
         camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
     #else
-        cam.setDeviceID(0);
-        cam.setup(360, 480); // 4 : 3
-        cam.setDesiredFrameRate(15);
-        float _ratio = 360.0 / ofGetWidth();
-        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
+        settingCamera(0);
     #endif
 
 }
@@ -1609,15 +1605,9 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
 #if TARGET_OS_SIMULATOR
 #else
         if (frontCameraOnOff) {
-            cam.setDeviceID(0);
-            cam.setup(480, 360);
-            cam.setDesiredFrameRate(15);
-            camSize.set(cam.getWidth(), cam.getHeight()); // 360
+            settingCamera(0);
         } else {
-            cam.setDeviceID(1);
-            cam.setup(480, 360);
-            cam.setDesiredFrameRate(15);
-            camSize.set(cam.getWidth(), cam.getHeight()); // 360
+            settingCamera(1);
         }
         
 #endif
@@ -1677,6 +1667,18 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
         bInterval = false;
     }
     
+}
+
+
+//--------------------------------------------------------------
+void ofApp::settingCamera(int cameraDevice) {
+    
+    cam.setDeviceID(cameraDevice);
+    cam.setup(360, 480); // 4 : 3
+    cam.setDesiredFrameRate(15);
+    float _ratio = 360.0 / ofGetWidth();
+    camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
+
 }
 
 

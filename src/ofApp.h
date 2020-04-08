@@ -283,6 +283,9 @@ public:
     
     ofxiOSImagePicker libraryImg;
     bool importLibraryImg;
+    
+    void settingCamera(int cameraDevice);
+    
 };
 
 
