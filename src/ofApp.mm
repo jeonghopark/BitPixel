@@ -31,7 +31,6 @@ void ofApp::setup() {
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
     
-
     safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
 
     lineScoreStepSize = 23;
@@ -92,13 +91,13 @@ void ofApp::activeAudioSilenceMode() {
 //--------------------------------------------------------------
 void ofApp::setupColors() {
     
-    colorVar[0] = ofColor(192, 25, 30);
-    colorVar[1] = ofColor(79, 185, 73);
-    colorVar[2] = ofColor(255, 172, 0);
-    colorVar[3] = ofColor(68, 128, 173);
-    colorVar[4] = ofColor(58, 193, 197);
-    colorVar[5] = ofColor(249, 154, 249);
-    colorVar[6] = ofColor(142, 82, 137);
+    colorVar[0] = ofColor(192, 25, 30) * 1.5;
+    colorVar[1] = ofColor(79, 185, 73) * 1.5;
+    colorVar[2] = ofColor(255, 172, 0) * 1.5;
+    colorVar[3] = ofColor(68, 128, 173) * 1.5;
+    colorVar[4] = ofColor(58, 193, 197) * 1.5;
+    colorVar[5] = ofColor(249, 154, 249) * 1.5;
+    colorVar[6] = ofColor(142, 82, 137) * 1.5;
     
     backgroundColor = ofColor(13, 13, 15);
     
@@ -585,7 +584,7 @@ void ofApp::drawLineScoreIPhone(bool playOn) {
         
         ofPushStyle();
         
-        ofSetColor(255, 120);
+        ofSetColor(255, 255);
         
         for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             drawScoreCircleLineIPhone(scoreNote[i], i + 1);
@@ -649,7 +648,7 @@ void ofApp::realtimeCameraConvertedImageView() {
     
     ofPushStyle();
     if (!bCameraCapturePlay) {
-        ofSetColor(contourLineColor, 120);
+        ofSetColor(contourLineColor, 180);
         
         ofPushMatrix();
         edge.draw(0, 0, cameraViewSize.x + 1, cameraViewSize.y + 1);
@@ -671,7 +670,7 @@ void ofApp::realtimeBufferImageView() {
 
     ofPushStyle();
     if (bCameraCapturePlay) {
-        ofSetColor(contourLineColor, 180);
+        ofSetColor(contourLineColor, 200);
         
         bufferImg.draw(0, 0, cameraViewSize.x + 1, cameraViewSize.y + 1);
     }
@@ -692,12 +691,12 @@ void ofApp::drawIPhoneTrianglePixel() {
     ofPushStyle();
         
     if (bCameraCapturePlay) {
-        ofSetColor(contourLineColor, 120);
+        ofSetColor(contourLineColor, 180);
     } else {
         ofSetColor(contourLineColor, 255);
     }
 
-    ofEnableAntiAliasing();
+//    ofEnableAntiAliasing();
     
     if (whitePixels.size() > 1) {
         
@@ -734,9 +733,9 @@ void ofApp::drawPixelNumbersCircleNotes() {
     
     ofPushMatrix();
     ofPushStyle();
-    ofEnableAntiAliasing();
+//    ofEnableAntiAliasing();
     
-    ofSetColor(255, 120);
+    ofSetColor(255, 180);
     ofNoFill();
     ofSetColor(eventColor, 80);
 
@@ -768,9 +767,9 @@ void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
-    ofEnableAntiAliasing();
+//    ofEnableAntiAliasing();
     
-    ofSetColor(255, 60);
+    ofSetColor(255, 120);
     
     for (int i = 0; i < whitePixels.size(); i++) {
         
@@ -855,13 +854,13 @@ void ofApp::drawIPhoneBaseLineLayout() {
     
     ofPushStyle();
     
-    ofSetColor(uiLineColor, 180);
+    ofSetColor(uiLineColor, 220);
     ofDrawLine(0, 0, ofGetWidth(), 0);
     
-    ofSetColor(uiLineColor, 120);
+    ofSetColor(uiLineColor, 200);
     ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, lineScoreAreaSize.y);
     
-    ofSetColor(uiLineColor, 180);
+    ofSetColor(uiLineColor, 220);
     ofDrawLine(0, lineScoreAreaSize.y, ofGetWidth(), lineScoreAreaSize.y);
     
     ofPopStyle();
@@ -1213,7 +1212,7 @@ void ofApp::drawCircle(ofColor cIn, int xNumber, vector<int> scoreNote, float st
                 _c = ofColor(cIn);
                 _size = 5;
             } else {
-                _c = ofColor(cIn, 120);
+                _c = ofColor(cIn, 220);
                 _size = 3;
             }
             
@@ -1236,7 +1235,7 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
     int _middle = xNumber * 0.5;
     
     ofPushStyle();
-    ofSetColor(c, 160);
+    ofSetColor(c, 220);
     
     for (int i = 0; i < xNumber - 1; i++) {
         
@@ -1275,7 +1274,6 @@ void ofApp::drawLine(ofColor c, int xNumber,  vector<int> scoreNote, float stepX
 void ofApp::drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int size, ofColor _color) {
     
     ofPoint _pos = pos;
-    
     vector<ofPoint> posLine;
     
     int _base = base;
@@ -1293,28 +1291,18 @@ void ofApp::drawShapeWithCenterlinesColorRotation(ofPoint pos, int base, int siz
     ofPushMatrix();
     ofPushStyle();
     
-    
     ofTranslate(_pos);
-    //    ofRotateZDeg(45);
-    
-    ofSetLineWidth(20);
-    
-    ofSetColor(_color.r, _color.g, _color.b, _color.a * 0.8);
-    
-    for (int i = 0; i < posLine.size(); i++) {
-        //        ofDrawLine(0, 0, posLine[i].x, posLine[i].y);
-    }
+    ofSetLineWidth(3);
     
     ofSetColor(_color);
     
     for (int i = 0; i < posLine.size() - 1; i++) {
         ofDrawLine(posLine[i].x, posLine[i].y, posLine[i + 1].x, posLine[i + 1].y);
     }
-    
     ofDrawLine(posLine[0].x, posLine[0].y, posLine[posLine.size() - 1].x, posLine[posLine.size() - 1].y);
     
-    ofPopMatrix();
     ofPopStyle();
+    ofPopMatrix();
     
 }
 
