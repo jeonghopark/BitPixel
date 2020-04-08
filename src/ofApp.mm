@@ -741,7 +741,9 @@ void ofApp::drawPixelNumbersCircleNotes() {
     ofEnableAntiAliasing();
     
     ofSetColor(255, 120);
-    
+    ofNoFill();
+    ofSetColor(eventColor, 80);
+
     if (whitePixels.size() > 1) {
         
         int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
@@ -753,10 +755,6 @@ void ofApp::drawPixelNumbersCircleNotes() {
             float _xS = ((_idPixels + i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
             float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
                         
-            ofNoFill();
-            
-            ofSetColor(eventColor, 80);
-            
             ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
             
         }
