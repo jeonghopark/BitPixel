@@ -1611,6 +1611,7 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     }
     
     if (!bPlayNote && cameraChange.inside(_chgdTouch)) {
+        importLibraryImg = false;
         frontCameraOnOff = !frontCameraOnOff;
         
 #if TARGET_OS_SIMULATOR
