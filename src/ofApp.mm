@@ -1376,7 +1376,7 @@ void ofApp::touchDown(ofTouchEventArgs & touch) {
 //--------------------------------------------------------------
 void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     
-    float _tolerance = 2 * 0.642857;
+    float _tolerance = 2;
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
     
@@ -1583,7 +1583,8 @@ void ofApp::touchUp(ofTouchEventArgs & touch) {
 void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     
     ofPoint _chgdTouch = ofPoint(touch.x, touch.y);
-    if (composeMode.inside(_chgdTouch)) {
+    ofVec3f _composeModCenter = composeMode.getCenter();
+    if (_composeModCenter.distance(_chgdTouch) < composeMode.getWidth() * 0.75 && _composeModCenter.distance(_chgdTouch) < composeMode.getHeight() * 0.75) {
         if ((whitePixels.size() > 2) && (touch.id == 0)) {
             bCameraCapturePlay = !bCameraCapturePlay;
             bufferImg = edge;
