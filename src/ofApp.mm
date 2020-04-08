@@ -558,10 +558,12 @@ void ofApp::draw() {
 //--------------------------------------------------------------
 void ofApp::drawIPhone() {
     
-    drawLineScoreIPhone(bCameraCapturePlay);
-    
     mainCameraCaptureViewiPhone();
     
+    if (bCameraCapturePlay) {
+        drawLineScoreIPhone();
+    }
+
     drawIPhoneBaseLineLayout();
     
     drawControlElementIPhone(bCameraCapturePlay);
@@ -574,27 +576,27 @@ void ofApp::drawIPhone() {
 
 
 //--------------------------------------------------------------
-void ofApp::drawLineScoreIPhone(bool playOn) {
+void ofApp::drawLineScoreIPhone() {
     
-    if (playOn) {
-        ofPushMatrix();
-        
-        //     FIXME: ??? 40 pixel Translate
-        ofTranslate(0, lineScoreAreaPosTopY - 40);
-        
-        ofPushStyle();
-        
-        ofSetColor(255, 255);
-        
-        for (int i = 0; i < NUM_SYNTH_LINE; i++) {
-            drawScoreCircleLineIPhone(scoreNote[i], i + 1);
-        }
-        
-        ofPopStyle();
-        
-        ofPopMatrix();
+    ofPushMatrix();
+    ofPushStyle();
+    
+    ofTranslate(0, lineScoreAreaPosTopY);
+    ofSetColor(0, 255);
+    
+    ofDrawRectangle(0, 0, lineScoreAreaSize.x, lineScoreAreaSize.y);
+    
+    ofPopMatrix();
+    
+    ofPushMatrix();
+    //     FIXME: ??? 40 pixel Translate
+    ofTranslate(0, lineScoreAreaPosTopY - 40);
+    for (int i = 0; i < NUM_SYNTH_LINE; i++) {
+        drawScoreCircleLineIPhone(scoreNote[i], i + 1);
     }
-    
+    ofPopMatrix();
+    ofPopStyle();
+
 }
 
 
@@ -854,13 +856,13 @@ void ofApp::drawIPhoneBaseLineLayout() {
     
     ofPushStyle();
     
-    ofSetColor(uiLineColor, 220);
+    ofSetColor(uiLineColor, 255);
     ofDrawLine(0, 0, ofGetWidth(), 0);
     
-    ofSetColor(uiLineColor, 200);
+    ofSetColor(uiLineColor, 255);
     ofDrawLine(ofGetWidth() * 0.5, 0, ofGetWidth() * 0.5, lineScoreAreaSize.y);
     
-    ofSetColor(uiLineColor, 220);
+    ofSetColor(uiLineColor, 255);
     ofDrawLine(0, lineScoreAreaSize.y, ofGetWidth(), lineScoreAreaSize.y);
     
     ofPopStyle();

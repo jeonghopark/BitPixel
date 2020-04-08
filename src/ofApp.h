@@ -203,7 +203,7 @@ public:
     vector<int> convertDecimalToNBase(int n, int base, int size);
     
     // Line Score
-    void drawLineScoreIPhone(bool playOn);
+    void drawLineScoreIPhone();
     float oldScoreNote[NUM_SYNTH_LINE];
     
     vector<int> scoreNote[NUM_SYNTH_LINE];
