@@ -443,7 +443,6 @@ void ofApp::update() {
             captureCamImg.setFromPixels(_buffImg.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
             
             libraryImg.close();
-            calculatePixels(captureCamImg);
             libraryImportDone = true;
         }
     } else {
@@ -451,9 +450,10 @@ void ofApp::update() {
         
         if (cam.isFrameNew()) {
             captureCamImg.setFromPixels(cam.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR);
-            calculatePixels(captureCamImg);
         }
     }
+
+    calculatePixels(captureCamImg);
     
 #endif
     
