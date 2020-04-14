@@ -72,7 +72,7 @@ void ofApp::setup() {
     importLibraryImg = false;
     libraryImportDone = false;
     
-    thresholdCPos.set(ofGetWidth() * 0.2, lineScoreAreaPosTopY * 0.5);
+    thresholdCPos.set(ofGetWidth() * 0.1, lineScoreAreaPosTopY * 0.5);
     thresholdCSize = 20;
     bthresholdCtrl = false;
 
@@ -576,11 +576,14 @@ void ofApp::drawIPhone() {
     drawBaseInterface(bCameraCapturePlay);
     
     menuImgDraw(bCameraCapturePlay);
-    
-    ofDrawCircle(thresholdCPos, thresholdCSize);
-    
-    ofDrawCircle(300, lineScoreAreaPosTopY * 0.2, 10);
-    ofDrawCircle(300, lineScoreAreaPosTopY * 0.8, 10);
+        
+    ofPushMatrix();
+    ofTranslate(thresholdCPos);
+    ofRotateZDeg(90);
+    capture.draw(thresholdCSize * 1.5, -20 - thresholdCSize * 1.5, thresholdCSize * 3, thresholdCSize * 3);
+    ofRotateZDeg(180);
+    capture.draw(-thresholdCSize * -1.5, 20 - thresholdCSize * 1.5, thresholdCSize * 3, thresholdCSize * 3);
+    ofPopMatrix();
     
 }
 
@@ -1537,8 +1540,8 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     }
 
     if (bthresholdCtrl) {
-        float _minY = lineScoreAreaPosTopY * 0.2;
-        float _maxY = lineScoreAreaPosTopY * 0.8;
+        float _minY = lineScoreAreaPosTopY * 0.3;
+        float _maxY = lineScoreAreaPosTopY * 0.7;
 
         if (touchPos[touch.id].y > _minY && touchPos[touch.id].y < _maxY) {
             thresholdCPos.y = touchPos[touch.id].y;
@@ -1685,12 +1688,15 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
 //--------------------------------------------------------------
 void ofApp::settingCamera(int cameraDevice) {
     
+#if TARGET_OS_SIMULATOR
+#else
     cam.setDeviceID(cameraDevice);
     cam.setup(360, 480); // 4 : 3
     cam.setDesiredFrameRate(15);
     float _ratio = 360.0 / ofGetWidth();
     camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
-
+#endif
+    
 }
 
 
