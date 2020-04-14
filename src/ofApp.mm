@@ -22,17 +22,17 @@ void ofApp::setup() {
     setupColors();
     
     frontCameraOnOff = true;
-
+    
     baseSelection = 7;
     intervalDist = 1;
-
+    
     ofBackground(backgroundColor);
     
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
     
     safeZoneHeightFactor = iPhoneXDeviceScreenFactor();
-
+    
     lineScoreStepSize = 23;
     lineScoreAreaSize.set(ofGetWidth(), 170);
     
@@ -40,7 +40,7 @@ void ofApp::setup() {
     controlAreaSize.set(ofGetWidth(), 326);
     
     cameraViewSize.set(ofGetWidth(), ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 2 * safeZoneHeightFactor);
-
+    
     setCamera();
     
     setImageBuffer();
@@ -55,11 +55,11 @@ void ofApp::setup() {
     }
     
     setInterfacePosition();
-
+    
     setImageParameter();
-
+    
     createSynthVoice();
-
+    
     setSynthMain();
     
     ofSoundStreamSetup(2, 0, this, 44100, 256, 4);
@@ -72,10 +72,7 @@ void ofApp::setup() {
     importLibraryImg = false;
     libraryImportDone = false;
     
-    thresholdCPos.set(ofGetWidth() * 0.1, lineScoreAreaPosTopY * 0.5);
-    thresholdCSize = 20;
     bthresholdCtrl = false;
-
     
 }
 
@@ -158,20 +155,20 @@ int ofApp::iPhoneXDeviceScreenFactor() {
 
 //--------------------------------------------------------------
 void ofApp::setCamera() {
-        
-    #if TARGET_OS_SIMULATOR
-        float _ratio = 360.0 / ofGetWidth();
-        camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
-    #else
-        settingCamera(0);
-    #endif
-
+    
+#if TARGET_OS_SIMULATOR
+    float _ratio = 360.0 / ofGetWidth();
+    camSize.set(int(cameraViewSize.x * _ratio), int(cameraViewSize.y * _ratio));
+#else
+    settingCamera(0);
+#endif
+    
 }
 
 
 //--------------------------------------------------------------
 void ofApp::setImageBuffer() {
-        
+    
     bufferImg.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
     gray.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
     edge.allocate(camSize.x, camSize.y, OF_IMAGE_GRAYSCALE);
@@ -184,15 +181,15 @@ void ofApp::setImageBuffer() {
     } else {
         //        debugCameraImage.load("debug_layout_cat_iPad.jpg");
     }
-        
+    
 }
 
 
 //--------------------------------------------------------------
 void ofApp::setIPhone() {
-        
+    
     lineScoreAreaPosTopY = ofGetHeight() - controlAreaSize.y - lineScoreAreaSize.y - 44 * 1 * safeZoneHeightFactor;
-        
+    
     pixelStepS = 4;
     changedCamSize = camSize.x / pixelStepS;  // 90
     thresholdValue = 80;
@@ -217,7 +214,7 @@ void ofApp::setInterfacePosition() {
     setSpeedCtrl(_ctrlAreaPosTopY, _screenWStepsize, controlAreaSize);
     setIntervalCtrl(_ctrlAreaPosTopY, _screenWStepsize, controlAreaSize);
     setBase(_ctrlAreaPosTopY, _screenWStepsize);
-
+    
 }
 
 
@@ -228,24 +225,23 @@ void ofApp::setSpeedCtrl(float _topY, float _screenWStepsize, ofVec2f _ctrlAreaS
     bSpeedCtrl = false;
     float _x = _screenWStepsize * 5.25;
     float _lineLengthRatio = _ctrlAreaSize.y * 0.35;
-
+    
     speedPos = ofPoint(_x, _topY + _ctrlAreaSize.y * 0.5 - 44 * safeZoneHeightFactor);
     speedLineLength = ofPoint(speedPos.y - _lineLengthRatio, speedPos.y + _lineLengthRatio);
-
+    
 }
 
 
 //--------------------------------------------------------------
 void ofApp::setIntervalCtrl(float _topY, float _screenWStepsize, ofVec2f _ctrlAreaSize) {
- 
+    
     intervalSize = ctrlRectS * 0.9;
-    bthresholdCtrl = false;
     float _x = _screenWStepsize * 0.75;
     float _lineLengthRatio = _ctrlAreaSize.y * 0.35;
-
+    
     intervalPos = ofPoint(_x, _topY + _ctrlAreaSize.y * 0.5 - 44 * safeZoneHeightFactor);
     intervalLineLength = ofPoint(intervalPos.y - _lineLengthRatio, intervalPos.y + _lineLengthRatio);
-
+    
 }
 
 
@@ -263,7 +259,7 @@ void ofApp::setBase(float _topY, float _screenWStepsize) {
     base7Pos = ofPoint(_basePosRight, controlAreaSize.y * 1.0 / 4.0 + _offSetY);
     base8Pos = ofPoint(_basePosRight, controlAreaSize.y * 2.0 / 4.0 + _offSetY);
     base9Pos = ofPoint(_basePosRight, controlAreaSize.y * 3.0 / 4.0 + _offSetY);
-
+    
 }
 
 
@@ -273,7 +269,7 @@ void ofApp::setImageParameter() {
     cannyThreshold1 = 120;
     cannyThreshold2 = 120;
     grayThreshold = 120;
-
+    
 }
 
 
@@ -334,7 +330,7 @@ Generator ofApp::addGenerator(ControlParameter _carrierPitch, float _addFq, floa
     Generator _modulationTone = SineWave().freq(_rModFreq) * _rModFreq * _amountMod;
     
     return SineWave().freq(_rCarrierFreq + _modulationTone);
-
+    
 }
 
 
@@ -418,6 +414,10 @@ void ofApp::menuImgSetup() {
     float _scaleReturn = 0.05;
     returnCapture.setFromCenter(_w * 0.5, _h * 0.85, returnCaptureMode.getWidth() * _scaleReturn, returnCaptureMode.getHeight() * _scaleReturn);
     
+    thresholdImg.load("threshold.png");
+    float _scaleThreshold = 0.05;
+    thresholdRect.setFromCenter(_w * 0.1, lineScoreAreaPosTopY * 0.5, thresholdImg.getWidth() * _scaleReturn, thresholdImg.getHeight() * _scaleReturn);
+
 }
 
 
@@ -425,9 +425,9 @@ void ofApp::menuImgSetup() {
 void ofApp::update() {
     
 #if TARGET_OS_SIMULATOR
-        
+    
     captureCamImg.setFromPixels(debugCameraImage.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR_ALPHA);
-
+    
     if (captureCamImg.isAllocated()) {
         calculatePixels(captureCamImg);
     }
@@ -452,7 +452,7 @@ void ofApp::update() {
             captureCamImg.setFromPixels(cam.getPixels().getData(), camSize.x, camSize.y, OF_IMAGE_COLOR);
         }
     }
-
+    
     calculatePixels(captureCamImg);
     
 #endif
@@ -502,7 +502,7 @@ void ofApp::calculatePixels(ofImage _img) {
         blackPixels.clear();
         
         unsigned char * _src = edge.getPixels().getData();
-                
+        
         for (int j = 0; j < camSize.y; j += pixelStepS) {
             for (int i = 0; i < camSize.x; i += pixelStepS) {
                 int _index = i + j * camSize.x;
@@ -516,7 +516,7 @@ void ofApp::calculatePixels(ofImage _img) {
         
         for (int i = 0; i < pixelBright.size(); i++) {
             int _whitePixel = 0;
-                        
+            
             if (pixelBright[i] == _whitePixel) {
                 
                 if (_bCounter == 0) {
@@ -568,7 +568,7 @@ void ofApp::drawIPhone() {
     if (bCameraCapturePlay) {
         drawLineScoreIPhone();
     }
-
+    
     drawIPhoneBaseLineLayout();
     
     drawControlElementIPhone(bCameraCapturePlay);
@@ -576,14 +576,13 @@ void ofApp::drawIPhone() {
     drawBaseInterface(bCameraCapturePlay);
     
     menuImgDraw(bCameraCapturePlay);
-        
-    ofPushMatrix();
-    ofTranslate(thresholdCPos);
-    ofRotateZDeg(90);
-    capture.draw(thresholdCSize * 1.5, -20 - thresholdCSize * 1.5, thresholdCSize * 3, thresholdCSize * 3);
-    ofRotateZDeg(180);
-    capture.draw(-thresholdCSize * -1.5, 20 - thresholdCSize * 1.5, thresholdCSize * 3, thresholdCSize * 3);
-    ofPopMatrix();
+
+    drawThresholdInterface(bCameraCapturePlay);
+    
+//    ofPushMatrix();
+////    ofTranslate(thresholdCPos);
+//    thresholdImg.draw(thresholdRect);
+//    ofPopMatrix();
     
 }
 
@@ -609,7 +608,7 @@ void ofApp::drawLineScoreIPhone() {
     }
     ofPopMatrix();
     ofPopStyle();
-
+    
 }
 
 
@@ -635,28 +634,28 @@ void ofApp::mainCameraCaptureViewiPhone() {
     realtimeBufferImageView();
     
     ofPushMatrix();
-
+    
     drawIPhoneTrianglePixel();
-        
+    
     if (bCameraCapturePlay) {
         
         drawPixelNumbersCircleNotes();
-                
+        
         for (int i = 0; i < NUM_SYNTH_LINE; i++) {
             drawPixelAllNoteShapesIPhone(scoreNote[i], i + 1);
             drawPlayingShapeNote(scoreNote[i], i + 1);
         }
-                
+        
     }
     
     ofPopMatrix();
-        
+    
 }
 
 
 //--------------------------------------------------------------
 void ofApp::realtimeCameraConvertedImageView() {
-      
+    
     ofPushMatrix();
     
     ofTranslate(0, 44 * 1 * safeZoneHeightFactor);
@@ -680,9 +679,9 @@ void ofApp::realtimeCameraConvertedImageView() {
 void ofApp::realtimeBufferImageView() {
     
     ofPushMatrix();
-
+    
     ofTranslate(0, 44 * 1 * safeZoneHeightFactor);
-
+    
     ofPushStyle();
     if (bCameraCapturePlay) {
         ofSetColor(contourLineColor, 200);
@@ -690,9 +689,9 @@ void ofApp::realtimeBufferImageView() {
         bufferImg.draw(0, 0, cameraViewSize.x + 1, cameraViewSize.y + 1);
     }
     ofPopStyle();
-
+    
     ofPopMatrix();
-
+    
 }
 
 
@@ -704,14 +703,14 @@ void ofApp::drawIPhoneTrianglePixel() {
     
     ofPushMatrix();
     ofPushStyle();
-        
+    
     if (bCameraCapturePlay) {
         ofSetColor(contourLineColor, 180);
     } else {
         ofSetColor(contourLineColor, 255);
     }
-
-//    ofEnableAntiAliasing();
+    
+    //    ofEnableAntiAliasing();
     
     if (whitePixels.size() > 1) {
         
@@ -748,12 +747,12 @@ void ofApp::drawPixelNumbersCircleNotes() {
     
     ofPushMatrix();
     ofPushStyle();
-//    ofEnableAntiAliasing();
+    //    ofEnableAntiAliasing();
     
     ofSetColor(255, 180);
     ofNoFill();
     ofSetColor(eventColor, 80);
-
+    
     if (whitePixels.size() > 1) {
         
         int _noteLoopIndex = ((noteIndex) % (whitePixels.size() - 1)) + 1;
@@ -764,7 +763,7 @@ void ofApp::drawPixelNumbersCircleNotes() {
             
             float _xS = ((_idPixels + i) % (int)changedCamSize) * pixelStepS * cameraScreenRatio;
             float _yS = (int)((_idPixels + i) / (int)changedCamSize) * pixelStepS * cameraScreenRatio;
-                        
+            
             ofDrawCircle(_xS, _yS, _pixelSize * _ellipseSizeR);
             
         }
@@ -782,7 +781,7 @@ void ofApp::drawPixelAllNoteShapesIPhone(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
-//    ofEnableAntiAliasing();
+    //    ofEnableAntiAliasing();
     
     ofSetColor(255, 120);
     
@@ -825,7 +824,7 @@ void ofApp::drawPlayingShapeNote(vector<int> _vNote, int _scoreCh) {
     
     ofPushMatrix();
     ofPushStyle();
-        
+    
     ofColor _c = colorVar[_scoreCh - 1];
     
     if (whitePixels.size() > 0) {
@@ -881,7 +880,7 @@ void ofApp::drawIPhoneBaseLineLayout() {
     ofPopStyle();
     
     ofPopMatrix();
-
+    
 }
 
 
@@ -998,7 +997,7 @@ void ofApp::drawBaseInterface(bool playOn) {
         drawShapeFillColor(base9Pos, 9, baseSize, _c[5]);
         
         if (bCameraCapturePlay) {
-//            activeShapeFillColor(base4Pos, baseSelection, baseSize, _c[baseSelection - 4]);
+            //            activeShapeFillColor(base4Pos, baseSelection, baseSize, _c[baseSelection - 4]);
             switch (baseSelection) {
                 case 4:
                     activeShapeFillColor(base4Pos, 4, baseSize, _c[0]);
@@ -1120,11 +1119,11 @@ void ofApp::activeShapeFillColor(ofPoint pos, int base, int size, ofColor _c) {
     ofTranslate(_pos);
     
     ofSetColor(_c, 120);
-        
+    
     ofSetColor(_c, 180);
     
     ofSetLineWidth(controlObjectLineWidth);
-        
+    
     float _scaleMoving = floor(activeFactor) * 0.05 + 1.2;
     
     ofSetColor(uiLineColor);
@@ -1170,6 +1169,16 @@ void ofApp::menuImgDraw(bool playOn) {
     
     ofPopStyle();
     
+}
+
+
+//--------------------------------------------------------------
+void ofApp::drawThresholdInterface(bool bCameraCapturePlay) {
+
+    if (!bCameraCapturePlay) {
+        thresholdImg.draw(thresholdRect);
+    }
+
 }
 
 
@@ -1358,7 +1367,7 @@ void ofApp::drawShape(ofPoint pos, int base, int size) {
 
 //--------------------------------------------------------------
 void ofApp::exit() {
-        
+    
 }
 
 
@@ -1410,9 +1419,9 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bSpeedCtrl = false;
         //        }
         
-        float _distT = ofDist(thresholdCPos.x, thresholdCPos.y , _chgdTouch.x, _chgdTouch.y);
+        float _distT = ofDist(thresholdRect.x, thresholdRect.y , _chgdTouch.x, _chgdTouch.y);
         
-        if (_distT < thresholdCSize * 3) {
+        if (_distT < thresholdRect.getWidth() * 3) {
             bthresholdCtrl = true;
         } else {
             bthresholdCtrl = false;
@@ -1426,18 +1435,18 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         //            bInterval = false;
         //        }
         
-//        float _xL = screenPosLeftY;
-//        float _xR = screenPosLeftY + cameraViewSize;
-//        if ((_chgdTouch.x > (screenW - cameraViewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-//            grayThreshold = 120;
-//            touchDownDefault = _chgdTouch.x;
-//        }
-
-//        if ((_chgdTouch.y < cameraViewSize.y) && (_chgdTouch.y > 0)) {
-//            grayThreshold = 120;
-//            touchDownDefault = _chgdTouch.x;
-//        }
-
+        //        float _xL = screenPosLeftY;
+        //        float _xR = screenPosLeftY + cameraViewSize;
+        //        if ((_chgdTouch.x > (screenW - cameraViewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
+        //            grayThreshold = 120;
+        //            touchDownDefault = _chgdTouch.x;
+        //        }
+        
+        //        if ((_chgdTouch.y < cameraViewSize.y) && (_chgdTouch.y > 0)) {
+        //            grayThreshold = 120;
+        //            touchDownDefault = _chgdTouch.x;
+        //        }
+        
     }
     
     if (bCameraCapturePlay) {
@@ -1538,18 +1547,18 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             intervalDist = _interval;
         }
     }
-
+    
     if (bthresholdCtrl) {
         float _minY = lineScoreAreaPosTopY * 0.3;
         float _maxY = lineScoreAreaPosTopY * 0.7;
-
+        
         if (touchPos[touch.id].y > _minY && touchPos[touch.id].y < _maxY) {
-            thresholdCPos.y = touchPos[touch.id].y;
-            float _threshold = ofMap(thresholdCPos.y, _minY, _maxY, 0, 255);
+            thresholdRect.y = touchPos[touch.id].y - thresholdRect.getHeight() * 0.5;
+            float _threshold = ofMap(thresholdRect.y, _minY, _maxY, 0, 255);
             grayThreshold = _threshold;
         }
     }
-
+    
     
     //    if (touch.id == 0) {
     //        float _xL = screenPosLeftY;
@@ -1559,9 +1568,9 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     //        }
     //    }
     
-//    if (_chgdTouch.y < cameraViewSize.y) {
-//        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
-//    }
+    //    if (_chgdTouch.y < cameraViewSize.y) {
+    //        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
+    //    }
     
 }
 

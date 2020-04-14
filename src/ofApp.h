@@ -260,6 +260,9 @@ public:
     void menuImgSetup();
     void menuImgDraw(bool playOn);
     
+    ofRectangle thresholdRect;
+    ofImage thresholdImg;
+
     ofRectangle composeMode;
     ofImage capture;
     
@@ -285,6 +288,9 @@ public:
     bool importLibraryImg;
     
     void settingCamera(int cameraDevice);
+    
+    
+    void drawThresholdInterface(bool bCameraCapturePlay);
     
 };
 
