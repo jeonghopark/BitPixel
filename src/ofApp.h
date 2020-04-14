@@ -289,7 +289,6 @@ public:
     
     void settingCamera(int cameraDevice);
     
-    
     void drawThresholdInterface(bool bCameraCapturePlay);
     
 };

@@ -416,7 +416,7 @@ void ofApp::menuImgSetup() {
     
     thresholdImg.load("threshold.png");
     float _scaleThreshold = 0.05;
-    thresholdRect.setFromCenter(_w * 0.1, lineScoreAreaPosTopY * 0.5, thresholdImg.getWidth() * _scaleReturn, thresholdImg.getHeight() * _scaleReturn);
+    thresholdRect.setFromCenter(_w * 0.1, lineScoreAreaPosTopY * 0.5, thresholdImg.getWidth() * _scaleThreshold, thresholdImg.getHeight() * _scaleThreshold);
 
 }
 
