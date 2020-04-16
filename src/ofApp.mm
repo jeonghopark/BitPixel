@@ -1166,7 +1166,6 @@ void ofApp::menuImgDraw(bool playOn) {
         changeCamera.draw(cameraChange);
     }
     
-    
     ofPopStyle();
     
 }
@@ -1411,14 +1410,6 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
     }
     
     if (touch.id == 0) {
-        //        float _distS = ofDist(speedPos.x, speedPos.y , _chgdTouch.x, _chgdTouch.y);
-        //
-        //        if (_distS < thresholdCSize * _tolerance) {
-        //            bSpeedCtrl = true;
-        //        } else {
-        //            bSpeedCtrl = false;
-        //        }
-        
         float _distT = ofDist(thresholdRect.x, thresholdRect.y , _chgdTouch.x, _chgdTouch.y);
         
         if (_distT < thresholdRect.getWidth() * 3) {
@@ -1426,27 +1417,6 @@ void ofApp::iPhoneTouchDown(ofTouchEventArgs & touch) {
         } else {
             bthresholdCtrl = false;
         }
-        
-        //        float _distI = ofDist(intervalPos.x, intervalPos.y , _chgdTouch.x, _chgdTouch.y);
-        //
-        //        if (_distI < intervalSize * _tolerance) {
-        //            bInterval = true;
-        //        } else {
-        //            bInterval = false;
-        //        }
-        
-        //        float _xL = screenPosLeftY;
-        //        float _xR = screenPosLeftY + cameraViewSize;
-        //        if ((_chgdTouch.x > (screenW - cameraViewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-        //            grayThreshold = 120;
-        //            touchDownDefault = _chgdTouch.x;
-        //        }
-        
-        //        if ((_chgdTouch.y < cameraViewSize.y) && (_chgdTouch.y > 0)) {
-        //            grayThreshold = 120;
-        //            touchDownDefault = _chgdTouch.x;
-        //        }
-        
     }
     
     if (bCameraCapturePlay) {
@@ -1506,16 +1476,6 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
     
     touchPos[touch.id] = _chgdTouch;
     
-    //    if (bSpeedCtrl) {
-    //        float _minX = ofGetWidth() * 0.15;
-    //        float _maxX = screenW * 0.9;
-    //        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y > screenPosRightY) {
-    //            speedPos.x = touchPos[touch.id].x;
-    //            float _tempo = ofMap(speedPos.x, _minX, _maxX, minSpeed, maxSpeed);
-    //            synthMain.setParameter("tempo", _tempo);
-    //        }
-    //    }
-    
     if (bSpeedCtrl) {
         float _minY = speedLineLength.x;
         float _maxY = speedLineLength.y;
@@ -1526,16 +1486,6 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             synthMain.setParameter("tempo", _tempo);
         }
     }
-    
-    //    if (bInterval) {
-    //        float _minX = ofGetWidth() * 0.15;
-    //        float _maxX = screenW * 0.9;
-    //        if ((touchPos[touch.id].x > _minX) && (touchPos[touch.id].x < _maxX) && touchPos[touch.id].y < intervalPos.y * 2) {
-    //            intervalPos.x = touchPos[touch.id].x;
-    //            float _interval = ofMap(intervalPos.x, _minX, _maxX, 20, 0);
-    //            intervalDist = _interval;
-    //        }
-    //    }
     
     if (bInterval) {
         float _minY = intervalLineLength.x;
@@ -1558,19 +1508,6 @@ void ofApp::iPhoneTouchMoved(ofTouchEventArgs & touch) {
             grayThreshold = _threshold;
         }
     }
-    
-    
-    //    if (touch.id == 0) {
-    //        float _xL = screenPosLeftY;
-    //        float _xR = screenPosLeftY + cameraViewSize;
-    //        if ((_chgdTouch.x > (screenW - cameraViewSize)) && (_chgdTouch.x < screenW) && (_chgdTouch.y < _xR) && (_chgdTouch.y > _xL)) {
-    //            grayThreshold = 120 + (_chgdTouch.x - touchDownDefault);
-    //        }
-    //    }
-    
-    //    if (_chgdTouch.y < cameraViewSize.y) {
-    //        grayThreshold = 120 + (_chgdTouch.y - touchDownDefault);
-    //    }
     
 }
 
@@ -1639,43 +1576,15 @@ void ofApp::iPhoneTouchUp(ofTouchEventArgs & touch) {
     }
     
     if (!bPlayNote && libaryImport.inside(_chgdTouch)) {
-        //        if (!bPlayNote) {
         libraryImg.openLibrary();
         importLibraryImg = true;
-        //            importLibraryImg = false;
-        //        }
     }
-    
-    //    if (importLibraryImg && libaryImport.inside(_chgdTouch)) {
-    //        if (!bCameraCapturePlay) {
-    //            cout << "open" << endl;
-    //            libraryImg.openLibrary();
-    //            importLibraryImg = false;
-    //        }
-    ////        importLibraryImg = false;
-    ////        libraryImportDone = false;
-    //    }
-    
+        
     if (libaryImportCancle.inside(_chgdTouch)) {
-        //        libraryImg.openLibrary();
         if (!bCameraCapturePlay) {
-            //            cout << "open" << endl;
             importLibraryImg = false;
         }
     }
-    
-    //    if ((_chgdTouch.x < lineScoreRightX) && (_chgdTouch.x > 0) && (_chgdTouch.y > screenPosLeftY) && (_chgdTouch.y < screenPosRightY) && bCameraCapturePlay) {
-    //
-    //        bPlayNote = !bPlayNote;
-    //
-    //        if (!bPlayNote) {
-    //            ofRemoveListener(*metroOut, this, &ofApp::triggerReceive);
-    //        } else {
-    //            ofAddListener(*metroOut, this, &ofApp::triggerReceive);
-    //        }
-    //
-    //    }
-    //
     
     float _tolerance = 2;
     
